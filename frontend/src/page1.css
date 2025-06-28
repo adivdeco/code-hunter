@@ -1,0 +1,108 @@
+
+
+ svg path {
+    fill: transparent;
+    stroke-width: 1; 
+    stroke-dasharray: 130; 
+    stroke-dashoffset: 1300;
+    animation: AllAnimation 4s ease-in-out forwards;
+    /* z-index: 4; */
+}
+@keyframes AllAnimation {
+    0% {
+        stroke-dashoffset: 130;
+        stroke: rgb(145, 191, 233); 
+    }
+    80% {
+        fill: transparent;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        stroke:rgb(168, 169, 169) ;
+        /* fill: rgba(255, 255, 255, 0.627); */
+    }
+}
+
+
+ .page1 svg path {
+    fill: transparent;
+    stroke-width: 1; 
+    stroke-dasharray: 130; 
+    stroke-dashoffset: 1300;
+    animation: textAnimation 4s ease-in-out forwards;
+    /* z-index: 4; */
+}
+
+.page1 svg {
+    filter: drop-shadow(10px -6px 5px rgba(145, 191, 233, 0.5));
+}
+
+@keyframes textAnimation {
+    0% {
+        stroke-dashoffset: 130;
+        stroke: rgb(145, 191, 233); 
+    }
+    80% {
+        fill: transparent;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        stroke:white ;
+        fill: rgba(255, 255, 255, 0.8);
+    }
+}
+
+
+.background{
+    height: 450px;
+    width:450px;
+    border-radius: 50%;
+    background-color: transparent;
+    position: absolute;
+    box-shadow: 0px 0px 4000px 50px rgba(7, 225, 173, 0.621),
+    inset 0px 0px 90px 30px rgb(7, 185, 229);
+    animation: circle 4s 1 forwards;
+   
+   
+}
+
+@keyframes circle {
+    0%{
+        transform: translate(10px,500px);
+    }
+    100%{
+        transform:translate(0px,10px);
+    }
+}
+
+.nav svg path {
+    fill: transparent;
+    stroke-width: 1; 
+    stroke-dasharray: 130; 
+    stroke-dashoffset: 1300;
+    animation: textAnimation2 5s ease-in alternate 5 forwards;
+    
+    /* z-index: 4; */
+}
+
+
+
+@keyframes textAnimation2 {
+    0% {
+        stroke-dashoffset: 130;
+        stroke: rgb(145, 191, 233); 
+    }
+    80% {
+        fill: transparent;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        stroke:rgb(59, 58, 58) ;
+        fill: rgba(0,0,0,0.8);
+    }
+     150% {
+    stroke-dashoffset: 0;
+    stroke: rgb(59, 58, 58);
+    fill: rgba(0, 0, 0, 0.8);
+  }
+}

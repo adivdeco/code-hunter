@@ -1,0 +1,43 @@
+
+
+// {
+//   "compilerOptions": {
+//     "target": "ESNext",
+//     "module": "ESNext",
+//     "lib": ["DOM", "DOM.Iterable", "ESNext"],
+//     "allowJs": false,
+//     "skipLibCheck": true,
+//     "esModuleInterop": true,
+//     "allowSyntheticDefaultImports": true,
+//     "strict": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "moduleResolution": "bundler",
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "noEmit": true,
+//     "jsx": "react-jsx",
+//     "baseUrl": ".",
+//     "paths": {
+//       "@/*": ["src/*"]
+//     }
+//   },
+//   "include": ["src"]
+// }
+
+
+  
+// // {  "compilerOptions": {
+// //     "baseUrl": ".",
+// //     "paths": {
+// //       "@/*": ["./src/*"]
+// //     }
+// //   }}
+
+{
+    "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
