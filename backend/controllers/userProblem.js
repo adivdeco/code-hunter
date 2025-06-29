@@ -30,10 +30,10 @@ console.log("Creating problem with data:", req.body);
         // const submissions  creates an array of objects like this in last line
 
         const submitResult = await submitBatch(submissions);  // this give data of all submissions  as tocken arr=> as [ { tocken:ndjbdjkh289u90u3},{ tocken:ndjbdjkh289u90u3}]
-        console.log("1");
+        // console.log("1");
 
         const resultToken = submitResult.map((value)=> value.token); // hear we make array of all tokens like [ndjbdjkh289u90u3, ndjbdjkh289u90u3]
-        console.log("2");
+        // console.log("2");
         const testResult = await submitToken(resultToken); // this will give all test cases result as array of objects like [{status:{id:3},time:0.1,memory:1024},{status:{id:3},time:0.1,memory:1024}]
 
      }

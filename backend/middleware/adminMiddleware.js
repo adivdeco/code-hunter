@@ -5,7 +5,7 @@ const redisClint = require('../config/redis');
 const adminMiddleware = async(req, res, next) => {
 
     try{
-         const {token} = req.headers["authorization"]?.split(" ")[1] || req.cookies || null;
+         const token = req.headers["authorization"]?.split(" ")[1] || req.cookies?.token || null;
          console.log("Token received:", token);
         if (!token) {
             return res.status(401).send("Token is not provided")}

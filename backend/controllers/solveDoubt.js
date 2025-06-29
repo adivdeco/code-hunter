@@ -1,21 +1,17 @@
 const { GoogleGenAI } = require("@google/genai");
 
+const solveDoubt = async (req, res) => {
+  try {
+    const { messages, title, description, testCases, startCode } = req.body;
 
-const solveDoubt = async(req , res)=>{
+    const ai = new GoogleGenAI({ apiKey: process.env.GoogleGenAI });
 
-
-    try{
-
-        const {messages,title,description,testCases,startCode} = req.body;
-
-        const ai = new GoogleGenAI({ apiKey: process.env.GoogleGenAI });
-       
-        async function main() {
-        const response = await ai.models.generateContent({
+    async function main() {
+      const response = await ai.models.generateContent({
         model: "gemini-1.5-flash",
         contents: messages,
         config: {
-        systemInstruction: `
+          systemInstruction: `
 You are an expert Data Structures and Algorithms (DSA) tutor specializing in helping users solve coding problems. Your role is strictly limited to DSA-related assistance only.
 
     ## CURRENT PROBLEM CONTEXT:
@@ -82,22 +78,21 @@ You are an expert Data Structures and Algorithms (DSA) tutor specializing in hel
 - Promote best coding practices
 
 Remember: Your goal is to help users learn and understand DSA concepts through the lens of the current problem, not just to provide quick answers.
-`},
-    });
-     
-    res.status(201).json({
-        message:response.text
-    });
+`,
+        },
+      });
+
+      res.status(201).json({
+        message: response.text,
+      });
     }
 
     main();
-      
-    }
-    catch(err){
-        res.status(500).json({
-            message: "Internal server error"
-        });
-    }
-}
+  } catch (err) {
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
 
 module.exports = solveDoubt;

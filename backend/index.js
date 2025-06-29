@@ -9,6 +9,7 @@ const problemRouter = require('./routes/problemCreator');
 const submitRouter = require('./routes/submit');
 const cors = require('cors');
 const aiRouter = require('./routes/aiChatting');
+const noteRouter = require('./routes/noteSection')
 
 
 app.use(cors({
@@ -24,6 +25,7 @@ app.use('/auth' , authRoutre) // user  login,registration,logout and progile vie
 app.use('/problem', problemRouter)
 app.use("/submit",submitRouter )
 app.use("/ai" , aiRouter)
+app.use("/note" , noteRouter)
 
 
 
