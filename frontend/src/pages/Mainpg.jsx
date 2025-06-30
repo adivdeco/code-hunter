@@ -44,27 +44,18 @@ const slugs = [
   "react",
   "python",
   "ruby",
-  // "flutter",
-  // "android",
-  // "kotlin",
+
   "dart",
   "prisma",
-  // "amazonaws",
-  // "postgresql",
+
   "firebase",
-  // "nginx",
   "vercel",
-  // "testinglibrary",
   "jest",
-  // "cypress",
   "docker",
   "git",
-  // "jira",
   "github",
   "gitlab",
-  // "visualstudiocode",
-  // "androidstudio",
-  // "sonarqube",
+
   "figma",
 ];
 
@@ -128,17 +119,17 @@ export default function Mainpg() {
         </nav>
 
         {/* Hero Section */}
-        <div className="relative z-10 flex h-[810px] w-full flex-col items-center justify-center px-4 mt-0 text-center bg-gray-100">
+        <div className="relative  flex h-[810px] w-full flex-col items-center justify-center px-4 mt-0 text-center bg-gray-100 overflow-hidden">
           {/* Background Animation */}
           <InteractiveGridPattern
             className={cn(
               "[mask-image:radial-gradient(800px_circle_at_center,white,transparent)]",
-              "absolute inset-x-10 inset-y-[-20%] h-[123%] skew-y-12 z-0"
+              "absolute inset-x-10 inset-y-[-20%] h-[123%] skew-y-12 z-10"
             )}
           />
 
           {/* Hero Text */}
-          <div className="relative z-[-1] space-y-7 max-w-5xl mt-9">
+          <div className="relative z-8 space-y-7 max-w-5xl mt-9">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-foreground tracking-tight font-rocksalt">
               Your <AuroraText className="font-rocksalt">Coding</AuroraText>{" "}
               Journey
@@ -163,7 +154,7 @@ export default function Mainpg() {
 
           {/* home-button */}
           <NavLink to={"/login"}>
-            <div className="group relative mx-auto flex items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#8fdfff1f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#8fdfff3f] mt-9 bg-gradient-to-r from-white to-gray-200 ">
+            <div className="group relative mx-auto flex items-center justify-center rounded-full px-4 py-1.5 shadow-[inset_0_-8px_10px_#8fdfff1f] transition-shadow duration-500 ease-out hover:shadow-[inset_0_-5px_10px_#8fdfff3f] mt-9 bg-gradient-to-r from-white to-gray-200 z-20 ">
               <span
                 className={cn(
                   "absolute inset-0 block h-full w-full animate-gradient rounded-[inherit] bg-gradient-to-r from-[#ffaa40]/50 via-[#9c40ff]/50 to-[#ffaa40]/50 bg-[length:300%_100%] p-[2px]"
@@ -188,8 +179,8 @@ export default function Mainpg() {
             </div>
           </NavLink>
         </div>
-        <div className="absolute  top-0 flex size-full items-center justify-center overflow-hidden ">
-          {/* <IconCloud images={images}  /> */}
+        <div className="absolute  top-0 flex size-full items-center justify-center overflow-hidden z-4 ">
+          <IconCloud images={images} />
         </div>
       </div>
       <Mainpg2 />

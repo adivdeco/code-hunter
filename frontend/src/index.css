@@ -37,6 +37,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -63,6 +64,7 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
   .theme {
     --animate-gradient: gradient 8s linear infinite;
     --animate-marquee: marquee var(--duration) infinite linear;
@@ -74,6 +76,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -81,24 +84,274 @@
 
 @theme inline {
   @keyframes gradient {
-  to {
-    background-position: var(--bg-size, 300%) 0;
+    to {
+      background-position: var(--bg-size, 300%) 0;
     }
   }
+
   @keyframes marquee {
-  from {
-    transform: translateX(0);
+    from {
+      transform: translateX(0);
     }
-  to {
-    transform: translateX(calc(-100% - var(--gap)));
+
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
     }
   }
+
   @keyframes marquee-vertical {
-  from {
-    transform: translateY(0);
+    from {
+      transform: translateY(0);
     }
-  to {
-    transform: translateY(calc(-100% - var(--gap)));
+
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
     }
   }
+}
+
+/* robort  */
+
+@layer custom-properties {
+  @property --elh {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+  }
+
+  @property --erx {
+    syntax: '<percentage>';
+    inherits: true;
+    initial-value: 0%;
+  }
+
+  @property --fx {
+    syntax: '<percentage>';
+    inherits: true;
+    initial-value: 0%;
+  }
+
+  @property --ealw {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+  }
+
+  @property --earw {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+  }
+
+  @property --erh {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+  }
+
+  @property --mh {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+  }
+
+  @property --mw {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+  }
+}
+
+@layer base {
+  :root {
+    --surface: #111;
+    --c: white;
+    --c2: #9ae3dc;
+    --c3: magenta;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+
+}
+
+@layer component {
+  .ai-bot {
+    scale: 6;
+    width: 34px;
+    aspect-ratio: 1;
+    position: relative;
+    display: grid;
+    place-items: center;
+    animation:
+      blink 2.4s ease infinite,
+      move-head 4.2s linear infinite,
+      mouth 1.2s ease-in infinite;
+  }
+
+  .ai-bot .head {
+    background: linear-gradient(var(--c) 80%, color-mix(in srgb, var(--c), black 30%), var(--c));
+    border-radius: 0.375rem;
+    position: absolute;
+    width: 28px;
+    height: 20px;
+  }
+
+  .ai-bot .head::before,
+  .ai-bot .head::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    width: 3px;
+    height: 10px;
+    background: var(--c);
+    border-radius: 2px 0 0 2px;
+  }
+
+  .ai-bot .head::before {
+    left: -4px;
+    scale: var(--ealw, 1) 1;
+  }
+
+  .ai-bot .head::after {
+    right: -4px;
+    left: unset;
+    border-radius: 0 2px 2px 0;
+    scale: var(--earw, 1) 1;
+  }
+
+  .face {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    inset: 0 3px;
+    background: var(--surface);
+    translate: var(--fx) 0;
+    border-radius: 4px;
+    padding: 4px 4px 2px 4px;
+    gap: 3px;
+  }
+
+  .face::before {
+    content: '';
+    background: var(--c);
+    position: absolute;
+    height: 1px;
+    width: 10px;
+    top: -2px;
+    border-radius: 2px 2px 0 0;
+    mask: radial-gradient(circle at 50% 100%, transparent 45%, black 45%);
+  }
+
+  .eyes {
+    display: flex;
+    height: 8px;
+    gap: 6px;
+  }
+
+  .eyes::before,
+  .eyes::after {
+    content: '';
+    width: 5px;
+    height: 8px;
+    filter: drop-shadow(0 0 2px var(--c2));
+    background: repeating-linear-gradient(to bottom, var(--c), var(--c) 0.25px, transparent 0.25px, transparent 0.6px),
+      linear-gradient(to bottom, var(--c3), transparent 60%),
+      var(--c2);
+    border-radius: 1px;
+  }
+
+  .eyes::before {
+    scale: 1 var(--elh);
+    translate: var(--erx) 0;
+  }
+
+  .eyes::after {
+    scale: 1 var(--erh);
+    translate: var(--erx) 0;
+  }
+
+  .mouth {
+    width: 10px;
+    height: 2px;
+    background: var(--c2);
+    border-radius: 0 0 1px 1px;
+    filter: drop-shadow(0 0 2px var(--c2));
+    scale: var(--mw, 1) var(--mh, 1);
+  }
+}
+
+@layer animations {
+  @keyframes blink {
+
+    0%,
+    10%,
+    100% {
+      --elh: 1;
+      --erh: 1;
+    }
+
+    2% {
+      --elh: 0.2;
+    }
+
+    8% {
+      --erh: 0.1;
+    }
+  }
+
+  @keyframes mouth {
+
+    0%,
+    30%,
+    70%,
+    100% {
+      --mh: 1;
+      --mw: 1;
+    }
+
+    20% {
+      --mh: 0.5;
+    }
+
+    60% {
+      --mw: 0.7;
+    }
+  }
+
+  @keyframes move-head {
+
+    0%,
+    20%,
+    40%,
+    100% {
+      --erx: 0%;
+      --fx: 0%;
+      --ealw: 1;
+      --earw: 1;
+    }
+
+    10% {
+      --erx: 20%;
+      --fx: 10%;
+      --ealw: 1.5;
+      --earw: 0.5;
+    }
+
+    30% {
+      --erx: -20%;
+      --fx: -10%;
+      --ealw: 0.5;
+      --earw: 1.5;
+    }
+  }
+}
+
+.botposn {
+  position: absolute;
+  margin-top: 18vh;
+  right: 49%;
 }

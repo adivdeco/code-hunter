@@ -3,7 +3,11 @@ import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
 import { Marquee } from "@/components/magicui/marquee";
 import { cn } from "@/lib/utils";
 import { AuroraText } from "@/components/magicui/aurora-text";
-import { AnimatedList } from "@/components/magicui/animated-list";
+import Mainpg3 from "./Mainpg3";
+import "../index.css";
+import { AvatarCircles } from "@/components/magicui/avatar-circles";
+
+
 import {
   Accordion,
   AccordionContent,
@@ -22,6 +26,26 @@ import {
 } from "lucide-react";
 import { Globe } from "@/components/magicui/globe";
 
+const avatars = [
+  {
+    imageUrl: "https://img.icons8.com/?size=100&id=108784&format=png&color=000000",
+    // profileUrl: "https://github.com/dillionverma",
+  },
+  {
+    imageUrl: "https://img.icons8.com/?size=100&id=hGdCwhSHUe6L&format=png&color=000000",
+    // profileUrl: "https://github.com/tomonarifeehan",
+  },
+  {
+    imageUrl: "https://img.icons8.com/?size=100&id=13679&format=png&color=000000",
+    // profileUrl: "https://github.com/BankkRoll",
+  },
+  {
+    imageUrl: "https://img.icons8.com/?size=100&id=40669&format=png&color=000000",
+    // profileUrl: "https://github.com/safethecode",
+  },
+
+];
+
 const features = [
   {
     Icon: Braces,
@@ -36,54 +60,74 @@ const features = [
   },
   {
     Icon: Sigma,
-    name: "number of language suports hear",
+    name: "Number of language suports hear",
     description: "language.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -right-20 -top-20 opacity-60" />,
+    background:
+      <div className="flex items-center justify-center w-full h-full  bg-gradient-to-br from-[#f475b4] via-[#dbc7ef] via-[#d9e8f8] via-indigo to-[#e3bed1]">
+        <div className="flex flex-col justify-center text-center mt-16">
+          <div className="font-aladin text-9xl flex flex-col ml-28 text-center"><AvatarCircles numPeople={+4} avatarUrls={avatars} />
+          </div>
+          <p className="max-w-lg mt-9 mx-auto">Explore and practice coding in multiple programming languages, Code in your favorite language —Python, Java, C++, JS, Go, etc.</p>
+        </div>
+      </div>,
     className:
       "lg:row-start-1 lg:row-end-2 lg:col-start-3 lg:col-end-5 font-changa",
   },
-
   {
     Icon: Tally5,
-    name: "number of question",
+    name: "Number of question",
     description: "Supports 100+ languages and counting.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -right-20 -top-20 opacity-60" />,
+    background:
+      <div className="flex items-center justify-center w-full h-full">
+        <div className="flex flex-col justify-center text-center mt-16">
+          <h1 className="font-aladin text-9xl"><span><AuroraText>150+</AuroraText></span></h1>
+        </div>
+      </div>,
     className:
       "lg:col-start-3 lg:col-end-4 lg:row-start-2 lg:row-end-3 font-changa",
   },
   {
     Icon: Bot,
-    name: "with ai feature",
-    description: "Use the calendar to filter your files by date.",
-    href: "/",
+    name: "With ai feature",
+    description: "Stuck on a problem? Our built-in AI assistant is here to help you.",
     cta: "Learn more",
-    background: <img className="absolute -right-20 -top-20 opacity-60" />,
+    background:
+      <div class="botposn">
+        <div class="ai-bot">
+          <div class="head">
+            <div class="face">
+              <div class="eyes"> </div>
+              <div class="mouth"> </div>
+            </div>
+          </div>
+        </div>
+      </div>,
     className:
-      "lg:col-start-4 lg:col-end-5 lg:row-start-2 lg:row-end-3 font-changa",
+      "lg:col-start-4 lg:col-end-5 lg:row-start-2 lg:row-end-3 font-changa bg-gray-100",
   },
   {
     Icon: Earth,
-    name: "user all over world",
+    name: "User all over world",
     description:
-      "Get notified when someone shares a file or mentions you in a comment.",
+      "• Join a global community of learners, challengers, and developers solving problems together",
     href: "/",
     cta: "Learn more",
     background: <Globe />,
     className:
-      "lg:col-start-1 lg:col-end-3 lg:row-start-3 lg:row-end-4 font-changa",
+      "lg:col-start-1 lg:col-end-3 lg:row-start-3 lg:row-end-4 font-changa bg-gray-100",
   },
   {
     Icon: LayoutDashboard,
-    name: "intrigated dashbord",
+    name: "Intrigated dashbord",
     description:
-      "Get notified when someone shares a file or mentions you in a comment.",
+      `• Get a clear view of your progress, submissions, and solved problems.`,
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -right-20 -top-20 opacity-60" />,
+    background: <img src="https://images.unsplash.com/photo-1666875753105-c63a6f3bdc86?q=80&w=2946&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" srcset="" />,
     className:
       "lg:col-start-3 lg:col-end-4 lg:row-start-3 lg:row-end-4 font-changa",
   },
@@ -91,47 +135,47 @@ const features = [
     Icon: Users,
     name: "Contribute to the Community",
     description:
-      "Get notified when someone shares a file or mentions you in a comment.",
+      "• Submit test cases, report issues, or suggest improvements — every voice matters.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -right-20 -top-20 opacity-60" />,
+    background: <img src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" srcset="" />,
     className:
       "lg:col-start-4 lg:col-end-5 lg:row-start-3 lg:row-end-4 font-changa",
   },
 ];
 const reviews = [
   {
-    name: "Jack",
+    name: "Adiv",
     username: "@jack",
     body: "I've never seen anything like this before. It's amazing. I love it.",
     img: "https://avatar.vercel.sh/jack",
   },
   {
-    name: "Jill",
+    name: "Prince",
     username: "@jill",
     body: "I don't know what to say. I'm speechless. This is amazing.",
     img: "https://avatar.vercel.sh/jill",
   },
   {
-    name: "John",
+    name: "Nanshy",
     username: "@john",
     body: "I'm at a loss for words. This is amazing. I love it.",
     img: "https://avatar.vercel.sh/john",
   },
   {
-    name: "Jane",
+    name: "Prince",
     username: "@jane",
     body: "I'm at a loss for words. This is amazing. I love it.",
     img: "https://avatar.vercel.sh/jane",
   },
   {
-    name: "Jenny",
+    name: "Sunny",
     username: "@jenny",
     body: "I'm at a loss for words. This is amazing. I love it.",
     img: "https://avatar.vercel.sh/jenny",
   },
   {
-    name: "James",
+    name: "Piyush",
     username: "@james",
     body: "I'm at a loss for words. This is amazing. I love it.",
     img: "https://avatar.vercel.sh/james",
@@ -203,7 +247,7 @@ let notifications = [
     description:
       "We're not here to compete — we're here to focus. CoderHunter is for those who want a guided, immersive, and themed experience.",
     time: "2hour ago",
-    icon: "🗞️",
+    icon: "🔥",
     color: "#1E86FF",
   },
 ];
@@ -277,18 +321,19 @@ export default function Mainpg2() {
 
       <div
         className={cn(
-          "relative flex h-[500px] w-full flex-col overflow-hidden p-2"
+          "relative flex h-[400px] w-full flex-col overflow-hidden p-2"
         )}
       >
         <Accordion
-          className="max-w-5xl w-full mx-auto"
+          className="max-w-5xl w-full mx-auto border-black"
           type="single"
           collapsible
         >
           {notifications.map((item, idx) => (
-            <AccordionItem key={item.name} value={item.name}>
+            <AccordionItem key={idx} value={item.name}>
               <AccordionTrigger className="font-changa  text-3xl decoration-0">
                 {item.name}
+                {item.icon}
               </AccordionTrigger>
               <AccordionContent className="font-changa  text-lg">
                 {item.description}
@@ -296,9 +341,8 @@ export default function Mainpg2() {
             </AccordionItem>
           ))}
         </Accordion>
-
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-background"></div>
       </div>
+      <Mainpg3 />
     </div>
   );
 }
