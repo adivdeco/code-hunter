@@ -13,10 +13,14 @@ const noteRouter = require("./routes/noteSection");
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: ["http://localhost:5173", "http://localhost:5174", process.env.FRONTEND_URL],
     credentials: true,
   })
 );
+
+app.get("/health", (req, res) => {
+  res.status(200).json({sucess: true, message: "All is well"})
+})
 
 app.use(express.json());
 app.use(cookieParser()); // Middleware to parse cookies
@@ -27,9 +31,7 @@ app.use("/submit", submitRouter);
 app.use("/ai", aiRouter);
 app.use("/note", noteRouter);
 
-app.get("/health", (req, res) => {
-  res.status(200).json({sucess: true, message: "All is well"})
-})
+
 
 const surver = async () => {
   try {
