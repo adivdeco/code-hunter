@@ -18,7 +18,7 @@ app.use(
   })
 );
 
-app.get("/health", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).json({sucess: true, message: "All is well"})
 })
 
