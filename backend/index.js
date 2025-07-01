@@ -13,13 +13,13 @@ const noteRouter = require("./routes/noteSection");
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174", "https://code-hunter-sable.vercel.app"],
+    origin: ["https://code-hunter-sable.vercel.app", "http://localhost:5173", "http://localhost:5174"],
     credentials: true,
   })
 );
 
 app.get("/", (req, res) => {
-  res.status(200).json({sucess: true, message: "All is well"})
+  res.status(200).json({ sucess: true, message: "All is well" })
 })
 
 app.use(express.json());
