@@ -31,15 +31,22 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+
 export const checkAuth = createAsyncThunk( 
   'auth/checkthunk',
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axiosClient.get('/auth/check');
-      return data?.user;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  const res = await axios.get("/auth/check");
+  return res.data;
+} catch (err) {
+  return rejectWithValue(err.response?.data?.message || "Something went wrong");
+}
+    // try {
+    //   const { data } = await axiosClient.get('/auth/check');
+    //   return data?.user;
+    // } catch (error) {
+    //   return rejectWithValue(error);
+    // }
   }
 );
 

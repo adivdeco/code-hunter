@@ -27,6 +27,10 @@ app.use("/submit", submitRouter);
 app.use("/ai", aiRouter);
 app.use("/note", noteRouter);
 
+app.get("/health", (req, res) => {
+  res.status(200).json({sucess: true, message: "All is well"})
+})
+
 const surver = async () => {
   try {
     await Promise.all([main(), redisClint.connect()]);

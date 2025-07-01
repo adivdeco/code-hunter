@@ -355,3 +355,36 @@
   margin-top: 18vh;
   right: 49%;
 }
+
+
+/* login animation */
+
+/* src/styles/sphere.css or inside index.css */
+
+.animation-wrapper {
+  width: 50%;
+  padding-bottom: 50%;
+}
+
+.sphere-animation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 580px;
+  height: 580px;
+  margin: -290px 0 0 -290px;
+  z-index: 1;
+}
+
+.sphere path {
+  fill: url(#sphereGradient);
+  stroke-width: 1px;
+  stroke: rgba(80, 80, 80, .35);
+  backface-visibility: hidden;
+}
+
+@media (min-width: 500px) {
+  .sphere path {
+    stroke-width: .4px;
+  }
+}

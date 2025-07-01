@@ -57,7 +57,7 @@ export function IconCloud({
           };
         } else {
           // Handle SVG icons
-          offCtx.scale(0.4, 0.4);
+          offCtx.scale(0.5, 0.5);
           const svgString = renderToString(item);
           const img = new Image();
           img.src = "data:image/svg+xml;base64," + btoa(svgString);
@@ -104,60 +104,60 @@ export function IconCloud({
   //   setIconPositions(newIcons);
   // }, [icons, images]);
   useEffect(() => {
-  const items = icons || images || [];
-  const newIcons = [];
-  const numIcons = items.length || 20;
+    const items = icons || images || [];
+    const newIcons = [];
+    const numIcons = items.length || 20;
 
-  const offset = 2 / numIcons;
-  const increment = Math.PI * (3 - Math.sqrt(5));
+    const offset = 2 / numIcons;
+    const increment = Math.PI * (3 - Math.sqrt(5));
 
-  const finalIcons = [];
+    const finalIcons = [];
 
-  for (let i = 0; i < numIcons; i++) {
-    const y = i * offset - 1 + offset / 2;
-    const r = Math.sqrt(1 - y * y);
-    const phi = i * increment;
+    for (let i = 0; i < numIcons; i++) {
+      const y = i * offset - 1 + offset / 2;
+      const r = Math.sqrt(1 - y * y);
+      const phi = i * increment;
 
-    const x = Math.cos(phi) * r;
-    const z = Math.sin(phi) * r;
+      const x = Math.cos(phi) * r;
+      const z = Math.sin(phi) * r;
 
-    finalIcons.push({
-      x: x * 600,
-      y: y * 500,
-      z: z * 400,
-      scale: 1,
-      opacity: 1,
-      id: i,
-    });
-  }
-
-  const duration = 8000;
-
-  const start = performance.now();
-
-  const animateIntro = (now) => {
-    const elapsed = now - start;
-    const progress = Math.min(1, elapsed / duration);
-    const eased = easeOutCubic(progress);
-
-    const animatedIcons = finalIcons.map((icon) => ({
-      x: icon.x * eased,
-      y: icon.y * eased,
-      z: icon.z * eased,
-      scale: 2 - eased,
-      opacity: eased,
-      id: icon.id,
-    }));
-
-    setIconPositions(animatedIcons);
-
-    if (progress < 1) {
-      requestAnimationFrame(animateIntro);
+      finalIcons.push({
+        x: x * 600,
+        y: y * 500,
+        z: z * 400,
+        scale: 2,
+        opacity: 1,
+        id: i,
+      });
     }
-  };
 
-  requestAnimationFrame(animateIntro);
-}, [icons, images]);
+    const duration = 8000;
+
+    const start = performance.now();
+
+    const animateIntro = (now) => {
+      const elapsed = now - start;
+      const progress = Math.min(1, elapsed / duration);
+      const eased = easeOutCubic(progress);
+
+      const animatedIcons = finalIcons.map((icon) => ({
+        x: icon.x * eased,
+        y: icon.y * eased,
+        z: icon.z * eased,
+        scale: 2 - eased,
+        opacity: eased,
+        id: icon.id,
+      }));
+
+      setIconPositions(animatedIcons);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateIntro);
+      }
+    };
+
+    requestAnimationFrame(animateIntro);
+  }, [icons, images]);
 
 
   // Handle mouse events
@@ -256,7 +256,7 @@ export function IconCloud({
       const dx = mousePos.x - centerX;
       const dy = mousePos.y - centerY;
       const distance = Math.sqrt(dx * dx + dy * dy);
-      const speed = 0.003 + (distance / maxDistance) * 0.002;
+      const speed = 0.003 + (distance / maxDistance) * 0.001;
 
       if (targetRotation) {
         const elapsed = performance.now() - targetRotation.startTime;
@@ -292,7 +292,7 @@ export function IconCloud({
         const rotatedZ = icon.x * sinY + icon.z * cosY;
         const rotatedY = icon.y * cosX + rotatedZ * sinX;
 
-        const scale = (rotatedZ + 100) / 250;
+        const scale = (rotatedZ + 200) / 250;
         const opacity = Math.max(0.4, Math.min(1, (rotatedZ + 20) / 200));
 
         ctx.save();
