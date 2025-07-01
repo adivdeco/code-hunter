@@ -13,7 +13,7 @@ const noteRouter = require("./routes/noteSection");
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174", process.env.FRONTEND_URL],
+    origin: ["http://localhost:5173", "http://localhost:5174", "https://code-hunter-sable.vercel.app"],
     credentials: true,
   })
 );
