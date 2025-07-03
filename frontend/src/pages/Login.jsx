@@ -214,7 +214,7 @@ import { loginUser } from "../authSlice";
 import { useEffect, useState } from 'react';
 import { TypingAnimation } from "@/components/magicui/typing-animation";
 import Navbar from "@/components/Navbar";
-import { initSphereAnimation } from "@/utils/sphere-animation";
+// import { initSphereAnimation } from "@/utils/sphere-animation";
 import "../index.css";
 
 const schema = z.object({
@@ -228,9 +228,9 @@ function Login() {
   const navigate = useNavigate();
   const { isAuthenticated, loading, error } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    initSphereAnimation();
-  }, []);
+  // useEffect(() => {
+  //   initSphereAnimation();
+  // }, []);
 
   const {
     register,
@@ -256,14 +256,15 @@ function Login() {
       <Navbar />
 
       <div className="relative min-h-screen flex items-center justify-center p-4 text-white overflow-hidden">
-
+        {/* 
         <div className="absolute inset-0 z-0 pointer-events-none">
           <div className="animation-wrapper">
             <div className="sphere-animation">
-              {/* Include your SVG here */}
+//add svg
+
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="relative z-10 card w-4/12 bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-2xl">
           <div className="card-body">
