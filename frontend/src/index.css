@@ -5,7 +5,7 @@
 
 /* .badge-rainbow {
   @apply badge;
-  background: linear-gradient(90deg,  red,yellow,green,blue);
+  background: linear-gradient(90deg, red, yellow, green, blue);
   color: white;
 } */
 
@@ -177,6 +177,7 @@
 
 }
 
+/* chat img */
 @layer component {
   .ai-bot {
     scale: 6;

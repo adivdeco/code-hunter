@@ -60,36 +60,20 @@ function Homepage() {
     return difficultyMatch && tagMatch && statusMatch;
   });
 
-  // const onadmin = ()=>{
-  //  navigate('/admin')
-  // }
+
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleCompanies = companies.slice(0, 3);
+  const hiddenCompanies = companies.slice(3);
 
 
 
   return (
-    <div className="min-h-screen bg-base-200">
+    <div className="min-h-screen  bg-black">
 
       {/* Navigation Bar */}
 
-      {/* <nav className="navbar bg-base-100 shadow-lg px-4">
-        <div className="flex-1">
-          <NavLink to="/" className="btn btn-ghost text-xl">LeetCode</NavLink>
-        </div>
-
-        <div className="flex-none gap-4">
-          <div className="dropdown dropdown-end">
-            <div tabIndex={0} className="btn btn-ghost text-xl font-serif mask-radial-from-neutral-200 capitalize ">
-              {user?.name}
-            </div>
-            <ul className="mt-3 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-              <li><button onClick={handleLogout}>Logout</button></li>
-              {user && user.role === 'admin' ? <li className='mt-1'><NavLink to="/admin" className=" ">admin</NavLink></li> : null}
-
-            </ul>
-          </div>
-        </div>
-      </nav> */}
-      <nav className='mb-24 text-white'>
+      <nav className=' text-gray-400 h-20  '>
         <Navbar />
       </nav>
 
@@ -132,17 +116,17 @@ function Homepage() {
           </select>
         </div>
 
-        {/*  */}
+        {/* mani data */}
 
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
           <table className="table">
             {/* Table Head */}
-            <thead>
+            <thead className='font-sans text-md text-gray-400'>
               <tr>
                 <th>Problem</th>
                 <th>Difficulty</th>
                 <th>Tags</th>
-                <th>Compaines</th>
+                <th className='text-center'>Compaines</th>
                 <th>Note</th>
                 <th>Add to<br />Sheet</th>
                 <th>Status</th>
@@ -154,7 +138,7 @@ function Homepage() {
                 <tr key={problem._id}>
                   {/* Problem Title with NavLink */}
                   <td>
-                    <NavLink to={`/problem/${problem._id}`} className="hover:text-primary font-medium">
+                    <NavLink to={`/problem/${problem._id}`} className="hover:text-primary font-medium text-gray-300 ">
                       {problem.title}
                     </NavLink>
                   </td>
@@ -166,18 +150,85 @@ function Homepage() {
                     </span>
                   </td>
 
-                  {/* Tags/Companies */}
+                  {/* Tags */}
                   <td>
-                    <span className="badge badge-info">{problem.tags}</span>
+                    <span className="badge badge-info ">{problem.tags}</span>
                   </td>
+
                   {/* Compaines array*/}
-                  <td className="flex flex-wrap gap-1">
-                    {problem.companies.map((company, index) => (
-                      <span key={index} className={`badge ${getCompanyBadgeColor(company)}`}>
-                        {company}
+                  {/* <td className="flex flex-wrap gap-1 justify-center">
+                    {problem.companies.map((company, index) => {
+
+                      return company === 'Google' ? (
+                        <span key={index} className="badge">
+                          <span className="text-blue-600">G</span>
+                          <span className="text-red-500">o</span>
+                          <span className="text-yellow-500">o</span>
+                          <span className="text-blue-600">g</span>
+                          <span className="text-green-600">l</span>
+                          <span className="text-red-500">e</span>
+                        </span>
+                      ) : (
+                        <span key={index} className={`badge ${getCompanyBadgeColor(company)}`}>
+                          {company}
+                        </span>
+                      );
+                    })}
+                  </td> */}
+                  <td className="relative flex flex-wrap gap-1 justify-center">
+                    {visibleCompanies.map((company, index) =>
+                      company === 'Google' ? (
+                        <span key={index} className="badge">
+                          <span className="text-blue-600">G</span>
+                          <span className="text-red-500">o</span>
+                          <span className="text-yellow-500">o</span>
+                          <span className="text-blue-600">g</span>
+                          <span className="text-green-600">l</span>
+                          <span className="text-red-500">e</span>
+                        </span>
+                      ) : (
+                        <span key={index} className={`badge ${getCompanyBadgeColor(company)}`}>
+                          {company}
+                        </span>
+                      )
+                    )}
+
+                    {/* +N Badge */}
+                    {hiddenCompanies.length > 0 && (
+                      <span
+                        className="badge bg-gray-400 text-white cursor-pointer"
+                        onClick={() => setShowAll(!showAll)}
+                      >
+                        +{hiddenCompanies.length}
                       </span>
-                    ))}
+                    )}
+
+                    {/* Dropdown Box */}
+                    {showAll && (
+                      <div className="absolute top-10 z-50 bg-white shadow-lg rounded-md p-2 border w-40">
+                        {hiddenCompanies.map((company, index) => (
+                          <div
+                            key={index}
+                            className="mb-1 text-sm text-gray-800 font-medium"
+                          >
+                            {company === 'Google' ? (
+                              <span className="flex gap-0.5">
+                                <span className="text-blue-600">G</span>
+                                <span className="text-red-500">o</span>
+                                <span className="text-yellow-500">o</span>
+                                <span className="text-blue-600">g</span>
+                                <span className="text-green-600">l</span>
+                                <span className="text-red-500">e</span>
+                              </span>
+                            ) : (
+                              <span>{company}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </td>
+
                   {/* Placeholder for Notes */}
                   <td>
                     <NotebookPen />
@@ -226,11 +277,12 @@ const getDifficultyBadgeColor = (difficulty) => {
 };
 
 const getCompanyBadgeColor = (companies) => {
-  if (!companies) return 'badge-neutral';
+  if (!companies) return null;
+
 
   switch (companies) {
-    case 'Google':
-      return 'badge-rainbow'; // custom class
+    // case 'Google':
+    //   return 'badge-rainbow'; // custom class
     case 'Amazon':
       return 'badge-warning';
     case 'Microsoft':
