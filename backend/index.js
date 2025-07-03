@@ -11,25 +11,16 @@ const cors = require("cors");
 const aiRouter = require("./routes/aiChatting");
 const noteRouter = require("./routes/noteSection");
 
-// app.use(
-//   cors({
-//     // origin: ['http://localhost:5173', "http://localhost:5174"],
-//     credentials: true,
 
-//   })
-// );
-// let whitelist = ['http://example1.com/', 'http://example2.com/', "https://code-hunter-sable.vercel.app/"]
-// let corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
-
-app.use(cors())
+// Only allow your deployed frontend for CORS with credentials
+app.use(
+  cors({
+    origin: "https://code-hunter-sable.vercel.app",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.get("/", (req, res) => {
   res.status(200).json({ sucess: true, message: "All is well" })
