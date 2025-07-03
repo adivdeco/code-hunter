@@ -18,20 +18,18 @@ const noteRouter = require("./routes/noteSection");
 
 //   })
 // );
-let whitelist = ['http://example1.com/', 'http://example2.com/', "https://code-hunter-sable.vercel.app/"]
-let corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-}
+// let whitelist = ['http://example1.com/', 'http://example2.com/', "https://code-hunter-sable.vercel.app/"]
+// let corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   }
+// }
 
-app.use(cors(
-  corsOptions
-))
+app.use(cors())
 
 app.get("/", (req, res) => {
   res.status(200).json({ sucess: true, message: "All is well" })
