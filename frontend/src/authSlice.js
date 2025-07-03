@@ -8,7 +8,7 @@ export const registerUser = createAsyncThunk(
   'auth/register',  // This is the Redux action type prefix used internally by createAsyncThunk.
   async (userData, { rejectWithValue }) => {      //in userData we pass value which we get after responce on login,signup etc..
     try {
-      const response = await axiosClient.post('/auth/register', userData);  // later one we pass to backend at it addres
+      const response = await axiosClient.post('/auth/register', userData, { withCredentials: true });  // later one we pass to backend at it addres
       return response.data.user; // bcz in backend we send like res.send({user:reply,message:"njknv"}) so it call data.user
     } catch (error) {
       return rejectWithValue(error);
@@ -23,7 +23,7 @@ export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.post('/auth/login', credentials);
+      const response = await axiosClient.post('/auth/login', credentials, { withCredentials: true });
       return response.data.user;
     } catch (error) {
       return rejectWithValue(error);
@@ -42,7 +42,7 @@ export const checkAuth = createAsyncThunk(
     //   return rejectWithValue(err.response?.data?.message || "Something went wrong");
     // }
     try {
-      const { data } = await axiosClient.get('/auth/check');
+      const { data } = await axiosClient.get('/auth/check', { withCredentials: true });
       return data?.user;
     } catch (error) {
       return rejectWithValue(error);
