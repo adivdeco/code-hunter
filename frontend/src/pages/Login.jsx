@@ -41,9 +41,9 @@ function Login() {
 
   const onSubmit = (data) => {
     dispatch(loginUser(data));
-    if (error) {
-      alert("User unauthorized: " + error);
-    }
+    // if (error) {
+    //   alert("User unauthorized: " + error);
+    // }
   };
 
   return (

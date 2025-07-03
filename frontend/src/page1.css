@@ -84,7 +84,7 @@ svg path {
     stroke-width: 1;
     stroke-dasharray: 130;
     stroke-dashoffset: 1300;
-    animation: textAnimation2 5s ease-in alternate 5 forwards;
+    animation: textAnimation2 6s ease-in alternate 5 forwards;
 
     /* z-index: 4; */
 }
@@ -104,13 +104,13 @@ svg path {
     100% {
         stroke-dashoffset: 0;
         stroke: rgb(59, 58, 58);
-        fill: rgba(0, 0, 0, 0.8);
+        fill: var(--logo-fill);
     }
 
     150% {
         stroke-dashoffset: 0;
         stroke: rgb(59, 58, 58);
-        fill: rgba(0, 0, 0, 0.8);
+        fill: var(--logo-fill);
     }
 }
 

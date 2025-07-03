@@ -8,8 +8,8 @@ export const registerUser = createAsyncThunk(
   'auth/register',  // This is the Redux action type prefix used internally by createAsyncThunk.
   async (userData, { rejectWithValue }) => {      //in userData we pass value which we get after responce on login,signup etc..
     try {
-    const response =  await axiosClient.post('/auth/register', userData);  // later one we pass to backend at it addres
-    return response.data.user; // bcz in backend we send like res.send({user:reply,message:"njknv"}) so it call data.user
+      const response = await axiosClient.post('/auth/register', userData);  // later one we pass to backend at it addres
+      return response.data.user; // bcz in backend we send like res.send({user:reply,message:"njknv"}) so it call data.user
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -32,21 +32,21 @@ export const loginUser = createAsyncThunk(
 );
 
 
-export const checkAuth = createAsyncThunk( 
+export const checkAuth = createAsyncThunk(
   'auth/checkthunk',
   async (_, { rejectWithValue }) => {
-    try {
-  const res = await axios.get("/auth/check");
-  return res.data;
-} catch (err) {
-  return rejectWithValue(err.response?.data?.message || "Something went wrong");
-}
     // try {
-    //   const { data } = await axiosClient.get('/auth/check');
-    //   return data?.user;
-    // } catch (error) {
-    //   return rejectWithValue(error);
+    //   const res = await axios.get("/auth/check");
+    //   return res.data?.user;
+    // } catch (err) {
+    //   return rejectWithValue(err.response?.data?.message || "Something went wrong");
     // }
+    try {
+      const { data } = await axiosClient.get('/auth/check');
+      return data?.user;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
 
@@ -93,7 +93,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       })
-//  login
+      //  login
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -109,7 +109,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       })
-  
+
       // Check Auth Cases
       .addCase(checkAuth.pending, (state) => {
         state.loading = true;
@@ -128,7 +128,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       })
-  
+
       // Logout User Cases
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
