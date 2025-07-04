@@ -6,6 +6,9 @@ import axiosClient from '../utils/axiosClint'
 import { Bookmark, NotebookPen } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 // const AdminPanel = require("./AdminPanel")
+// import CompanyDropdown from '@/components/CompanyDropdown';
+import CompanyBadgeCell from '@/components/CompanyDropdown';
+
 
 function Homepage() {
 
@@ -25,7 +28,7 @@ function Homepage() {
         const { data } = await axiosClient.get('/problem/allProblems');
         setProblems(Array.isArray(data) ? data : data.allproblem || []);
         // setProblems(data)
-        // console.log(data);    // for debugging
+        console.log(data);    // for debugging
       } catch (error) {
         console.error('Error fetching problems:', error);
       }
@@ -61,15 +64,11 @@ function Homepage() {
   });
 
 
-  const [showAll, setShowAll] = useState(false);
-
-  const visibleCompanies = companies.slice(0, 3);
-  const hiddenCompanies = companies.slice(3);
-
 
 
   return (
-    <div className="min-h-screen  bg-black">
+
+    <div className="min-h-screen  bg-black pb-52">
 
       {/* Navigation Bar */}
 
@@ -83,8 +82,9 @@ function Homepage() {
         {/* Filters */}
         <div className="flex flex-wrap gap-4 mb-6">
           {/* New Status Filter */}
+
           <select
-            className="select select-bordered"
+            className="select select-bordered text-gray-300 font-changa rounded-full"
             value={filters.status}
             onChange={(e) => setFilters({ ...filters, status: e.target.value })}
           >
@@ -93,7 +93,7 @@ function Homepage() {
           </select>
 
           <select
-            className="select select-bordered"
+            className="select select-bordered  text-gray-300 font-changa rounded-full"
             value={filters.difficulty}
             onChange={(e) => setFilters({ ...filters, difficulty: e.target.value })}
           >
@@ -104,7 +104,7 @@ function Homepage() {
           </select>
 
           <select
-            className="select select-bordered"
+            className="select select-bordered text-gray-300 font-changa rounded-full"
             value={filters.tag}
             onChange={(e) => setFilters({ ...filters, tag: e.target.value })}
           >
@@ -118,10 +118,10 @@ function Homepage() {
 
         {/* mani data */}
 
-        <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+        <div className="overflow-x-auto rounded-box border border-base-content/5 bg-gray-900">
           <table className="table">
             {/* Table Head */}
-            <thead className='font-sans text-md text-gray-400'>
+            <thead className='font-aladin text-lg text-gray-300 bg-gray-800 '>
               <tr>
                 <th>Problem</th>
                 <th>Difficulty</th>
@@ -138,7 +138,7 @@ function Homepage() {
                 <tr key={problem._id}>
                   {/* Problem Title with NavLink */}
                   <td>
-                    <NavLink to={`/problem/${problem._id}`} className="hover:text-primary font-medium text-gray-300 ">
+                    <NavLink to={`/problem/${problem._id}`} className="hover:text-white font-changa font-medium text-gray-300 ">
                       {problem.title}
                     </NavLink>
                   </td>
@@ -155,78 +155,9 @@ function Homepage() {
                     <span className="badge badge-info ">{problem.tags}</span>
                   </td>
 
-                  {/* Compaines array*/}
-                  {/* <td className="flex flex-wrap gap-1 justify-center">
-                    {problem.companies.map((company, index) => {
-
-                      return company === 'Google' ? (
-                        <span key={index} className="badge">
-                          <span className="text-blue-600">G</span>
-                          <span className="text-red-500">o</span>
-                          <span className="text-yellow-500">o</span>
-                          <span className="text-blue-600">g</span>
-                          <span className="text-green-600">l</span>
-                          <span className="text-red-500">e</span>
-                        </span>
-                      ) : (
-                        <span key={index} className={`badge ${getCompanyBadgeColor(company)}`}>
-                          {company}
-                        </span>
-                      );
-                    })}
-                  </td> */}
+                  {/* Companies */}
                   <td className="relative flex flex-wrap gap-1 justify-center">
-                    {visibleCompanies.map((company, index) =>
-                      company === 'Google' ? (
-                        <span key={index} className="badge">
-                          <span className="text-blue-600">G</span>
-                          <span className="text-red-500">o</span>
-                          <span className="text-yellow-500">o</span>
-                          <span className="text-blue-600">g</span>
-                          <span className="text-green-600">l</span>
-                          <span className="text-red-500">e</span>
-                        </span>
-                      ) : (
-                        <span key={index} className={`badge ${getCompanyBadgeColor(company)}`}>
-                          {company}
-                        </span>
-                      )
-                    )}
-
-                    {/* +N Badge */}
-                    {hiddenCompanies.length > 0 && (
-                      <span
-                        className="badge bg-gray-400 text-white cursor-pointer"
-                        onClick={() => setShowAll(!showAll)}
-                      >
-                        +{hiddenCompanies.length}
-                      </span>
-                    )}
-
-                    {/* Dropdown Box */}
-                    {showAll && (
-                      <div className="absolute top-10 z-50 bg-white shadow-lg rounded-md p-2 border w-40">
-                        {hiddenCompanies.map((company, index) => (
-                          <div
-                            key={index}
-                            className="mb-1 text-sm text-gray-800 font-medium"
-                          >
-                            {company === 'Google' ? (
-                              <span className="flex gap-0.5">
-                                <span className="text-blue-600">G</span>
-                                <span className="text-red-500">o</span>
-                                <span className="text-yellow-500">o</span>
-                                <span className="text-blue-600">g</span>
-                                <span className="text-green-600">l</span>
-                                <span className="text-red-500">e</span>
-                              </span>
-                            ) : (
-                              <span>{company}</span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <CompanyBadgeCell companies={problem.companies} />
                   </td>
 
                   {/* Placeholder for Notes */}
@@ -238,10 +169,11 @@ function Homepage() {
                   <td>
                     <button className=" "><Bookmark /></button>
                   </td>
+
                   {/* Solved Status */}
                   <td>
                     {solvedProblems.some(sp => sp._id === problem._id) ? (
-                      <div className="badge badge-success gap-1">
+                      <div className="badge badge-success gap-1 ">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                           <path
                             fillRule="evenodd"
@@ -276,29 +208,7 @@ const getDifficultyBadgeColor = (difficulty) => {
   }
 };
 
-const getCompanyBadgeColor = (companies) => {
-  if (!companies) return null;
 
-
-  switch (companies) {
-    // case 'Google':
-    //   return 'badge-rainbow'; // custom class
-    case 'Amazon':
-      return 'badge-warning';
-    case 'Microsoft':
-      return 'bg-indigo-800';
-    case 'Facebook':
-      return 'badge-info';
-    case 'Apple':
-      return 'bg-gray-700';
-    case 'Goldman sachs':
-      return 'bg-yellow-500';
-    case 'Flipkart':
-      return 'badge-warning';
-    default:
-      return 'badge-ghost';
-  }
-};
 
 
 export default Homepage;

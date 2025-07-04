@@ -13,14 +13,20 @@ const noteRouter = require("./routes/noteSection");
 
 
 // Only allow your deployed frontend for CORS with credentials
+// app.use(
+//   cors({
+//     origin: "https://code-hunter-sable.vercel.app",
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//   })
+// );
 app.use(
   cors({
-    origin: "https://code-hunter-sable.vercel.app",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    credentials: true
   })
-);
+)
 
 app.get("/", (req, res) => {
   res.status(200).json({ sucess: true, message: "All is well" })

@@ -25,6 +25,11 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+
+        fadeIn: {
+          '0%': { opacity: 0, transform: 'scale(0.95)' },
+          '100%': { opacity: 1, transform: 'scale(1)' },
+        },
         marquee: {
           "0%": {
             transform: "translateX(0)",
@@ -83,6 +88,7 @@ export default {
         },
       },
       animation: {
+        fade_in: 'fadeIn 0.25s ease-out forwards',
         aurora: "aurora 3s ease-out infinite",
         "shimmer-slide": "shimmer var(--speed) linear infinite",
         "spin-around": "spinAround 10s linear infinite",

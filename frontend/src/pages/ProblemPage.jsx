@@ -11,6 +11,8 @@ const langMap = {
   javascript: 'javascript',
   java: 'java',
   cpp: 'c++',
+  go: 'go',
+  python: 'python'
 };
 
 const ProblemPage = () => {
@@ -23,65 +25,65 @@ const ProblemPage = () => {
   const [activeLeftTab, setActiveLeftTab] = useState('description');
   const [activeRightTab, setActiveRightTab] = useState('code');
   const editorRef = useRef(null);
-  let {problemId}  = useParams();
+  let { problemId } = useParams();
 
   const { handleSubmit } = useForm();
 
 
 
   useEffect(() => {
-  //   const fetchProblem = async () => {
-  //     setLoading(true);
-  //     try {
-        
-  //       const response = await axiosClient.get(`/problem/find/${problemId}`);
-  //       console.log(response.data.findproblem);
-        
-  // const initialcode = response.data.findproblem.startCode.find(sc => sc.language === langMap[selectedLanguage])?.initialcode
-        
+    //   const fetchProblem = async () => {
+    //     setLoading(true);
+    //     try {
 
-  //       // console.log(initialCode);
-  //       setProblem(response.data.findproblem);
-  //       // console.log(response.data.findproblem);
-        
+    //       const response = await axiosClient.get(`/problem/find/${problemId}`);
+    //       console.log(response.data.findproblem);
 
-  //       setCode(initialcode);
-  //       setLoading(false);
-        
-  //     } catch (error) {
-  //       console.error('Error fetching problem:', error);
-  //       setLoading(false);
-  //     }
-  //   };
-const fetchProblem = async () => {
-  setLoading(true);
-  try {
-    const response = await axiosClient.get(`/problem/find/${problemId}`);
-    console.log("Fetched problem:", response.data.findproblem);
-
-    const matchedStartCode = response.data.findproblem.startCode.find(
-  sc => sc.language === langMap[selectedLanguage] // or use langMap[selectedLanguage] if needed
-);
-
-// console.log("Available startCode languages:", response.data.findproblem.startCode.map(sc => sc.language));
+    // const initialcode = response.data.findproblem.startCode.find(sc => sc.language === langMap[selectedLanguage])?.initialcode
 
 
-    if (!matchedStartCode) {
-      console.warn("No matching start code found for language:", selectedLanguage);
-    }
-
-    const initialcode = matchedStartCode?.initialCode || '';
+    //       // console.log(initialCode);
+    //       setProblem(response.data.findproblem);
+    //       // console.log(response.data.findproblem);
 
 
-    setProblem(response.data.findproblem);
-    setCode(initialcode);
-    setLoading(false);
+    //       setCode(initialcode);
+    //       setLoading(false);
 
-  } catch (error) {
-    console.error('Error fetching problem:', error);
-    setLoading(false);
-  }
-};
+    //     } catch (error) {
+    //       console.error('Error fetching problem:', error);
+    //       setLoading(false);
+    //     }
+    //   };
+    const fetchProblem = async () => {
+      setLoading(true);
+      try {
+        const response = await axiosClient.get(`/problem/find/${problemId}`);
+        console.log("Fetched problem:", response.data.findproblem);
+
+        const matchedStartCode = response.data.findproblem.startCode.find(
+          sc => sc.language === langMap[selectedLanguage] // or use langMap[selectedLanguage] if needed
+        );
+
+        // console.log("Available startCode languages:", response.data.findproblem.startCode.map(sc => sc.language));
+
+
+        if (!matchedStartCode) {
+          console.warn("No matching start code found for language:", selectedLanguage);
+        }
+
+        const initialcode = matchedStartCode?.initialCode || '';
+
+
+        setProblem(response.data.findproblem);
+        setCode(initialcode);
+        setLoading(false);
+
+      } catch (error) {
+        console.error('Error fetching problem:', error);
+        setLoading(false);
+      }
+    };
 
     fetchProblem();
   }, [problemId]);
@@ -113,11 +115,11 @@ const fetchProblem = async () => {
   const handleRun = async () => {
     setLoading(true);
     setRunResult(null);
-    
+
 
     try {
       const response = await axiosClient.post(`/submit/run/${problemId}`, {
-        code:code,
+        code: code,
         language: selectedLanguage
       });
 
@@ -125,7 +127,7 @@ const fetchProblem = async () => {
       setRunResult(response.data);
       setLoading(false);
       setActiveRightTab('testcase');
-      
+
     } catch (error) {
       console.error('Error running code:', error);
       setRunResult({
@@ -140,18 +142,18 @@ const fetchProblem = async () => {
   const handleSubmitCode = async () => {
     setLoading(true);
     setSubmitResult(null);
-    
+
     try {
-        const response = await axiosClient.post(`/submit/submit/${problemId}`, {
-        code:code,
+      const response = await axiosClient.post(`/submit/submit/${problemId}`, {
+        code: code,
         language: selectedLanguage
       });
-console.log(response.data);
+      console.log(response.data);
 
-       setSubmitResult(response.data); //all data pass by backend by res.json
-       setLoading(false);
-       setActiveRightTab('result');   //default me code hai eska value 
-      
+      setSubmitResult(response.data); //all data pass by backend by res.json
+      setLoading(false);
+      setActiveRightTab('result');   //default me code hai eska value 
+
     } catch (error) {
       console.error('Error submitting code:', error);
       setSubmitResult(null);
@@ -159,16 +161,18 @@ console.log(response.data);
       setActiveRightTab('result');
     }
   };
-// language selector for monaco
+  // language selector for monaco
   const getLanguageForMonaco = (lang) => {
     switch (lang) {
       case 'javascript': return 'javascript';
       case 'java': return 'java';
       case 'cpp': return 'cpp';
+      case 'go': return 'go';
+      case 'python': return 'python';
       default: return 'javascript';
     }
   };
-// color of tags..
+  // color of tags..
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case 'easy': return 'text-green-500';
@@ -187,40 +191,40 @@ console.log(response.data);
   }
 
   return (
-    <div className="h-screen flex bg-base-100">
+    <div className="h-screen flex bg-base-100 ">
       {/* Left Panel */}
       <div className="w-1/2 flex flex-col border-r border-base-300">
         {/* Left Tabs */}
         <div className="tabs tabs-bordered bg-base-200 px-4">
-          <button 
+          <button
             className={`tab ${activeLeftTab === 'description' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('description')}
           >
             Description
           </button>
 
-          <button 
+          <button
             className={`tab ${activeLeftTab === 'editorial' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('editorial')}
           >
             Editorial
           </button>
 
-          <button 
+          <button
             className={`tab ${activeLeftTab === 'solutions' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('solutions')}
           >
             Solutions
           </button>
 
-          <button 
+          <button
             className={`tab ${activeLeftTab === 'submissions' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('submissions')}
           >
             Submissions
           </button>
 
-          <button 
+          <button
             className={`tab ${activeLeftTab === 'chatAi' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('chatAi')}
           >
@@ -309,12 +313,12 @@ console.log(response.data);
                 </div>
               )}
 
-                {activeLeftTab === 'chatAi' && (
+              {activeLeftTab === 'chatAi' && (
                 <div className="prose max-w-none">
                   <h2 className="text-xl font-bold mb-4">CHAT-AI</h2>
                   <div className="whitespace-pre-wrap text-sm leading-relaxed">
                     {/* {'chat with AI , that helps to solve qurrey related question...'} */}
-                    <ChatAi problem={problem}/>
+                    <ChatAi problem={problem} />
                   </div>
                 </div>
               )}
@@ -328,23 +332,23 @@ console.log(response.data);
       <div className="w-1/2 flex flex-col ">
         {/* Right Tabs */}
         <div className="tabs tabs-bordered bg-base-200 px-4">
-          
+
           {/* code */}
-          <button 
+          <button
             className={`tab ${activeRightTab === 'code' ? 'tab-active' : ''}`}
             onClick={() => setActiveRightTab('code')}
           >
             Code
           </button>
           {/* test cas */}
-          <button 
+          <button
             className={`tab ${activeRightTab === 'testcase' ? 'tab-active' : ''}`}
             onClick={() => setActiveRightTab('testcase')}
           >
             Testcase
           </button>
           {/* rslt */}
-          <button 
+          <button
             className={`tab ${activeRightTab === 'result' ? 'tab-active' : ''}`}
             onClick={() => setActiveRightTab('result')}
           >
@@ -359,13 +363,14 @@ console.log(response.data);
               {/* Language Selector */}
               <div className="flex justify-between items-center p-4 border-b border-base-300">
                 <div className="flex gap-2">
-                  {['javascript', 'java', 'cpp'].map((lang) => (
+                  {['javascript', 'java', 'cpp', 'go', 'python'].map((lang) => (
                     <button
                       key={lang}
                       className={`btn btn-sm ${selectedLanguage === lang ? 'btn-primary' : 'btn-ghost'}`}
                       onClick={() => handleLanguageChange(lang)}
                     >
-                      {lang === 'cpp' ? 'C++' : lang === 'javascript' ? 'JavaScript' : 'Java'}
+                      {/* {lang === 'cpp' ? 'C++' : lang === 'javascript' ? 'JavaScript' : 'Java'} */}
+                      {langMap[lang]}
                       {/* {langMap[lang]} */}
                     </button>
                   ))}
@@ -407,7 +412,7 @@ console.log(response.data);
               {/* Action Buttons */}
               <div className="p-4 border-t border-base-300 flex justify-between">
                 <div className="flex gap-2">
-                  <button 
+                  <button
                     className="btn btn-ghost btn-sm"
                     onClick={() => setActiveRightTab('testcase')}
                   >
@@ -438,14 +443,14 @@ console.log(response.data);
             <div className="flex-1 p-4 overflow-y-auto">
               <h3 className="font-semibold mb-4">Test Results</h3>
               {runResult ? (
-                <div className={`alert ${runResult.success? 'alert-success' : 'alert-error'} mb-4`}>
+                <div className={`alert ${runResult.success ? 'alert-success' : 'alert-error'} mb-4`}>
                   <div>
-                    {runResult.success  ? (
+                    {runResult.success ? (
                       <div>
                         <h4 className="font-bold">✅ All test cases passed!</h4>
-                        <p className="text-sm mt-2">Runtime: {runResult.runtime+" sec"}</p>
-                        <p className="text-sm">Memory: {runResult.memory+" KB"}</p>
-                        
+                        <p className="text-sm mt-2">Runtime: {runResult.runtime + " sec"}</p>
+                        <p className="text-sm">Memory: {runResult.memory + " KB"}</p>
+
                         <div className="mt-4 space-y-2">
                           {runResult.testCases.map((tc, i) => (
                             <div key={i} className="bg-base-100 p-3 rounded text-xs">
@@ -471,8 +476,8 @@ console.log(response.data);
                                 <div><strong>Input:</strong> {tc.stdin}</div>
                                 <div><strong>Expected:</strong> {tc.expected_output}</div>
                                 <div><strong>Output:</strong> {tc.stdout}</div>
-                                <div className={tc.status_id==3 ? 'text-green-600' : 'text-red-600'}>
-                                  {tc.status_id==3 ? '✓ Passed' : '✗ Failed'}
+                                <div className={tc.status_id == 3 ? 'text-green-600' : 'text-red-600'}>
+                                  {tc.status_id == 3 ? '✓ Passed' : '✗ Failed'}
                                 </div>
                               </div>
                             </div>
@@ -496,7 +501,7 @@ console.log(response.data);
               {submitResult ? (
                 <div className={`alert ${submitResult.status === "accepted" ? 'alert-success' : 'alert-error'}`}>
                   <div>
-                    {submitResult.status === "accepted"? (
+                    {submitResult.status === "accepted" ? (
                       <div>
                         <h4 className="font-bold text-lg">🎉 Accepted</h4>
                         <div className="mt-4 space-y-2">
@@ -524,6 +529,7 @@ console.log(response.data);
           )}
         </div>
       </div>
+
     </div>
   );
 };
