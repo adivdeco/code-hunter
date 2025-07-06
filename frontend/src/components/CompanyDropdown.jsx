@@ -53,7 +53,7 @@ const CompanyBadgeCell = ({ companies = [] }) => {
             {/* Dropdown with animation */}
             {showAll && (
                 <div
-                    className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-gray-800  rounded-md  shadow-lg p-2 w-32
+                    className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-gray-800  rounded-md  shadow-lg p-2 w-36
           transition-all duration-200 transform origin-top scale-95 opacity-0 animate-fade_in"
                 >
                     {hiddenCompanies.map((company, index) =>
