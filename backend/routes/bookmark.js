@@ -7,7 +7,7 @@ const bookmarkRouter = express.Router()
 
 
 bookmarkRouter.post('/createmark/:id', userMiddleware, createMark);
-bookmarkRouter.get('/getmark/:id', userMiddleware, getMark)
+bookmarkRouter.get('/getmark', userMiddleware, getMark)
 bookmarkRouter.delete('delmark/:id', userMiddleware, delMark)
 
 

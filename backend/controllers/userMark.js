@@ -1,11 +1,10 @@
-const BookMark = require('../models/ bookmarkSchema')
+const BookMark = require('../models/bookmarkSchema');
 
-
+// ✅ CREATE Bookmark
 const createMark = async (req, res) => {
-
     try {
         const userId = req.finduser._id;
-        const problemId = req.params.Id;
+        const problemId = req.params.id;
 
         const exists = await BookMark.findOne({ userId, problemId });
         if (exists) return res.status(200).json({ message: "Already bookmarked" });
@@ -13,39 +12,40 @@ const createMark = async (req, res) => {
         const bookmark = await BookMark.create({ userId, problemId });
         res.status(201).json({ message: "Bookmarked!", bookmark });
 
-    }
-    catch (err) {
+    } catch (err) {
         console.error("Bookmark add error:", err);
-        res.status(500).json({
-            message: "error in Bookmark addition", err
-        })
+        res.status(500).json({ message: "Error adding bookmark", err });
     }
-}
+};
+
+
 
 const delMark = async (req, res) => {
     try {
+        const userId = req.finduser._id;
+        const problemId = req.params.id;
+
         await BookMark.deleteOne({ userId, problemId });
         res.json({ message: "Removed from bookmarks" });
 
     } catch (error) {
-        res.send('error in bookmark removed: ', error)
+        console.error("Bookmark removal error:", error);
+        res.status(500).json({ message: "Error removing bookmark", error });
     }
-}
+};
 
+// ✅ GET Bookmarks
 const getMark = async (req, res) => {
     try {
         const userId = req.finduser._id;
         const bookmarks = await BookMark.find({ userId }).populate('problemId');
-        res.json({ bookmarks });
+
+        res.status(200).json({ bookmarks });
 
     } catch (error) {
-        res.send('error in fetch bookmark: ', error)
-
+        console.error("Bookmark fetch error:", error);
+        res.status(500).json({ message: "Error fetching bookmarks", error });
     }
-}
+};
 
-
-
-
-
-module.exports = { createMark, getMark, delMark }
+module.exports = { createMark, getMark, delMark };
