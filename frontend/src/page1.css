@@ -136,3 +136,15 @@ svg path {
         stroke-width: .4px;
     }
 }
+
+.bookmark-filled path {
+    fill: #facc15 !important;
+    /* Tailwind yellow-400 */
+    stroke: #ec5f07 !important;
+}
+
+.notebook-filled path {
+    fill: #4ade809b !important;
+    /* Tailwind green-400 */
+    stroke: #56fb04 !important;
+}

@@ -61,9 +61,19 @@ const getNote = async (req, res) => {
 
 }
 
+const allNote = async (req, res) => {
+    try {
+        const userId = req.finduser._id;
+
+        const notes = await Note.find({ userId }).select('problemId'); // Only fetch IDs
+        res.status(200).json({ notes });
+    } catch (error) {
+        console.error('Error fetching all notes:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
 
 
 
 
-
-module.exports = { creatNote, getNote };
+module.exports = { creatNote, getNote, allNote };

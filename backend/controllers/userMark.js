@@ -29,6 +29,8 @@ const delMark = async (req, res) => {
         res.json({ message: "Removed from bookmarks" });
 
     } catch (error) {
+        console.log(error);
+
         console.error("Bookmark removal error:", error);
         res.status(500).json({ message: "Error removing bookmark", error });
     }

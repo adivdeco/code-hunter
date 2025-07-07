@@ -3,88 +3,88 @@ const { Schema } = mongoose;
 
 
 const problemSchema = new Schema({
-     
-    title:{
+
+    title: {
         type: String,
         required: true,
     },
-    description:{
+    description: {
         type: String,
         required: true,
     },
-     difficulty:{
-        type:String,
-        enum:['easy','medium','hard'],
-        required:true,
+    difficulty: {
+        type: String,
+        enum: ['easy', 'medium', 'hard'],
+        required: true,
     },
-    tags:{
+    tags: {
         type: String,
         enum: ['array', 'string', 'linkedlist', 'tree', 'graph', 'dynamic programming', 'greedy', 'backtracking'],
         required: true,
     },
-    companies:{
+    companies: {
         type: [String],
-        enum: ['Google', 'Amazon', 'Microsoft', 'Facebook', 'Apple', 'Goldman Sachs', 'Flipkart'],
+        enum: ['Google', 'Netflix', 'TCS', 'Amazon', 'Microsoft', 'Facebook', 'Apple', 'Goldman Sachs', 'Flipkart'],
         required: true,
     },
-     visibleTestCases:[
+    visibleTestCases: [
         {
-            input:{
-                type:String,
-                required:true,
+            input: {
+                type: String,
+                required: true,
             },
-            output:{
-                type:String,
-                required:true,
+            output: {
+                type: String,
+                required: true,
             },
-            explanation:{
-                type:String,
-                required:true
+            explanation: {
+                type: String,
+                required: true
             }
         }
     ],
-      hiddenTestCases:[
+    hiddenTestCases: [
         {
-            input:{
-                type:String,
-                required:true,
+            input: {
+                type: String,
+                required: true,
             },
-            output:{
-                type:String,
-                required:true,
-            }
-        }
-    ],
-
-     startCode: [
-        {
-            language:{
-                type:String,
-                required:true,
-            },
-            initialCode:{
-                type:String,
-                required:true
-            }
-        }
-    ],
-     referenceSolution:[
-        {
-            language:{
-                type:String,
-                required:true,
-            },
-            completeCode:{
-                type:String,
-                required:true
+            output: {
+                type: String,
+                required: true,
             }
         }
     ],
 
-    problemCreator:{
+    startCode: [
+        {
+            language: {
+                type: String,
+                required: true,
+            },
+            initialCode: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+    referenceSolution: [
+        {
+            language: {
+                type: String,
+                required: true,
+            },
+            completeCode: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+
+    problemCreator: {
         type: Schema.Types.ObjectId,
-        ref:'user',
-        required:true
+        ref: 'user',
+        required: true
     }
 
 

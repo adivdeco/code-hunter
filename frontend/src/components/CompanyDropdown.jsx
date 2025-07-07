@@ -83,26 +83,38 @@ export default CompanyBadgeCell;
 
 
 
-const getCompanyBadgeColor = (companies) => {
-    if (!companies) return null;
+const getCompanyBadgeColor = (company) => {
+    if (!company) return 'px-3 py-1 text-sm rounded-full bg-gray-500/10 text-gray-300 border border-gray-500 shadow-sm';
+
+    switch (company.trim().toLowerCase()) {
 
 
-    switch (companies) {
-        // case 'Google':
-        //   return 'badge-rainbow'; // custom class
-        case 'Amazon':
-            return 'badge-warning';
-        case 'Microsoft':
-            return 'bg-indigo-800';
-        case 'Facebook':
-            return 'badge-info';
-        case 'Apple':
-            return 'bg-gray-700';
-        case 'Goldman sachs':
-            return 'bg-yellow-500';
-        case 'Flipkart':
-            return 'badge-warning';
+        case 'amazon':
+            return 'px-3 py-1 text-sm rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-400 shadow-md backdrop-blur-sm';
+
+        case 'microsoft':
+            return 'px-3 py-1 text-sm rounded-full bg-indigo-700/10 text-indigo-300 border border-indigo-500 shadow-md backdrop-blur-sm';
+
+        case 'facebook':
+            return 'px-3 py-1 text-sm rounded-full bg-blue-600/30 text-blue-300 border border-blue-400 shadow-md backdrop-blur-sm';
+
+        case 'apple':
+            return 'px-3 py-1 text-sm rounded-full bg-gray-800/10 text-gray-200 border border-gray-400 shadow-md backdrop-blur-sm';
+
+        case 'goldman sachs':
+            return 'px-3 py-1 text-sm rounded-full bg-yellow-300/10 text-yellow-300 border border-yellow-300 shadow-md backdrop-blur-sm';
+
+        case 'flipkart':
+            return 'px-3 py-1 text-sm rounded-full bg-blue-500/10 text-blue-300 border border-blue-300 shadow-md backdrop-blur-sm';
+
+        case 'netflix':
+            return 'px-3 py-1 text-sm rounded-full bg-red-600/10 text-red-500 border border-red-500 shadow-md backdrop-blur-sm font-semibold';
+
+        case 'tcs':
+            return 'px-3 py-1 text-sm rounded-full bg-orange-400/10 text-orange-300 border border-orange-300 shadow-md backdrop-blur-sm';
+
         default:
-            return 'badge-ghost';
+            return 'px-3 py-1 text-sm rounded-full bg-gray-600/10 text-gray-300 border border-gray-500 shadow-sm';
     }
 };
+
