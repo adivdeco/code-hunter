@@ -198,7 +198,7 @@ function Homepage() {
             <option value="array">Array</option>
             <option value="linkedList">Linked List</option>
             <option value="graph">Graph</option>
-            <option value="dp">DP</option>
+            <option value="dynamic programming">DP</option>
             <option value="backtracking" >Backtracking</option>
             <option value="string">String</option>
           </select>
@@ -252,7 +252,7 @@ function Homepage() {
               {filteredProblems.map(problem => (
                 <tr key={problem._id}>
                   <td>
-                    <NavLink to={`/problem/${problem._id}`} className="hover:text-white font-changa text-lg text-gray-300">
+                    <NavLink to={`/problem/${problem._id}`} className="hover:text-yellow-500 font-changa text-lg text-gray-300">
                       {problem.title}
                     </NavLink>
                   </td>
@@ -285,16 +285,18 @@ function Homepage() {
                   </td>
 
                   <td>
-                    {solvedProblems.some(sp => sp._id === problem._id) ? (
-                      <div className="badge badge-success gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                        Solved
-                      </div>
-                    ) : (
-                      <span className="badge badge-ghost">Unsolved</span>
-                    )}
+                    <NavLink to={`/problem/${problem._id}`}>
+                      {solvedProblems.some(sp => sp._id === problem._id) ? (
+                        <div className="badge badge-success gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          Solved
+                        </div>
+                      ) : (
+                        <span className="badge badge-ghost">Unsolved</span>
+                      )}
+                    </NavLink>
                   </td>
                 </tr>
               ))}

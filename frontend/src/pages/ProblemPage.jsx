@@ -6,6 +6,8 @@ import { useParams } from 'react-router';
 import axiosClient from "../utils/axiosClint"
 import SubmissionHistory from "../components/SubmissionHistory"
 import ChatAi from '../components/Chat-Ai';
+import ThreeRingLoader from "@/components/ThreeRingLoader";
+
 
 const langMap = {
   javascript: 'javascript',
@@ -32,29 +34,7 @@ const ProblemPage = () => {
 
 
   useEffect(() => {
-    //   const fetchProblem = async () => {
-    //     setLoading(true);
-    //     try {
 
-    //       const response = await axiosClient.get(`/problem/find/${problemId}`);
-    //       console.log(response.data.findproblem);
-
-    // const initialcode = response.data.findproblem.startCode.find(sc => sc.language === langMap[selectedLanguage])?.initialcode
-
-
-    //       // console.log(initialCode);
-    //       setProblem(response.data.findproblem);
-    //       // console.log(response.data.findproblem);
-
-
-    //       setCode(initialcode);
-    //       setLoading(false);
-
-    //     } catch (error) {
-    //       console.error('Error fetching problem:', error);
-    //       setLoading(false);
-    //     }
-    //   };
     const fetchProblem = async () => {
       setLoading(true);
       try {
@@ -64,9 +44,6 @@ const ProblemPage = () => {
         const matchedStartCode = response.data.findproblem.startCode.find(
           sc => sc.language === langMap[selectedLanguage] // or use langMap[selectedLanguage] if needed
         );
-
-        // console.log("Available startCode languages:", response.data.findproblem.startCode.map(sc => sc.language));
-
 
         if (!matchedStartCode) {
           console.warn("No matching start code found for language:", selectedLanguage);
@@ -175,23 +152,27 @@ const ProblemPage = () => {
   // color of tags..
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'easy': return 'text-green-500';
-      case 'medium': return 'text-yellow-500';
-      case 'hard': return 'text-red-500';
-      default: return 'text-gray-500';
+      case 'easy':
+        return 'px-3 py-1 text-sm  rounded-full bg-green-500/10 text-green-400 border border-green-400 shadow-md backdrop-blur-sm';
+      case 'medium':
+        return 'px-3 py-1 text-sm  rounded-full bg-yellow-200/10 text-yellow-300 border border-yellow-400 shadow-md backdrop-blur-sm';
+      case 'hard':
+        return 'px-3 py-1 text-sm  rounded-full bg-red-500/10 text-red-400 border border-red-500 shadow-md backdrop-blur-sm';
+      default:
+        return 'px-3 py-1 text-sm  rounded-full bg-gray-600/10 text-gray-300 border border-gray-500 shadow-md backdrop-blur-sm';
     }
   };
 
   if (loading && !problem) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
+
+      <ThreeRingLoader />
+
     );
   }
 
   return (
-    <div className="h-screen flex bg-base-100 ">
+    <div className="h-screen flex bg-base-100 text-white ">
       {/* Left Panel */}
       <div className="w-1/2 flex flex-col border-r border-base-300">
         {/* Left Tabs */}

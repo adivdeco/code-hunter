@@ -11,6 +11,8 @@ import ProblemPage from "./pages/ProblemPage"
 import Admin from "./pages/Admin";
 import Page1 from "./pages/page1";
 import Mainpg from "./pages/Mainpg";
+import ThreeRingLoader from "@/components/ThreeRingLoader";
+
 
 function App() {
 
@@ -52,11 +54,12 @@ function App() {
 
   console.log(isAuthenticated);
 
+
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <span className="loading loading-spinner loading-lg"></span>
-    </div>;
+    return <ThreeRingLoader />;
   }
+
+
 
   const handleSplashAnimationEnd = () => {
     if (slideUp) {
