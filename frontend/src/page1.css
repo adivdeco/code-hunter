@@ -225,6 +225,7 @@ svg path {
     background-clip: padding-box;
     cursor: col-resize;
     display: flex;
+    z-index: 60;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;

@@ -177,21 +177,16 @@ const ProblemPage = () => {
   }
 
   return (
-    <div className="h-screen overflow-hidden  px-2 flex flex-col bg-black text-white ">
-
-      <nav className="h-12 w-full bg-black  px-3 flex items-center justify-between text-white shadow-sm">
-        {/* Left Logo or Title */}
+    <div className="h-screen overflow-hidden px-2 flex flex-col bg-black text-white">
+      <nav className="h-12 w-full bg-black px-3 flex items-center justify-between text-white shadow-sm">
         <div className="flex items-center gap-3">
           <span className="text-lg font-bold font-changa text-white flex items-center">
             Code
-            <span className="ml-1 bg-yellow-400 text-black px-0.5 rounded-sm">
-              Hunter
-            </span>
+            <span className="ml-1 bg-yellow-400 text-black px-0.5 rounded-sm">Hunter</span>
           </span>
           <span className="text-sm text-gray-400 hidden sm:inline">Practice. Learn. Repeat.</span>
         </div>
 
-        {/* Center Nav Links */}
         <div className="hidden md:flex items-center gap-6 text-sm text-gray-300">
           <button className="hover:text-yellow-400 transition">Problems</button>
           <button className="hover:text-yellow-400 transition">Leaderboard</button>
@@ -199,28 +194,24 @@ const ProblemPage = () => {
           <button className="hover:text-yellow-400 transition">Contests</button>
         </div>
 
-        {/* Right User/Theme section */}
         <div className="flex items-center gap-4">
           <button className="text-gray-400 hover:text-yellow-400 transition text-sm">Login</button>
-          <button className="px-3 py-1 text-sm rounded-md bg-yellow-500 text-black font-semibold hover:bg-yellow-400 transition">
-            Sign Up
-          </button>
+          <button className="px-3 py-1 text-sm rounded-md bg-yellow-500 text-black font-semibold hover:bg-yellow-400 transition">Sign Up</button>
         </div>
       </nav>
 
-      {/* Left Panel */}
       <div className="flex-1 overflow-hidden">
         <Split
           className="flex w-full h-full"
           sizes={[50, 50]}
-          minSize={300}
+          minSize={[200, 300]}
           gutterSize={7}
-          gutterClassName="gutter"
+          gutterClassName="gutter-horizontal"
           direction="horizontal"
         >
-          <div className=" w-full h-full flex flex-col rounded-md overflow-hidden border border-gray-600">
-            {/* Left Tabs */}
-            <div className=" w-full flex bg-[rgb(55,55,55)] px-2 border-b font-changa border-gray-700  h-10  text-sm font-medium">
+          {/* LEFT PANEL */}
+          <div className="w-full h-full flex flex-col rounded-md overflow-hidden border border-gray-600">
+            <div className="w-full flex bg-[rgb(55,55,55)] px-2 border-b font-changa border-gray-700 h-10 text-sm font-medium">
               {[
                 { key: 'description', label: 'Description' },
                 { key: 'editorial', label: 'Editorial' },
@@ -230,10 +221,7 @@ const ProblemPage = () => {
               ].map(({ key, label }) => (
                 <button
                   key={key}
-                  className={`relative py-2 px-3 h-9 hover:bg-slate-700 rounded-lg transition-colors duration-200 hover:text-yellow-100 ${activeLeftTab === key
-                    ? 'text-yellow-500 border-b-2 border-primary font-semibold'
-                    : 'text-gray-500'
-                    }`}
+                  className={`relative py-2 px-3 h-9 hover:bg-slate-700 rounded-lg transition-colors duration-200 hover:text-yellow-100 ${activeLeftTab === key ? 'text-yellow-500 border-b-2 border-primary font-semibold' : 'text-gray-500'}`}
                   onClick={() => setActiveLeftTab(key)}
                 >
                   {label}
@@ -241,8 +229,6 @@ const ProblemPage = () => {
               ))}
             </div>
 
-
-            {/* Left Content */}
             <div className="flex-1 overflow-y-auto px-4 py-3 bg-[rgb(38,38,38)] w-full h-full">
               {problem && (
                 <>
@@ -341,80 +327,59 @@ const ProblemPage = () => {
           </div>
 
 
-          {/* Right Panel */}
-          <div className="flex flex-col overflow-hidden rounded-lg">
-            {/* Right Tabs */}
-            <div className="tabs tabs-bordered bg-[rgb(55,55,55)] ">
 
-              {/* code */}
-              <p className=' px-4 py-1 font-changa text-lg'>
-                <span className='text-green-500 text-xl'>&lt;/&gt;</span>
-                Code
-              </p>
 
-              {/* Language Selector */}
-              <div className="flex justify-between items-center bg-[rgb(38,38,38)]  border-b border-gray-700">
-                <div className="flex items-center">
-                  <select
-                    id="language-select"
-                    value={selectedLanguage}
-                    onChange={(e) => handleLanguageChange(e.target.value)}
-                    className="px-3 py-1 text-sm bg-transparent text-gray-300 border border-transparent rounded-md hover:border-gray-600 focus:outline-none focus:border-transparent transition duration-200"
-                  >
-                    {['javascript', 'java', 'cpp', 'go', 'python'].map((lang) => (
-                      <option key={lang} value={lang}>
-                        {lang === 'cpp' ? 'C++' : lang.charAt(0).toUpperCase() + lang.slice(1)}
-                      </option>
-                    ))}
-                  </select>
+
+
+          {/* RIGHT PANEL */}
+          <div className="flex flex-col h-full overflow-hidden rounded-lg">
+            <Split
+              className="flex-1 flex flex-col w-full h-full"
+              sizes={[70, 30]}
+              minSize={[300, 100]}
+              gutterSize={7}
+              gutterClassName="gutter-vertical"
+              direction="vertical"
+            >
+              <div className="flex-1 flex flex-col bg-[rgba(30,30,30,0.8)] rounded-md">
+                <div className="tabs tabs-bordered bg-[rgb(55,55,55)]">
+                  <p className='px-4 py-1 font-changa text-lg'>
+                    <span className='text-green-500 text-xl'>&lt;/&gt;</span>
+                    Code
+                  </p>
+                  <div className="flex justify-between items-center bg-[rgb(38,38,38)] border-b border-gray-700">
+                    <div className="flex items-center">
+                      <select
+                        id="language-select"
+                        value={selectedLanguage}
+                        onChange={(e) => handleLanguageChange(e.target.value)}
+                        className="px-3 py-1 text-sm bg-transparent text-gray-300 border border-transparent rounded-md hover:border-gray-600 focus:outline-none focus:border-transparent transition duration-200"
+                      >
+                        {['javascript', 'java', 'cpp', 'go', 'python'].map((lang) => (
+                          <option key={lang} value={lang}>
+                            {lang === 'cpp' ? 'C++' : lang.charAt(0).toUpperCase() + lang.slice(1)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className='flex mr-2 gap-2 text-xs'>
+                      <RotateCcw />
+                      <Bookmark />
+                      <Maximize />
+                      <Maximize2 />
+                      <ChevronUp />
+                      <ChevronDown />
+                    </div>
+                  </div>
                 </div>
-                <div className='flex mr-2 gap-2 text-xs'>
-                  <RotateCcw />
-                  <Bookmark />
-                  {/* <BookmarkButton problemId={problem._id} user={user} onBookmarkChange={handleBookmarkChange} /> */}
-                  <Maximize />
-                  <Maximize2 />
-                  <ChevronUp />
-                  <ChevronDown />
-                </div>
-
-              </div>
-
-              {/* test cas */}
-
-              {/* <button
-                className={`tab ${activeRightTab === 'testcase' ? 'tab-active' : ''}`}
-                onClick={() => setActiveRightTab('testcase')}
-              >
-                Testcase
-              </button> */}
-
-              {/* rslt */}
-
-              {/* <button
-                className={`tab ${activeRightTab === 'result' ? 'tab-active' : ''}`}
-                onClick={() => setActiveRightTab('result')}
-              >
-                Result
-              </button> */}
-
-            </div>
-
-            {/* Right Content */}
-            <div className="flex-1 flex flex-col bg-pink-800">
-              {/* {activeRightTab === 'code' && ( */}
-              <div className="flex-1 flex flex-col bg-[rgba(30,30,30,0.8)]">
-
-
-                {/* Monaco Editor */}
-                <div className="flex-1">
+                <div className="flex-1 flex flex-col">
                   <Editor
-                    height="70%"
                     language={getLanguageForMonaco(selectedLanguage)}
                     value={code}
                     onChange={handleEditorChange}
                     onMount={handleEditorDidMount}
                     theme="vs-dark"
+                    className="flex-1"
                     options={{
                       fontSize: 12,
                       minimap: { enabled: false },
@@ -437,130 +402,48 @@ const ProblemPage = () => {
                     }}
                   />
                 </div>
+              </div>
 
-                {/* Action Buttons */}
-                <div className="p-4 border-t border-base-300 flex justify-between">
+              <div className="flex flex-col overflow-y-auto bg-[rgba(38,38,38)] border border-gray-600 rounded-md z-50">
+
+                <div className="px-4 py-0.5 border-b border-gray-700 flex justify-between">
+
                   <div className="flex gap-2">
-                    <button
-                      className="btn btn-ghost btn-sm"
-                      onClick={() => setActiveRightTab('testcase')}
-                    >
-                      Console
-                    </button>
+                    <button className={`tab ${activeRightTab === 'testcase' ? 'tab-active' : ''}`} onClick={() => setActiveRightTab('testcase')}>Testcase</button>
+                    <button className={`tab ${activeRightTab === 'result' ? 'tab-active' : ''}`} onClick={() => setActiveRightTab('result')}>Result</button>
                   </div>
+
                   <div className="flex gap-2">
-                    <button
-                      className={`btn btn-outline btn-sm ${loading ? 'loading' : ''}`}
-                      onClick={handleRun}
-                      disabled={loading}
-                    >
-                      Run
-                    </button>
-                    <button
-                      className={`btn btn-primary btn-sm ${loading ? 'loading' : ''}`}
-                      onClick={handleSubmitCode}
-                      disabled={loading}
-                    >
-                      Submit
-                    </button>
+                    <button className={`btn btn-outline btn-sm ${loading ? 'loading' : ''}`} onClick={handleRun} disabled={loading}>Run</button>
+                    <button className={`btn btn-primary btn-sm ${loading ? 'loading' : ''}`} onClick={handleSubmitCode} disabled={loading}>Submit</button>
                   </div>
+
                 </div>
+
+                {/* introduce tabs hear */}
 
               </div>
-              {/* )} */}
-
-              {activeRightTab === 'testcase' && (
-                <div className="flex-1 p-4 overflow-y-auto">
-                  <h3 className="font-semibold mb-4">Test Results</h3>
-                  {runResult ? (
-                    <div className={`alert ${runResult.success ? 'alert-success' : 'alert-error'} mb-4`}>
-                      <div>
-                        {runResult.success ? (
-                          <div>
-                            <h4 className="font-bold">✅ All test cases passed!</h4>
-                            <p className="text-sm mt-2">Runtime: {runResult.runtime + " sec"}</p>
-                            <p className="text-sm">Memory: {runResult.memory + " KB"}</p>
-
-                            <div className="mt-4 space-y-2">
-                              {runResult.testCases.map((tc, i) => (
-                                <div key={i} className="bg-base-100 p-3 rounded text-xs">
-                                  <div className="font-mono">
-                                    <div><strong>Input:</strong> {tc.stdin}</div>
-                                    <div><strong>Expected:</strong> {tc.expected_output}</div>
-                                    <div><strong>Output:</strong> {tc.stdout}</div>
-                                    <div className={'text-green-600'}>
-                                      {'✓ Passed'}
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ) : (
-                          <div>
-                            <h4 className="font-bold">❌ Error</h4>
-                            <div className="mt-4 space-y-2">
-                              {runResult.testCases.map((tc, i) => (
-                                <div key={i} className="bg-base-100 p-3 rounded text-xs">
-                                  <div className="font-mono">
-                                    <div><strong>Input:</strong> {tc.stdin}</div>
-                                    <div><strong>Expected:</strong> {tc.expected_output}</div>
-                                    <div><strong>Output:</strong> {tc.stdout}</div>
-                                    <div className={tc.status_id == 3 ? 'text-green-600' : 'text-red-600'}>
-                                      {tc.status_id == 3 ? '✓ Passed' : '✗ Failed'}
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-gray-500">
-                      Click "Run" to test your code with the example test cases.
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {activeRightTab === 'result' && (
-                <div className="flex-1 p-4 overflow-y-auto">
-                  <h3 className="font-semibold mb-4">Submission Result</h3>
-                  {submitResult ? (
-                    <div className={`alert ${submitResult.status === "accepted" ? 'alert-success' : 'alert-error'}`}>
-                      <div>
-                        {submitResult.status === "accepted" ? (
-                          <div>
-                            <h4 className="font-bold text-lg">🎉 Accepted</h4>
-                            <div className="mt-4 space-y-2">
-                              <p>Test Cases Passed: {submitResult.testCasesPassed}/{submitResult.testCasesTotal}</p>
-                              <p>Runtime: {submitResult.runtime + " sec"}</p>
-                              <p>Memory: {submitResult.memory + "KB"} </p>
-                            </div>
-                          </div>
-                        ) : (
-                          <div>
-                            <h4 className="font-bold text-lg">❌ {submitResult.status}</h4>
-                            <div className="mt-4 space-y-2">
-                              <p>Test Cases Passed: {submitResult.testCasesPassed}/{submitResult.testCasesTotal}</p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-gray-500">
-                      Click "Submit" to submit your solution for evaluation.
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+            </Split>
           </div>
+
+
         </Split>
       </div >
+
+
+      {/* Conditional Outputs */}
+      {activeRightTab === 'testcase' && (
+        <div className="flex-1 p-4 overflow-y-auto">
+          <h3 className="font-semibold mb-4">Test Results</h3>
+          {/* Render test case results here... */}
+        </div>
+      )}
+      {activeRightTab === 'result' && (
+        <div className="flex-1 p-4 overflow-y-auto">
+          <h3 className="font-semibold mb-4">Submission Result</h3>
+          {/* Render submission results here... */}
+        </div>
+      )}
     </div >
   );
 };
