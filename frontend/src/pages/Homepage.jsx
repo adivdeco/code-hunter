@@ -68,7 +68,7 @@ function Homepage() {
     };
     fetchMore();
   }, [page]);
-  console.log(problems);
+  // console.log(problems);
 
 
   // Fetch solved problems
