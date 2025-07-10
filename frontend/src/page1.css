@@ -220,23 +220,48 @@ svg path {
 }
 
 /* table width part in problems */
+/* Shared Gutter Base */
 .gutter {
     background-color: black;
     background-clip: padding-box;
-    cursor: col-resize;
     display: flex;
-    z-index: 60;
+    z-index: 20;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
 }
 
+/* On hover */
 .gutter:hover {
     background-color: #838282;
     border-radius: 70%;
 }
 
-.gutter::after {
+/* Vertical Gutter — ⋮ */
+.gutter-vertical {
+    cursor: row-resize;
+}
+
+.gutter-vertical::after {
+    content: '⋯';
+    color: #aaa;
+    font-size: 19px;
+    opacity: 0.9;
+    transition: opacity 0.3s;
+}
+
+.gutter-vertical:hover::after {
+    opacity: 1;
+    color: #ffffff;
+}
+
+/* Horizontal Gutter — ⋯ */
+.gutter-horizontal {
+    cursor: col-resize;
+}
+
+.gutter-horizontal::after {
+    /* Horizontal dots */
     content: '⋮';
     color: #aaa;
     font-size: 19px;
@@ -244,7 +269,7 @@ svg path {
     transition: opacity 0.3s;
 }
 
-.gutter:hover::after {
+.gutter-horizontal:hover::after {
     opacity: 1;
     color: #ffffff;
 }

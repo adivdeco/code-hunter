@@ -4,12 +4,24 @@ import axiosClient from "../utils/axiosClint";
 import { Send } from "lucide-react";
 
 function ChatAi({ problem }) {
-  const [messages, setMessages] = useState(
-    JSON.parse(localStorage.getItem("messages")) || [
-      { role: "model", text: "'hi', how i help you?" },
-      { role: "user", text: "..." },
-    ]
-  );
+  // const [messages, setMessages] = useState(
+  //   JSON.parse(localStorage.getItem("messages")) || [
+  //     { role: "model", text: "'hi', how i help you?" },
+  //     { role: "user", text: "..." },
+  //   ]
+  // );
+  const chatKey = `chat-${problem._id}`;
+
+  const [messages, setMessages] = useState(() => {
+    const stored = localStorage.getItem(chatKey);
+    return stored
+      ? JSON.parse(stored)
+      : [
+        { role: "model", text: "'hi', how can I help you?" },
+        { role: "user", text: "..." },
+      ];
+  });
+
 
   const {
     register,
@@ -27,6 +39,7 @@ function ChatAi({ problem }) {
     setMessages((prev) => [...prev, { role: "user", text: data.message }]);
 
     reset();
+
     try {
       const response = await axiosClient.post("/ai/chat", {
         messages,
@@ -55,27 +68,35 @@ function ChatAi({ problem }) {
   };
 
   // Persist messages to localStorage whenever they change
+  // useEffect(() => {
+  //   localStorage.setItem("messages", JSON.stringify(messages));
+  // }, [messages]);
   useEffect(() => {
-    localStorage.setItem("messages", JSON.stringify(messages));
-  }, [messages]);
+    localStorage.setItem(chatKey, JSON.stringify(messages));
+  }, [messages, chatKey]);
+
 
   return (
+
     <div className="flex flex-col h-screen max-h-[80vh] min-h-[500px] bg-gray-700 rounded-2xl">
+
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`chat ${
-              msg.role === "user" ? "chat-end" : "chat-start"
-            }`}
+            className={`chat ${msg.role === "user" ? "chat-end" : "chat-start"
+              }`}
           >
-            <div className="chat-bubble bg-base-200 text-base-content">
+            <div className="chat-bubble bg-base-200 text-gray-300">
               {msg.text}
             </div>
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
+
+
+
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -89,7 +110,7 @@ function ChatAi({ problem }) {
           />
           <button
             type="submit"
-            className="btn btn-ghost ml-2"
+            className="btn btn-circle bg-gray-900 ml-2"
             disabled={errors.message}
           >
             <Send size={20} />

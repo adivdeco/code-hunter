@@ -4,56 +4,56 @@ const { Schema } = mongoose;
 
 const solutionSchema = new Schema({
 
-    problemId:{
-        type:Schema.Types.ObjectId,
+    problemId: {
+        type: Schema.Types.ObjectId,
         ref: 'problemdata',
         required: true,
     },
-    userId:{
-        type:Schema.Types.ObjectId,
+    userId: {
+        type: Schema.Types.ObjectId,
         ref: 'user',
         required: true
     },
-    code:{
+    code: {
         type: String,
         required: true
     },
-    language:{
+    language: {
         type: String,
         required: true,
-        enum: ['c++', 'java', 'javascript']
+        enum: ['c++', 'java', 'javascript', 'go', 'python']
     },
-    status:{
+    status: {
         type: String,
-        enum:['pending', 'accepted', 'wrong_amnswer', 'error'],
-        default:'pending'
+        enum: ['pending', 'accepted', 'wrong_amnswer', 'error'],
+        default: 'pending'
     },
-    runtime:{
+    runtime: {
         type: Number,
         default: 0
     },
-    memory:{
+    memory: {
         type: Number,
         default: 0
     },
-    errormessage:{
+    errormessage: {
         type: String,
         default: ''
     },
-    testCasesPassed:{
+    testCasesPassed: {
         type: Number,
         default: 0
     },
-    testCasesTotal:{
+    testCasesTotal: {
         type: Number,
         default: 0
     },
-    
-},{ 
+
+}, {
     timestamps: true,
     versionKey: false,
 })
-solutionSchema.index({ problemId: 1, userId: 1 }); 
+solutionSchema.index({ problemId: 1, userId: 1 });
 
-const Solution = mongoose.model('solution' , solutionSchema);
+const Solution = mongoose.model('solution', solutionSchema);
 module.exports = Solution;

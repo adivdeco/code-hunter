@@ -18,7 +18,7 @@ function Homepage() {
   const [solvedProblems, setSolvedProblems] = useState([]);
   const [bookmarkedProblems, setBookmarkedProblems] = useState([]);
   const [bookmarkedIds, setBookmarkedIds] = useState([]);
-  const [noteExistsMap, setNoteExistsMap] = useState({});
+  const [noteExistsMap, setNoteExistsMap] = useState({});  // to add colour if prst green : null
 
 
   const [filters, setFilters] = useState({

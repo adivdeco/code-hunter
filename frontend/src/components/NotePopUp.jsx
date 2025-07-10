@@ -76,7 +76,7 @@ const NotePopup = ({ problemId, onClose }) => {
                         className="w-full border px-3 py-2 rounded h-40 border-none text-white"
                         value={noteContent}
                         placeholder="write your thoughts..."
-                        maxLength={500}
+                        maxLength={800}
                         onChange={(e) => setNoteContent(e.target.value)}
                     />
                 )}

@@ -55,11 +55,13 @@ export default function Navbar() {
                         Home
                     </p>
                 </NavLink>
+
                 <NavLink to={"/login"}>
                     <p className="cursor-pointer  hover:underline hover:text-indigo-700 hover:bg-indigo-200 p-2 rounded-2xl">
                         Practice
                     </p>
                 </NavLink>
+
                 <p className="cursor-pointer hover:underline hover:text-pink-700 hover:bg-pink-200 p-2 rounded-2xl">
                     Pricing
                 </p>
@@ -76,13 +78,14 @@ export default function Navbar() {
                 {/* signup */}
 
 
-                {isAuthenticated === true ? <h1 className="font-aladin text-xl relative inline-block mt-2" > Upgrade to <span className="font-aladin bg-gradient-to-r from-yellow-500 to-orange-600 text-transparent bg-clip-text text-xl font-extrabold">Pro</span></h1> : <NavLink to={"/signup"}>
-                    <ShimmerButton>
-                        <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white lg:text-lg font-changa">
-                            SignUp
-                        </span>
-                    </ShimmerButton>
-                </NavLink>}
+                {isAuthenticated === true ? <h1 className="font-aladin text-xl relative inline-block mt-2" > Upgrade to <span className="font-aladin bg-gradient-to-r from-yellow-500 to-orange-600 text-transparent bg-clip-text text-xl font-extrabold">Pro</span></h1>
+                    : <NavLink to={"/signup"}>
+                        <ShimmerButton>
+                            <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white lg:text-lg font-changa">
+                                SignUp
+                            </span>
+                        </ShimmerButton>
+                    </NavLink>}
 
                 {/* login */}
                 {isAuthenticated && isAuthenticated === true ? <NavProfile user={user} />

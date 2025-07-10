@@ -8,10 +8,13 @@ import SubmissionHistory from "../components/SubmissionHistory"
 import ChatAi from '../components/Chat-Ai';
 import ThreeRingLoader from "@/components/ThreeRingLoader";
 import Split from 'react-split';
-import { Bookmark, RotateCcw, ChevronUp, ChevronDown, Maximize2, Minimize2, Minimize } from 'lucide-react';
+import { Bookmark, RotateCcw, ChevronUp, ChevronDown, Maximize2, Minimize2, Minimize, CheckSquare, Volleyball, Play, CloudUpload, Trash2 } from 'lucide-react';
 import { Maximize } from 'lucide-react';
-// import BookmarkButton from '@/components/BookmarkButton';
-
+import { triggerSideCannonsConfetti } from "@/lib/confettiTrigger";
+import NavProfile from "@/components/NavProfile"
+import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router';
+import NotePopUp from '@/components/NotePopUp';
 
 
 const langMap = {
@@ -30,9 +33,17 @@ const ProblemPage = () => {
   const [runResult, setRunResult] = useState(null);
   const [submitResult, setSubmitResult] = useState(null);
   const [activeLeftTab, setActiveLeftTab] = useState('description');
-  const [activeRightTab, setActiveRightTab] = useState('code');
+  const [activeRightTab, setActiveRightTab] = useState("testcase");
   const editorRef = useRef(null);
   let { problemId } = useParams();
+  const [activeCaseIndex, setActiveCaseIndex] = useState(0);
+  const { user } = useSelector((state) => state.auth);
+  const [noteContent, setNoteContent] = useState('');
+  const [noteLoading, setNoteLoading] = useState(false);
+  const [resetTrigger, setResetTrigger] = useState(0);
+
+
+
 
   const { handleSubmit } = useForm();
 
@@ -69,6 +80,44 @@ const ProblemPage = () => {
 
     fetchProblem();
   }, [problemId]);
+
+  useEffect(() => {
+    if (submitResult?.status === "accepted") {
+      triggerSideCannonsConfetti(); // or whatever the exported function is
+    }
+  }, [submitResult]);
+
+  useEffect(() => {
+    const fetchNote = async () => {
+      setNoteLoading(true);
+      try {
+        const res = await axiosClient.get(`/note/getnote/${problemId}`);
+        const content = res.data.allnote[0]?.content || '';
+        setNoteContent(content);
+      } catch (err) {
+        console.error('Error fetching note:', err);
+        setNoteContent('');
+      } finally {
+        setNoteLoading(false);
+      }
+    };
+
+    if (problemId) fetchNote();
+  }, [problemId]);
+
+
+  const handleNoteSave = async () => {
+    try {
+      await axiosClient.post(`/note/createnote/${problemId}`, {
+        content: noteContent.trim()
+      });
+
+      alert("Note saved!");
+    } catch (err) {
+      console.error('Failed to save note:', err);
+      alert("Error saving note.");
+    }
+  };
 
 
   // Update code when language changes
@@ -179,24 +228,32 @@ const ProblemPage = () => {
   return (
     <div className="h-screen overflow-hidden px-2 flex flex-col bg-black text-white">
       <nav className="h-12 w-full bg-black px-3 flex items-center justify-between text-white shadow-sm">
+
+        {/* left */}
         <div className="flex items-center gap-3">
           <span className="text-lg font-bold font-changa text-white flex items-center">
             Code
             <span className="ml-1 bg-yellow-400 text-black px-0.5 rounded-sm">Hunter</span>
           </span>
-          <span className="text-sm text-gray-400 hidden sm:inline">Practice. Learn. Repeat.</span>
+          <span className="text-sm text-gray-400 font-changa hidden sm:inline">Practice. Learn. Repeat.</span>
         </div>
 
+        {/* center */}
         <div className="hidden md:flex items-center gap-6 text-sm text-gray-300">
-          <button className="hover:text-yellow-400 transition">Problems</button>
+          <NavLink to={"/login"}>
+            <button className="hover:text-yellow-400 transition">Practice</button>
+          </NavLink>
           <button className="hover:text-yellow-400 transition">Leaderboard</button>
           <button className="hover:text-yellow-400 transition">Discuss</button>
           <button className="hover:text-yellow-400 transition">Contests</button>
         </div>
 
+        {/* right */}
         <div className="flex items-center gap-4">
-          <button className="text-gray-400 hover:text-yellow-400 transition text-sm">Login</button>
-          <button className="px-3 py-1 text-sm rounded-md bg-yellow-500 text-black font-semibold hover:bg-yellow-400 transition">Sign Up</button>
+          <h1 className="font-aladin text-xl relative inline-block mt-2" > Upgrade to
+            <span className="font-aladin bg-gradient-to-r from-yellow-500 to-orange-600 text-transparent bg-clip-text text-xl font-extrabold">Pro</span>
+          </h1>
+          <NavProfile user={user} />
         </div>
       </nav>
 
@@ -210,18 +267,19 @@ const ProblemPage = () => {
           direction="horizontal"
         >
           {/* LEFT PANEL */}
-          <div className="w-full h-full flex flex-col rounded-md overflow-hidden border border-gray-600">
-            <div className="w-full flex bg-[rgb(55,55,55)] px-2 border-b font-changa border-gray-700 h-10 text-sm font-medium">
+          <div className="w-full h-full flex flex-col  rounded-md overflow-hidden border border-gray-600">
+            <div className="w-full flex bg-[rgb(55,55,55)]  px-2 border-b font-changa border-gray-700 h-10 text-sm font-medium">
               {[
                 { key: 'description', label: 'Description' },
                 { key: 'editorial', label: 'Editorial' },
                 { key: 'solutions', label: 'Solutions' },
                 { key: 'submissions', label: 'Submissions' },
+                { key: 'note', label: 'Note' },
                 { key: 'chatAi', label: 'ChatAI' },
               ].map(({ key, label }) => (
                 <button
                   key={key}
-                  className={`relative py-2 px-3 h-9 hover:bg-slate-700 rounded-lg transition-colors duration-200 hover:text-yellow-100 ${activeLeftTab === key ? 'text-yellow-500 border-b-2 border-primary font-semibold' : 'text-gray-500'}`}
+                  className={`relative  py-2 px-3 h-9 hover:bg-slate-700  rounded-lg transition-colors duration-200 hover:text-yellow-100 ${activeLeftTab === key ? 'text-yellow-500 border-b-2 border-primary font-semibold' : 'text-gray-500'}`}
                   onClick={() => setActiveLeftTab(key)}
                 >
                   {label}
@@ -280,8 +338,6 @@ const ProblemPage = () => {
                     </div>
                   )}
 
-
-
                   {activeLeftTab === 'solutions' && (
                     <div>
                       <h2 className="text-xl font-bold mb-4">Solutions</h2>
@@ -312,15 +368,63 @@ const ProblemPage = () => {
                     </div>
                   )}
 
+
+                  {activeLeftTab === 'note' && (
+                    <div className="w-full text-white flex flex-col h-full">
+                      <h2 className="text-2xl mt-8 mb-4 font-changa">Notes</h2>
+
+                      {noteLoading ? (
+                        <div className="text-sm text-gray-400">Loading...</div>
+                      ) : (
+                        <>
+                          <textarea
+                            className="w-full bg-gray-800/40 border border-gray-700 rounded-md text-sm text-white p-4 h-96  outline-none"
+                            placeholder="Write your thoughts here..."
+                            value={noteContent}
+                            onChange={(e) => setNoteContent(e.target.value)}
+                            maxLength={700}
+                          />
+
+                          <div className="flex justify-end mt-4">
+                            <button
+                              onClick={handleNoteSave}
+                              className=" px-4 py-1 flex items-center text-sm font-changa rounded-md bg-green-500/15 text-green-400 border border-green-400 shadow-md backdrop-blur-sm"
+                            >
+                              Save Note
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+
+
                   {activeLeftTab === 'chatAi' && (
                     <div className="prose max-w-none">
-                      <h2 className="text-xl font-bold mb-4">CHAT-AI</h2>
+                      {/* 🔥 Header Row with Title + Clear Button */}
+                      <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-bold">CHAT-AI</h2>
+                        <button
+                          onClick={() => {
+                            localStorage.removeItem(`chat-${problem._id}`);
+                            setResetTrigger((prev) => prev + 1);
+                          }}
+                          className="inline-flex items-center gap-1 text-sm text-red-400 hover:text-red-600 border border-red-400 hover:border-red-600 px-3 py-1 rounded-md transition-colors"
+                        >
+                          <Trash2 size={20} className="mt-[-1px]" /> {/* Fine-tuned vertical alignment */}
+                          Clear Chat
+                        </button>
+
+                      </div>
+
                       <div className="whitespace-pre-wrap text-sm leading-relaxed">
-                        {/* {'chat with AI , that helps to solve qurrey related question...'} */}
-                        <ChatAi problem={problem} />
+                        <ChatAi key={resetTrigger} problem={problem} />
                       </div>
                     </div>
                   )}
+
+
                 </>
               )}
             </div>
@@ -335,7 +439,7 @@ const ProblemPage = () => {
           <div className="flex flex-col h-full overflow-hidden rounded-lg">
             <Split
               className="flex-1 flex flex-col w-full h-full"
-              sizes={[70, 30]}
+              sizes={[65, 35]}
               minSize={[300, 100]}
               gutterSize={7}
               gutterClassName="gutter-vertical"
@@ -372,6 +476,7 @@ const ProblemPage = () => {
                     </div>
                   </div>
                 </div>
+
                 <div className="flex-1 flex flex-col">
                   <Editor
                     language={getLanguageForMonaco(selectedLanguage)}
@@ -404,23 +509,144 @@ const ProblemPage = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col overflow-y-auto bg-[rgba(38,38,38)] border border-gray-600 rounded-md z-50">
+              <div className="flex flex-col overflow-y-auto bg-[rgba(38,38,38)] border border-gray-600 rounded-md z-10">
 
                 <div className="px-4 py-0.5 border-b border-gray-700 flex justify-between">
 
                   <div className="flex gap-2">
-                    <button className={`tab ${activeRightTab === 'testcase' ? 'tab-active' : ''}`} onClick={() => setActiveRightTab('testcase')}>Testcase</button>
-                    <button className={`tab ${activeRightTab === 'result' ? 'tab-active' : ''}`} onClick={() => setActiveRightTab('result')}>Result</button>
+                    <button className={`flex items-center gap-1 text-green-500 font-semibold tab ${activeRightTab === 'testcase' ? 'tab-active' : ''}`} onClick={() => setActiveRightTab('testcase')}><CheckSquare size={16} />
+                      Testcase</button>|
+                    <button className={`tab flex items-center gap-1 ${activeRightTab === 'result' ? 'tab-active' : ''}`} onClick={() => setActiveRightTab('result')}><Volleyball size={18} />Result</button>
                   </div>
 
                   <div className="flex gap-2">
-                    <button className={`btn btn-outline btn-sm ${loading ? 'loading' : ''}`} onClick={handleRun} disabled={loading}>Run</button>
-                    <button className={`btn btn-primary btn-sm ${loading ? 'loading' : ''}`} onClick={handleSubmitCode} disabled={loading}>Submit</button>
+                    <button className={`px-3  flex gap-1 items-center text-sm font-changa rounded-md bg-yellow-500/15 text-yellow-400 border border-yellow-400 shadow-md backdrop-blur-sm ${loading ? 'loading' : ''}`} onClick={handleRun} disabled={loading}><Play size={16} />Run</button>
+                    <button className={`px-3  flex gap-1 items-center text-sm font-changa rounded-md bg-green-500/15 text-green-400 border border-green-400 shadow-md backdrop-blur-sm ${loading ? 'loading' : ''}`} onClick={handleSubmitCode} disabled={loading}><CloudUpload size={20} />Submit</button>
                   </div>
 
                 </div>
 
                 {/* introduce tabs hear */}
+                {activeRightTab === 'testcase' && (
+                  <div className="flex-1 overflow-y-auto p-3 bg-[rgb(32,32,32)] rounded-md text-sm font-mono text-white">
+                    {runResult ? (
+                      <div className="space-y-4">
+
+                        {/* Tab buttons */}
+                        <div className="flex gap-3 px-2 font-changa text-xs bg-[rgb(32,32,32)] font-semibold">
+                          {runResult.testCases.map((_, i) => (
+                            <button
+                              key={i}
+                              onClick={() => setActiveCaseIndex(i)}
+                              className={`px-3 py-1 rounded-full transition-all duration-200 ${i === activeCaseIndex
+                                ? 'bg-[rgb(65,65,65)] text-white'
+                                : 'text-gray-400 hover:text-white'
+                                }`}
+                            >
+                              Case {i + 1}
+                            </button>
+                          ))}
+                          <button className="text-gray-500 text-xl">+</button>
+                        </div>
+
+                        {/* Show selected input/output only */}
+                        {runResult.testCases[activeCaseIndex] && (
+                          <div
+                            className={`bg-[rgb(32,32,32)] p-4 rounded-md border ${runResult.testCases[activeCaseIndex].status_id === 3
+                              ? 'border-green-600'
+                              : 'border-red-600'
+                              }`}
+                          >
+                            <div className="mb-3 font-changa">
+                              <label className="block text-gray-400 mb-1">nums =</label>
+                              <input
+                                type="text"
+                                value={runResult.testCases[activeCaseIndex].stdin}
+                                readOnly
+                                className="w-full bg-[rgb(50,50,50)] px-3 py-2 rounded-md text-white outline-none"
+                              />
+                            </div>
+                            <div className="font-changa">
+                              <label className="block text-gray-400 mb-1">target =</label>
+                              <input
+                                type="text"
+                                value={
+                                  runResult.testCases[activeCaseIndex].expected_output || 'not added'
+                                }
+                                readOnly
+                                className="w-full bg-[rgb(50,50,50)] px-3 py-2 rounded-md text-white outline-none"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-gray-500 text-lg ">
+                        Click <span className="text-yellow-400 font-semibold">  "Run" </span> to test your code.</div>
+                    )}
+                  </div>
+                )}
+
+
+
+                {/* submit */}
+                {activeRightTab === 'result' && (
+                  <div className="flex-1 px-4 py-2 overflow-y-auto bg-[rgb(32,32,32)] rounded-md border border-gray-700 shadow-md">
+                    <div className="flex items-center justify-between mb-4 border-b border-gray-600 pb-2">
+                      <h3 className=" text-xl font-changa text-white">Submission Result</h3>
+                      {submitResult && (
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow-sm
+                       ${submitResult.status === "accepted"
+                            ? "bg-green-600/20 text-green-400 border border-green-500"
+                            : "bg-red-600/20 text-red-400 border border-red-500"
+                          }`}>
+                          {submitResult.status === "accepted" ? "✓ Accepted" : "✗ Failed"}
+                        </span>
+                      )}
+                    </div>
+
+                    {submitResult ? (
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm font-mono">
+
+                          <div className="bg-gray-800 rounded p-3 border border-gray-700">
+                            <p className="text-gray-400 mb-1">Test Cases Passed</p>
+                            <p className="text-white font-semibold">{submitResult.testCasesPassed}/{submitResult.testCasesTotal}</p>
+                          </div>
+
+                          <div className="bg-gray-800 rounded p-3 border border-gray-700 overflow-x-auto">
+                            <p className="text-gray-400 mb-1">Runtime</p>
+                            <p className="text-white font-semibold">{submitResult.runtime} sec</p>
+                          </div>
+
+                          <div className="bg-gray-800 rounded p-3 border border-gray-700">
+                            <p className="text-gray-400 mb-1">Memory</p>
+                            <p className="text-white font-semibold">{submitResult.memory} KB</p>
+                          </div>
+
+                        </div>
+                        {submitResult.status === "accepted" ? (
+
+                          <div className=" text-sm text-green-400 border font-changa border-green-500 bg-green-500/10 rounded-md p-4">
+                            <h4 className="font-bold text-green-300 text-base mb-2">🎉 Well Done!</h4>
+                            <p>You've successfully solved the problem. Analyze your approach and hunt another challenge!</p>
+                          </div>
+                        ) : (
+                          <div className=" text-sm text-red-400 border border-red-500 bg-red-500/10 rounded-md p-4">
+                            <h4 className="font-bold text-red-300 text-base mb-2">❌ Reason for failure:</h4>
+                            <p>{submitResult.message || "One or more test cases failed."}</p>
+                          </div>
+                        )}
+
+                      </div>
+                    ) : (
+                      <div className="text-gray-500 text-sm ">
+                        Click <span className="text-yellow-400 font-semibold">"Submit"</span> to evaluate your solution.
+                      </div>
+                    )}
+                  </div>
+                )}
+
 
               </div>
             </Split>
@@ -432,18 +658,9 @@ const ProblemPage = () => {
 
 
       {/* Conditional Outputs */}
-      {activeRightTab === 'testcase' && (
-        <div className="flex-1 p-4 overflow-y-auto">
-          <h3 className="font-semibold mb-4">Test Results</h3>
-          {/* Render test case results here... */}
-        </div>
-      )}
-      {activeRightTab === 'result' && (
-        <div className="flex-1 p-4 overflow-y-auto">
-          <h3 className="font-semibold mb-4">Submission Result</h3>
-          {/* Render submission results here... */}
-        </div>
-      )}
+
+
+
     </div >
   );
 };
