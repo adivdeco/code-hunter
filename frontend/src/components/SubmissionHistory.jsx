@@ -1,6 +1,11 @@
+
+
+
+
+
 import { useState, useEffect } from 'react';
 import axiosClient from '../utils/axiosClint';
-// ../utils/axiosClient
+
 const SubmissionHistory = ({ problemId }) => {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,12 +31,17 @@ const SubmissionHistory = ({ problemId }) => {
   }, [problemId]);
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case 'accepted': return 'badge-success';
-      case 'wrong': return 'badge-error';
-      case 'error': return 'badge-warning';
-      case 'pending': return 'badge-info';
-      default: return 'badge-neutral';
+    switch (status.toLowerCase()) {
+      case 'accepted':
+        return 'badge-success';
+      case 'wrong':
+        return 'badge-error';
+      case 'error':
+        return 'badge-warning';
+      case 'pending':
+        return 'badge-info';
+      default:
+        return 'badge-neutral';
     }
   };
 
@@ -47,7 +57,7 @@ const SubmissionHistory = ({ problemId }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <span className="loading loading-spinner loading-lg"></span>
+        <span className="loading loading-spinner loading-lg text-yellow-500"></span>
       </div>
     );
   }
@@ -56,9 +66,6 @@ const SubmissionHistory = ({ problemId }) => {
     return (
       <div className="alert alert-error shadow-lg my-4">
         <div>
-          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
           <span>{error}</span>
         </div>
       </div>
@@ -66,24 +73,23 @@ const SubmissionHistory = ({ problemId }) => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-6 text-center">Submission History</h2>
-      
+    <div className="p-4 bg-[rgb(58,58,58)] dark:bg-[#1a1a1a] rounded-lg shadow-md ">
+      <h2 className="text-2xl font-changa font-semibold text-white dark:text-white mb-6 border-b border-gray-300 dark:border-gray-700 pb-2">
+        📝 Submission History
+      </h2>
+
       {submissions.length === 0 ? (
-        <div className="alert alert-info shadow-lg">
+        <div className="alert alert-info shadow-md">
           <div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
             <span>No submissions found for this problem</span>
           </div>
         </div>
       ) : (
         <>
           <div className="overflow-x-auto">
-            <table className="table table-zebra w-full">
-              <thead>
-                <tr>
+            <table className="table w-full text-sm">
+              <thead className=" dark:bg-gray-800">
+                <tr className="text-gray-300 dark:text-gray-300">
                   <th>#</th>
                   <th>Language</th>
                   <th>Status</th>
@@ -91,30 +97,29 @@ const SubmissionHistory = ({ problemId }) => {
                   <th>Memory</th>
                   <th>Test Cases</th>
                   <th>Submitted</th>
-                  <th>Actions</th>
+                  <th>Code</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-gray-200 dark:text-gray-100">
                 {submissions.map((sub, index) => (
-                  <tr key={sub._id}>
+                  <tr key={sub._id} className="hover:bg-gray-600 dark:hover:bg-gray-700 transition duration-150">
                     <td>{index + 1}</td>
                     <td className="font-mono">{sub.language}</td>
                     <td>
-                      <span className={`badge ${getStatusColor(sub.status)}`}>
-                        {sub.status.charAt(0).toUpperCase() + sub.status.slice(1)}
+                      <span className={`badge ${getStatusColor(sub.status)} capitalize`}>
+                        {sub.status}
                       </span>
                     </td>
-                    
-                    <td className="font-mono">{sub.runtime}sec</td>
-                    <td className="font-mono">{formatMemory(sub.memory)}</td>
-                    <td className="font-mono">{sub.testCasesPassed}/{sub.testCasesTotal}</td>
+                    <td>{sub.runtime}s</td>
+                    <td>{formatMemory(sub.memory)}</td>
+                    <td>{sub.testCasesPassed}/{sub.testCasesTotal}</td>
                     <td>{formatDate(sub.createdAt)}</td>
                     <td>
-                      <button 
-                        className="btn btn-s btn-outline"
+                      <button
                         onClick={() => setSelectedSubmission(sub)}
+                        className="btn btn-sm btn-outline btn-primary"
                       >
-                        Code
+                        View
                       </button>
                     </td>
                   </tr>
@@ -123,23 +128,23 @@ const SubmissionHistory = ({ problemId }) => {
             </table>
           </div>
 
-          <p className="mt-4 text-sm text-gray-500">
-            Showing {submissions.length} submissions
+          <p className="mt-4 text-xs text-gray-500">
+            Showing {submissions.length} submission{submissions.length > 1 && 's'}
           </p>
         </>
       )}
 
-      {/* Code View Modal */}
+      {/* Code Modal */}
       {selectedSubmission && (
-        <div className="modal modal-open">
-          <div className="modal-box w-11/12 max-w-5xl">
+        <dialog open className="modal modal-open">
+          <div className="modal-box max-w-5xl max-h-[90vh] overflow-y-auto">
             <h3 className="font-bold text-lg mb-4">
-              Submission Details: {selectedSubmission.language}
+              Code - {selectedSubmission.language}
             </h3>
-            
-            <div className="mb-4">
-              <div className="flex flex-wrap gap-2 mb-2">
-                <span className={`badge ${getStatusColor(selectedSubmission.status)}`}>
+
+            <div className="mb-4 space-y-2">
+              <div className="flex flex-wrap gap-2 text-sm">
+                <span className={`badge ${getStatusColor(selectedSubmission.status)} capitalize`}>
                   {selectedSubmission.status}
                 </span>
                 <span className="badge badge-outline">
@@ -149,33 +154,30 @@ const SubmissionHistory = ({ problemId }) => {
                   Memory: {formatMemory(selectedSubmission.memory)}
                 </span>
                 <span className="badge badge-outline">
-                  Passed: {selectedSubmission.testCasesPassed}/{selectedSubmission.testCasesTotal}
+                  Test Cases: {selectedSubmission.testCasesPassed}/{selectedSubmission.testCasesTotal}
                 </span>
               </div>
-              
+
               {selectedSubmission.errorMessage && (
-                <div className="alert alert-error mt-2">
+                <div className="alert alert-error mt-2 text-xs">
                   <div>
                     <span>{selectedSubmission.errorMessage}</span>
                   </div>
                 </div>
               )}
             </div>
-            
-            <pre className="p-4 bg-gray-900 text-gray-100 rounded overflow-x-auto">
+
+            <pre className="p-4 bg-gray-900 text-gray-100 rounded overflow-x-auto text-sm leading-relaxed">
               <code>{selectedSubmission.code}</code>
             </pre>
-            
-            <div className="modal-action">
-              <button 
-                className="btn"
-                onClick={() => setSelectedSubmission(null)}
-              >
+
+            <div className="modal-action mt-4">
+              <button onClick={() => setSelectedSubmission(null)} className="btn btn-sm btn-secondary">
                 Close
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </div>
   );

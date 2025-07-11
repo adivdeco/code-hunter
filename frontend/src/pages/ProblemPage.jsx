@@ -8,14 +8,14 @@ import SubmissionHistory from "../components/SubmissionHistory"
 import ChatAi from '../components/Chat-Ai';
 import ThreeRingLoader from "@/components/ThreeRingLoader";
 import Split from 'react-split';
-import { Bookmark, RotateCcw, ChevronUp, ChevronDown, Maximize2, Minimize2, Minimize, CheckSquare, Volleyball, Play, CloudUpload, Trash2 } from 'lucide-react';
+import { Bookmark, RotateCcw, ChevronUp, ChevronDown, Maximize2, Minimize2, Minimize, CheckSquare, Volleyball, CloudUpload, Trash2, SettingsIcon, Timer } from 'lucide-react';
+import { Code, Bot, StickyNote, FileText, Edit3, CheckCircle, Palette, Pause, Play, ChevronLeft } from "lucide-react";
 import { Maximize } from 'lucide-react';
 import { triggerSideCannonsConfetti } from "@/lib/confettiTrigger";
 import NavProfile from "@/components/NavProfile"
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router';
-import NotePopUp from '@/components/NotePopUp';
-
+import TimerBar from '@/components/TimeBar';
 
 const langMap = {
   javascript: 'javascript',
@@ -41,6 +41,17 @@ const ProblemPage = () => {
   const [noteContent, setNoteContent] = useState('');
   const [noteLoading, setNoteLoading] = useState(false);
   const [resetTrigger, setResetTrigger] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [initialCode, setInitialCode] = useState('');
+  const [editorTheme, setEditorTheme] = useState('vs-dark'); // default theme
+  const [fontSize, setFontSize] = useState(12); // Default font size
+  const [isEditorMaximized, setIsEditorMaximized] = useState(false);
+  const [showSettingsPopup, setShowSettingsPopup] = useState(false);
+  const [showLineNumbers, setShowLineNumbers] = useState(true);
+  const [showMinmap, setShowMinmap] = useState(true);
+  const [isWordWrapEnabled, setIsWordWrapEnabled] = useState(true);
+  const [tabSize, setTabSize] = useState(2); // Or your default
+
 
 
 
@@ -69,8 +80,10 @@ const ProblemPage = () => {
 
 
         setProblem(response.data.findproblem);
-        setCode(initialcode);
         setLoading(false);
+
+        setInitialCode(initialcode); // ✅ store starter code
+        setCode(initialcode);
 
       } catch (error) {
         console.error('Error fetching problem:', error);
@@ -225,6 +238,22 @@ const ProblemPage = () => {
     );
   }
 
+  // for screen height....
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false);
+      });
+    }
+  };
+
+
+
+
   return (
     <div className="h-screen overflow-hidden px-2 flex flex-col bg-black text-white">
       <nav className="h-12 w-full bg-black px-3 flex items-center justify-between text-white shadow-sm">
@@ -244,6 +273,14 @@ const ProblemPage = () => {
             <button className="hover:text-yellow-400 transition">Practice</button>
           </NavLink>
           <button className="hover:text-yellow-400 transition">Leaderboard</button>
+
+          {/* Timer Button */}
+          <div className="w-full flex justify-center my-4">
+            <TimerBar />
+          </div>
+
+
+
           <button className="hover:text-yellow-400 transition">Discuss</button>
           <button className="hover:text-yellow-400 transition">Contests</button>
         </div>
@@ -267,24 +304,30 @@ const ProblemPage = () => {
           direction="horizontal"
         >
           {/* LEFT PANEL */}
-          <div className="w-full h-full flex flex-col  rounded-md overflow-hidden border border-gray-600">
+          <div className={` w-full h-full flex flex-col  rounded-md overflow-hidden border border-gray-600 ${isEditorMaximized ? 'text-black bg-black -z-30' : ""}`}>
+
             <div className="w-full flex bg-[rgb(55,55,55)]  px-2 border-b font-changa border-gray-700 h-10 text-sm font-medium">
               {[
-                { key: 'description', label: 'Description' },
-                { key: 'editorial', label: 'Editorial' },
-                { key: 'solutions', label: 'Solutions' },
-                { key: 'submissions', label: 'Submissions' },
-                { key: 'note', label: 'Note' },
-                { key: 'chatAi', label: 'ChatAI' },
-              ].map(({ key, label }) => (
+                { key: 'description', label: 'Description', icon: <FileText size={16} /> },
+                { key: 'editorial', label: 'Editorial', icon: <Edit3 size={16} /> },
+                { key: 'solutions', label: 'Solutions', icon: <CheckCircle size={16} /> },
+                { key: 'submissions', label: 'Submissions', icon: <Code size={16} /> },
+                { key: 'note', label: 'Note', icon: <StickyNote size={16} /> },
+                { key: 'chatAi', label: 'ChatAI', icon: <Bot size={22} /> },
+              ].map(({ key, label, icon }) => (
                 <button
                   key={key}
-                  className={`relative  py-2 px-3 h-9 hover:bg-slate-700  rounded-lg transition-colors duration-200 hover:text-yellow-100 ${activeLeftTab === key ? 'text-yellow-500 border-b-2 border-primary font-semibold' : 'text-gray-500'}`}
+                  className={`flex items-center gap-2 py-2 px-3 h-9 hover:bg-slate-700 rounded-lg transition-colors duration-200 hover:text-yellow-100 ${activeLeftTab === key
+                    ? 'text-yellow-500 border-b-2 border-primary font-semibold'
+                    : 'text-gray-500'
+                    }`}
                   onClick={() => setActiveLeftTab(key)}
                 >
-                  {label}
+                  {icon}
+                  <span>{label}</span>
                 </button>
               ))}
+
             </div>
 
             <div className="flex-1 overflow-y-auto px-4 py-3 bg-[rgb(38,38,38)] w-full h-full">
@@ -404,7 +447,7 @@ const ProblemPage = () => {
                     <div className="prose max-w-none">
                       {/* 🔥 Header Row with Title + Clear Button */}
                       <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-bold">CHAT-AI</h2>
+                        <h2 className="text-2xl font-changa">CHAT-AI</h2>
                         <button
                           onClick={() => {
                             localStorage.removeItem(`chat-${problem._id}`);
@@ -445,12 +488,27 @@ const ProblemPage = () => {
               gutterClassName="gutter-vertical"
               direction="vertical"
             >
-              <div className="flex-1 flex flex-col bg-[rgba(30,30,30,0.8)] rounded-md">
+              <div
+                className={`transition-all duration-300 ${isEditorMaximized
+                  ? 'fixed top-0 left-0 w-screen h-screen z-[9999] bg-black   flex flex-col'
+                  : 'flex-1 flex flex-col bg-[rgba(30,30,30,0.8)] rounded-md'
+                  }`}
+              >
+
                 <div className="tabs tabs-bordered bg-[rgb(55,55,55)]">
-                  <p className='px-4 py-1 font-changa text-lg'>
-                    <span className='text-green-500 text-xl'>&lt;/&gt;</span>
-                    Code
-                  </p>
+                  <div className='flex justify-between items-center'>
+                    <p className='px-4 py-1 font-changa text-lg'>
+                      <span className='text-green-500 text-xl'>&lt;/&gt;</span>
+                      Code
+                    </p>
+
+                    <span className='flex mr-4 gap-3'>
+                      <button onClick={toggleFullscreen} className="hover:text-yellow-400">
+                        {isFullscreen ? <Minimize /> : <Maximize />}
+                      </button>
+                    </span>
+
+                  </div>
                   <div className="flex justify-between items-center bg-[rgb(38,38,38)] border-b border-gray-700">
                     <div className="flex items-center">
                       <select
@@ -466,14 +524,128 @@ const ProblemPage = () => {
                         ))}
                       </select>
                     </div>
-                    <div className='flex mr-2 gap-2 text-xs'>
-                      <RotateCcw />
-                      <Bookmark />
-                      <Maximize />
-                      <Maximize2 />
-                      <ChevronUp />
-                      <ChevronDown />
+
+                    <div className='flex items-center mr-5 gap-4 text-xs'>
+
+                      {/* hlo */}
+                      <div className="relative font-changa flex items-center">
+                        <button onClick={() => setShowSettingsPopup(prev => !prev)} title="Settings">
+                          <SettingsIcon size={20} />
+                        </button>
+
+                        {showSettingsPopup && (
+                          <div className="absolute top-10 right-0 z-50 w-64 bg-[rgb(40,40,40)] border border-gray-600 shadow-lg rounded-md p-4 text-sm space-y-3 font-changa">
+                            <h3 className="text-lg font-bold text-gray-300 mb-2">Editor Settings</h3>
+
+                            {/* Line Numbers Toggle */}
+                            <label className="flex items-center gap-2 text-gray-300">
+                              <input
+                                type="checkbox"
+                                checked={showLineNumbers}
+                                onChange={() => setShowLineNumbers(prev => !prev)}
+                              />
+                              Show Line Numbers
+                            </label>
+
+                            {/* enable min map */}
+                            <label className="flex items-center gap-2 text-gray-300">
+                              <input
+                                type="checkbox"
+                                checked={showMinmap}
+                                onChange={() => setShowMinmap(prev => !prev)}
+                              />
+                              Show Min-map
+                            </label>
+
+                            {/* Word Wrap Toggle */}
+                            <label className="flex items-center gap-2 text-gray-300">
+                              <input
+                                type="checkbox"
+                                checked={isWordWrapEnabled}
+                                onChange={() => setIsWordWrapEnabled(prev => !prev)}
+                              />
+                              Enable Word Wrap
+                            </label>
+
+                            {/* Tab Size */}
+                            <div className="flex items-center gap-2 text-gray-300">
+                              <label htmlFor="tabSize">Tab Size:</label>
+                              <select
+                                id="tabSize"
+                                value={tabSize}
+                                onChange={(e) => setTabSize(Number(e.target.value))}
+                                className="bg-black border border-gray-600 text-white rounded px-2 py-1"
+                              >
+                                {[2, 4, 8].map(size => (
+                                  <option key={size} value={size}>{size}</option>
+                                ))}
+                              </select>
+                            </div>
+
+                            {/* Theme Selector */}
+                            <div className="flex items-center gap-2 text-white">
+                              <label htmlFor="editorTheme">Theme:</label>
+                              <select
+                                id="editorTheme"
+                                value={editorTheme}
+                                onChange={(e) => setEditorTheme(e.target.value)}
+                                className="bg-black border border-gray-600 text-white rounded px-2 py-1"
+                              >
+                                <option value="vs-dark">Dark</option>
+                                <option value="light">Light</option>
+                                <option value="hc-black">High Contrast</option>
+                              </select>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+
+
+                      <button
+                        onClick={() => setEditorTheme(prev => prev === 'vs-dark' ? 'light' : 'vs-dark')}
+                        title={`Switch to ${editorTheme === 'vs-dark' ? 'Light' : 'Dark'} Mode`}
+                      >
+                        <Palette size={20} />
+                      </button>
+
+                      <div className="flex items-center font-changa text-sm text-white">
+                        <label htmlFor="fontSize">Font Size:</label>
+                        <select
+                          id="fontSize"
+                          value={fontSize}
+                          onChange={(e) => setFontSize(Number(e.target.value))}
+                          className=" bg-transparent text-white rounded px-2 py-1"
+                        >
+                          {[12, 14, 16, 18, 20, 22, 24].map((size) => (
+                            <option key={size} value={size}>{size}px</option>
+                          ))}
+                        </select>
+                      </div>
+
+
+
+                      <button
+                        onClick={() => setCode(initialCode)}
+                        className="hover:text-yellow-400"
+                        title="Reset code"
+                      >
+                        <RotateCcw size={18} />
+                      </button>
+
+
+                      <button
+                        onClick={() => setIsEditorMaximized(prev => !prev)}
+                        title={isEditorMaximized ? "Minimize Editor" : "Maximize Editor"}
+                      >
+                        {isEditorMaximized ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                      </button>
+
+
+
+                      <Bookmark size={20} />
                     </div>
+
                   </div>
                 </div>
 
@@ -481,19 +653,19 @@ const ProblemPage = () => {
                   <Editor
                     language={getLanguageForMonaco(selectedLanguage)}
                     value={code}
-                    onChange={handleEditorChange}
                     onMount={handleEditorDidMount}
-                    theme="vs-dark"
+                    onChange={(newCode) => setCode(newCode)}
+                    theme={editorTheme}
                     className="flex-1"
                     options={{
-                      fontSize: 12,
-                      minimap: { enabled: false },
+                      fontSize,
+                      minimap: { enabled: showMinmap },
                       scrollBeyondLastLine: true,
                       automaticLayout: true,
-                      tabSize: 2,
+                      tabSize,
                       insertSpaces: true,
-                      wordWrap: 'on',
-                      lineNumbers: 'on',
+                      wordWrap: isWordWrapEnabled ? 'on' : 'off',
+                      lineNumbers: showLineNumbers ? 'on' : 'off',
                       glyphMargin: false,
                       folding: true,
                       lineDecorationsWidth: 10,
@@ -508,6 +680,10 @@ const ProblemPage = () => {
                   />
                 </div>
               </div>
+
+
+
+
 
               <div className="flex flex-col overflow-y-auto bg-[rgba(38,38,38)] border border-gray-600 rounded-md z-10">
 
@@ -649,6 +825,8 @@ const ProblemPage = () => {
 
 
               </div>
+
+
             </Split>
           </div>
 
@@ -658,6 +836,7 @@ const ProblemPage = () => {
 
 
       {/* Conditional Outputs */}
+
 
 
 
