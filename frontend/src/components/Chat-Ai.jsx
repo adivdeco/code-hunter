@@ -2,14 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axiosClient from "../utils/axiosClint";
 import { Send } from "lucide-react";
+import { useSelector } from 'react-redux';
+
 
 function ChatAi({ problem }) {
-  // const [messages, setMessages] = useState(
-  //   JSON.parse(localStorage.getItem("messages")) || [
-  //     { role: "model", text: "'hi', how i help you?" },
-  //     { role: "user", text: "..." },
-  //   ]
-  // );
+  const { user } = useSelector((state) => state.auth);
+
   const chatKey = `chat-${problem._id}`;
 
   const [messages, setMessages] = useState(() => {
@@ -17,8 +15,8 @@ function ChatAi({ problem }) {
     return stored
       ? JSON.parse(stored)
       : [
-        { role: "model", text: "'hi', how can I help you?" },
-        { role: "user", text: "..." },
+        { role: "model", text: `hi ${user?.name}, how can I help you?` },
+        // { role: "user", text: "..." },
       ];
   });
 
@@ -39,7 +37,6 @@ function ChatAi({ problem }) {
     setMessages((prev) => [...prev, { role: "user", text: data.message }]);
 
     reset();
-
     try {
       const response = await axiosClient.post("/ai/chat", {
         messages,
@@ -75,11 +72,8 @@ function ChatAi({ problem }) {
     localStorage.setItem(chatKey, JSON.stringify(messages));
   }, [messages, chatKey]);
 
-
   return (
-
     <div className="flex flex-col h-screen max-h-[80vh] min-h-[500px] bg-gray-700 rounded-2xl">
-
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((msg, index) => (
           <div
@@ -87,16 +81,13 @@ function ChatAi({ problem }) {
             className={`chat ${msg.role === "user" ? "chat-end" : "chat-start"
               }`}
           >
-            <div className="chat-bubble bg-base-200 text-gray-300">
+            <div className="chat-bubble bg-base-200 text-base-content">
               {msg.text}
             </div>
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
-
-
-
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -110,7 +101,7 @@ function ChatAi({ problem }) {
           />
           <button
             type="submit"
-            className="btn btn-circle bg-gray-900 ml-2"
+            className="btn btn-ghost ml-2"
             disabled={errors.message}
           >
             <Send size={20} />
