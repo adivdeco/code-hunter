@@ -24,6 +24,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cobe": "^0.6.4",
+    "feather-icons": "^4.29.2",
     "lucide-react": "^0.517.0",
     "monaco-editor": "^0.52.2",
     "motion": "^12.20.1",

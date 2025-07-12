@@ -24,6 +24,7 @@ import {
   Users,
   Tally5,
 } from "lucide-react";
+
 import { Globe } from "@/components/magicui/globe";
 
 const avatars = [
@@ -43,6 +44,11 @@ const avatars = [
     imageUrl: "https://img.icons8.com/?size=100&id=40669&format=png&color=000000",
     // profileUrl: "https://github.com/safethecode",
   },
+  {
+    imageUrl: "https://img.icons8.com/?size=100&id=44442&format=png&color=000000",
+    // profileUrl: "https://github.com/safethecode",
+  },
+
 
 ];
 
@@ -54,9 +60,9 @@ const features = [
     Challenge yourself with beginner to expert-level tasks and enhance your coding skills.`,
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -right-20 -top-20 opacity-60" />,
+    background: <img src="home.png" alt="hompg" className=" h-96 w-full p-2 rounded-2xl shadow-2xl " />,
     className:
-      "lg:col-start-1 lg:col-end-3 lg:row-start-1 lg:row-end-3 font-changa",
+      "lg:col-start-1 lg:col-end-3 lg:row-start-1 lg:row-end-3 font-changa border-2 hover:border-purple-500 ",
   },
   {
     Icon: Sigma,
@@ -73,7 +79,7 @@ const features = [
         </div>
       </div>,
     className:
-      "lg:row-start-1 lg:row-end-2 lg:col-start-3 lg:col-end-5 font-changa",
+      "lg:row-start-1 lg:row-end-2 lg:col-start-3 lg:col-end-5  font-changa  border-2 hover:border-pink-400 shadow-md backdrop-blur-sm ",
   },
   {
     Icon: Tally5,
@@ -88,7 +94,7 @@ const features = [
         </div>
       </div>,
     className:
-      "lg:col-start-3 lg:col-end-4 lg:row-start-2 lg:row-end-3 font-changa",
+      "lg:col-start-3 lg:col-end-4 lg:row-start-2 lg:row-end-3 font-changa border-2 hover:border-red-400",
   },
   {
     Icon: Bot,
@@ -96,29 +102,29 @@ const features = [
     description: "Stuck on a problem? Our built-in AI assistant is here to help you.",
     cta: "Learn more",
     background:
-      <div class="botposn">
-        <div class="ai-bot">
-          <div class="head">
-            <div class="face">
-              <div class="eyes"> </div>
-              <div class="mouth"> </div>
+      <div className="botposn">
+        <div className="ai-bot">
+          <div className="head">
+            <div className="face">
+              <div className="eyes"> </div>
+              <div className="mouth"> </div>
             </div>
           </div>
         </div>
       </div>,
     className:
-      "lg:col-start-4 lg:col-end-5 lg:row-start-2 lg:row-end-3 font-changa bg-gray-100",
+      "lg:col-start-4 lg:col-end-5 lg:row-start-2 lg:row-end-3 font-changa bg-gray-100 border-2 hover:border-cyan-400",
   },
   {
     Icon: Earth,
     name: "User all over world",
     description:
-      "• Join a global community of learners, challengers, and developers solving problems together",
+      "• Join a global community of learners, challengers, and developers solving problems together",
     href: "/",
     cta: "Learn more",
     background: <Globe />,
     className:
-      "lg:col-start-1 lg:col-end-3 lg:row-start-3 lg:row-end-4 font-changa bg-gray-100",
+      "lg:col-start-1 lg:col-end-3 lg:row-start-3 lg:row-end-4 font-changa bg-gray-100 border-2 hover:border-green-600",
   },
   {
     Icon: LayoutDashboard,
@@ -127,9 +133,9 @@ const features = [
       `• Get a clear view of your progress, submissions, and solved problems.`,
     href: "/",
     cta: "Learn more",
-    background: <img src="https://images.unsplash.com/photo-1666875753105-c63a6f3bdc86?q=80&w=2946&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" srcset="" />,
+    background: <img src="https://images.unsplash.com/photo-1666875753105-c63a6f3bdc86?q=80&w=2946&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />,
     className:
-      "lg:col-start-3 lg:col-end-4 lg:row-start-3 lg:row-end-4 font-changa",
+      "lg:col-start-3 lg:col-end-4 lg:row-start-3 lg:row-end-4 font-changa border-2 hover:border-blue-800 ",
   },
   {
     Icon: Users,
@@ -138,15 +144,39 @@ const features = [
       "• Submit test cases, report issues, or suggest improvements — every voice matters.",
     href: "/",
     cta: "Learn more",
-    background: <img src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" srcset="" />,
+    background: <img src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />,
     className:
-      "lg:col-start-4 lg:col-end-5 lg:row-start-3 lg:row-end-4 font-changa",
+      "lg:col-start-4 lg:col-end-5 lg:row-start-3 lg:row-end-4 font-changa border-2 hover:border-orange-400",
   },
 ];
 const reviews = [
   {
     name: "Adiv",
-    username: "@jack",
+    username: "@Atul",
+    body: "I've never seen anything like this before. It's amazing. I love it.",
+    img: "https://avatar.vercel.sh/jack",
+  },
+  {
+    name: "Rohit",
+    username: "@Hunter",
+    body: "best platform for dominating in codeing.",
+    img: "https://avatar.vercel.sh/jack",
+  },
+  {
+    name: "Rupesh",
+    username: "@Sparta",
+    body: "I really love the ai feature.",
+    img: "https://avatar.vercel.sh/jack",
+  },
+  {
+    name: "Suraj",
+    username: "@Undertaker",
+    body: "Only focus on dout-solving.",
+    img: "https://avatar.vercel.sh/jack",
+  },
+  {
+    name: "Himanshu",
+    username: "@Hemaa",
     body: "I've never seen anything like this before. It's amazing. I love it.",
     img: "https://avatar.vercel.sh/jack",
   },
@@ -181,6 +211,7 @@ const reviews = [
     img: "https://avatar.vercel.sh/james",
   },
 ];
+
 const firstRow = reviews.slice(0, reviews.length / 2);
 const secondRow = reviews.slice(reviews.length / 2);
 
@@ -256,7 +287,7 @@ const texts = ["CODE", "MASTER", "DOMINATE"];
 
 export default function Mainpg2() {
   return (
-    <div className="min-h-screen w-full bg-slate-100 px-4 py-10">
+    <div className="min-h-screen w-full bg-white  mt-5">
       {/* Section Header */}
       <div className="flex flex-col items-center text-center space-y-4 mb-12">
         <div className="text-2xl md:text-lg font-bold font-changa text-orange-500 flex items-center gap-2">
@@ -295,6 +326,7 @@ export default function Mainpg2() {
           to improve their coding journey.
         </p>
       </div>
+
       {/* marque */}
       <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mb-28">
         <Marquee pauseOnHover className="[--duration:20s]">
@@ -311,7 +343,7 @@ export default function Mainpg2() {
         <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background"></div>
       </div>
       {/* faq */}
-      <div className="relative flex w-full flex-col items-center justify-center overflow-hidden font-changa text-xl mt-32">
+      <div className="relative flex w-full flex-col items-center justify-center overflow-hidden font-changa text-xl mt-36">
         <h2 className="text-5xl font-bold mb-5">
           <AuroraText className="italic">FAQs</AuroraText>
         </h2>
@@ -321,7 +353,7 @@ export default function Mainpg2() {
 
       <div
         className={cn(
-          "relative flex h-[400px] w-full flex-col overflow-hidden p-2"
+          "relative flex h-[400px] w-full flex-col overflow-hidden mb-5 p-2"
         )}
       >
         <Accordion
@@ -343,6 +375,7 @@ export default function Mainpg2() {
         </Accordion>
       </div>
       <Mainpg3 />
+
     </div>
   );
 }

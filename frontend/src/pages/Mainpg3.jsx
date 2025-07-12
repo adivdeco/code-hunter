@@ -46,7 +46,7 @@ export default function Mainpg3() {
   );
 
   return (
-    <div className="min-h-screen w-full bg-slate-100 flex items-center justify-center px-6 py-2">
+    <div className="min-h-screen w-full bg-white flex items-center justify-center   ">
       <div className="relative space-y-9  max-w-5xl text-center">
         {/* Main Heading */}
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 tracking-tight leading-tight font-rocksalt">
@@ -87,13 +87,15 @@ export default function Mainpg3() {
               </AnimatedGradientText>
               <ChevronRight className="ml-2 size-6 stroke-neutral-800 transition-transform duration-300 group-hover:translate-x-1" />
             </span>
+
           </div>
         </NavLink>
 
-        <div className="absolute h-96  top-0 flex size-full items-center justify-center overflow-hidden ">
+        <div className="absolute  h-full top-0 flex size-full items-center justify-center overflow-hidden ">
           <IconCloud images={images} />
         </div>
       </div>
+
     </div>
   );
 }

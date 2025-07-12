@@ -9,59 +9,53 @@ import { ChevronRight } from "lucide-react";
 import { NavLink, useNavigate } from "react-router";
 import Mainpg2 from "./Mainpg2";
 import Navbar from "@/components/Navbar";
-
+import Footer from "@/components/footer";
 import "../page1.css";
 
 const slugs = [
   "typescript",
-  "typescript",
   "react",
-  "python",
-  "c++",
-  "c++",
-  "c++",
-  "c++",
-  "c++",
-  "c++",
-  "python",
-  "python",
-  "python",
-  "javascript",
-  "javascript",
-  "javascript",
-  "javascript",
-  "nodedotjs",
-  "express",
-  "typescript",
-  "nextdotjs",
-  "react",
-  "python",
-  "ruby",
-  "ruby",
-  "ruby",
-  "nextdotjs",
-  "react",
-  "react",
-  "react",
-  "react",
-  "python",
+  "python", "python", "python", "python", "python", "python", "python", "python",
+  "cplusplus", "cplusplus", "cplusplus", "cplusplus", "cplusplus",
   "github",
   "gitlab",
+  "javascript", "javascript", "javascript", "javascript", "javascript",
+  "express",
+  "nextjs",
+  "nodejs",
+  "ruby", "ruby", "ruby", "ruby", "ruby",
+  "java", "java", "java", "java", "java", "java", "java", "java", "java"
 ];
+const iconMap = {
+  react: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+  java: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
+  python: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+  cplusplus: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
+  github: "https://img.icons8.com/material-outlined/96/github.png",
+  gitlab: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg",
+  nextjs: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
+  typescript: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+  javascript: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+  express: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+  ruby: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg",
+  nodejs: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+};
 
 export default function Mainpg() {
-  const images = slugs.map(
-    (slug) => `https://cdn.simpleicons.org/${slug}/${slug}`
-  );
+  // const images = slugs.map(
+  //   (slug) => `https://cdn.simpleicons.org/${slug}/${slug}`,
+  //   // (slug) => `https://img.icons8.com/?size=100&id=${slug}&format=png&color=000000`
+  // );
+  const images = slugs.map((slug) => iconMap[slug]);
 
   return (
-    <div>
+    <div className="bg-white">
       <div className="relative">
         {/* Navbar */}
         <Navbar />
 
         {/* Hero Section */}
-        <div className="relative  flex h-[810px] w-full flex-col items-center justify-center px-4 mt-0 text-center bg-gray-100 overflow-hidden">
+        <div className="relative  flex h-[810px] w-full flex-col items-center justify-center px-4 mt-0 text-center bg-white overflow-hidden">
           {/* Background Animation */}
           <InteractiveGridPattern
             className={cn(
@@ -71,7 +65,7 @@ export default function Mainpg() {
           />
 
           {/* Hero Text */}
-          <div className="relative z-8 space-y-7 max-w-5xl mt-9">
+          <div className="relative z-7 space-y-7 max-w-5xl mt-9">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-foreground tracking-tight font-rocksalt">
               Your <AuroraText className="font-rocksalt">Coding</AuroraText>{" "}
               Journey
@@ -126,6 +120,12 @@ export default function Mainpg() {
         </div>
       </div>
       <Mainpg2 />
+
+      {/* <div className=" mb-[75vh]"> */}
+      <Footer />
+      {/* </div> */}
+
+
     </div>
   );
 }

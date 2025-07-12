@@ -26,6 +26,28 @@ export default {
       },
       keyframes: {
 
+        parallax: {
+          '0%': { backgroundPosition: '260px' },
+          '100%': { backgroundPosition: '-10000vw' },
+        },
+        moto: {
+          '0%': { transform: 'translateY(0) rotate(0)' },
+          '5%': { transform: 'translateY(0) rotate(-5deg)' },
+          '25%': { transform: 'translateY(60px) rotate(-20deg)' },
+          '49%': { transform: 'translateY(0) rotate(-1deg)' },
+          '51%': { transform: 'translateY(0) rotate(1deg)' },
+          '75%': { transform: 'translateY(60px) rotate(20deg)' },
+          '80%': { transform: 'translateY(60px) rotate(0)' },
+          '98%': { transform: 'translateY(0) rotate(0)' },
+        },
+        voiture: {
+          '0%': { transform: 'rotate(0)' },
+          '25%': { transform: 'rotate(-5deg)' },
+          '50%': { transform: 'rotate(0)' },
+          '75%': { transform: 'rotate(5deg)' },
+          '100%': { transform: 'rotate(0)' },
+        },
+
         fadeIn: {
           '0%': { opacity: 0, transform: 'scale(0.95)' },
           '100%': { opacity: 1, transform: 'scale(1)' },
@@ -88,6 +110,9 @@ export default {
         },
       },
       animation: {
+        parallax: 'parallax 600s linear infinite',
+        moto: 'moto 5s linear infinite',
+        voiture: 'voiture 1s linear infinite',
         fade_in: 'fadeIn 0.25s ease-out forwards',
         aurora: "aurora 3s ease-out infinite",
         "shimmer-slide": "shimmer var(--speed) linear infinite",
