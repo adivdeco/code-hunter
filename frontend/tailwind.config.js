@@ -166,6 +166,8 @@ export default {
           5: "hsl(var(--chart-5))",
         },
       },
+
+
     },
   },
   plugins: [require("tailwindcss-animate"), daisyui],

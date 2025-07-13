@@ -15,6 +15,7 @@ import "../page1.css";
 const slugs = [
   "typescript",
   "react",
+  "go", "go", "go", "go", "go", "go", "go",
   "python", "python", "python", "python", "python", "python", "python", "python",
   "cplusplus", "cplusplus", "cplusplus", "cplusplus", "cplusplus",
   "github",
@@ -27,6 +28,7 @@ const slugs = [
   "java", "java", "java", "java", "java", "java", "java", "java", "java"
 ];
 const iconMap = {
+  go: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg",
   react: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
   java: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
   python: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",

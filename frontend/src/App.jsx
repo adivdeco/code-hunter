@@ -12,7 +12,7 @@ import Admin from "./pages/Admin";
 import Page1 from "./pages/page1";
 import Mainpg from "./pages/Mainpg";
 import ThreeRingLoader from "@/components/ThreeRingLoader";
-
+import Pricing from "./pages/Pricing";
 
 function App() {
 
@@ -88,6 +88,7 @@ function App() {
         <Route path="/admin/create" element={isAuthenticated && user?.role === "admin" ? <AdminPanel /> : <Navigate to="/" />}></Route>
         <Route path="/admin/delete" element={isAuthenticated && user?.role === "admin" ? <AdminDelete /> : <Navigate to="/" />}></Route>
         <Route path="/problem/:problemId" element={<ProblemPage />}></Route>
+        <Route path="/pricing" element={<Pricing />} />
 
       </Routes>
     </>

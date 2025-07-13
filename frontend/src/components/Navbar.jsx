@@ -1,11 +1,9 @@
-import { NavLink, useNavigate } from "react-router";
+import { Navigate, NavLink, useNavigate } from "react-router";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { Half1Icon } from "@radix-ui/react-icons";
 import NavProfile from "./NavProfile"
 import { useLocation } from "react-router";
-
+import ThreeRingLoader from "@/components/ThreeRingLoader"
 
 export default function Navbar() {
 
@@ -13,12 +11,10 @@ export default function Navbar() {
 
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center">
-            <span className="loading loading-spinner loading-lg"></span>
-        </div>;
+        return <ThreeRingLoader></ThreeRingLoader>
     }
     const location = useLocation();
-    const isDarkBackground = ["/"].includes(location.pathname);
+    const isDarkBackground = ["/", "/pricing"].includes(location.pathname);
 
 
     return (
@@ -49,22 +45,42 @@ export default function Navbar() {
 
 
             {/* Nav Links */}
-            <div className=" md:flex items-center gap-7   text-md font-changa space-x-2">
-                <NavLink to={"/"}>
-                    <p className="cursor-pointer  hover:underline hover:text-blue-600 hover:bg-blue-200 p-2 rounded-2xl ">
-                        Home
-                    </p>
+            <div className=" md:flex items-center gap-7  text-md font-changa space-x-2">
+                <NavLink to={"/"}
+                    className={({ isActive }) =>
+                        `cursor-pointer p-2 rounded-2xl ${isActive
+                            ? "text-purple-600  underline"
+                            : "hover:text-purple-600 hover:bg-purple-200 hover:underline"
+                        }`
+                    }
+                >
+                    Home
                 </NavLink>
 
-                <NavLink to={"/login"}>
-                    <p className="cursor-pointer  hover:underline hover:text-indigo-700 hover:bg-indigo-200 p-2 rounded-2xl">
-                        Practice
-                    </p>
+                <NavLink to={"/login"}
+                    className={({ isActive }) =>
+                        `cursor-pointer p-2 rounded-2xl ${isActive
+                            ? "text-indigo-700  underline"
+                            : "hover:text-indigo-700 hover:bg-indigo-200 hover:underline"
+                        }`
+                    }
+                >
+                    Practice
                 </NavLink>
 
-                <p className="cursor-pointer hover:underline hover:text-pink-700 hover:bg-pink-200 p-2 rounded-2xl">
+                <NavLink to="/pricing"
+                    className={({ isActive }) =>
+                        `cursor-pointer p-2 rounded-2xl ${isActive
+                            ? "text-pink-700  underline"
+                            : "hover:text-pink-700 hover:bg-pink-200 hover:underline"
+                        }`
+                    }
+                >
                     Pricing
-                </p>
+                </NavLink>
+
+
+
                 <p className="cursor-pointer hover:underline hover:text-purple-700  hover:bg-purple-200 p-2 rounded-2xl border-dashed ">
                     Explore
                 </p>
@@ -94,6 +110,7 @@ export default function Navbar() {
                     </button>}
 
             </div>
+
         </nav >
     )
 }

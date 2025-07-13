@@ -402,7 +402,7 @@
   transform: translateX(-50%);
   height: 2px;
   width: 0%;
-  background: linear-gradient(to right, transparent, currentColor, red, transparent);
+  background: linear-gradient(to right, transparent, currentColor, transparent);
   transition: width 0.3s ease;
 }
 

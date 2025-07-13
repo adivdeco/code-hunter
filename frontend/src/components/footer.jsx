@@ -1,7 +1,8 @@
 
 import { AuroraText } from "@/components/magicui/aurora-text";
-import { Facebook, Github, Instagram, Linkedin, Mail, MapPin, Phone, Twitter, YoutubeIcon } from "lucide-react";
+import { Facebook, Github, icons, Instagram, Linkedin, Mail, MapPin, Phone, Twitter, YoutubeIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { clsx } from "clsx";
 
 export default function Footer() {
     return (
@@ -33,28 +34,34 @@ export default function Footer() {
                     {/* Social Links */}
                     <div>
                         <h3 className="uppercase text-2xl mb-4 ml-4 font-changa">Connect with us</h3>
-                        <ul className="space-y-3 py-6 text-lg font-changa ml-5 text-muted-foreground">
-                            {[
-                                { icon: <YoutubeIcon className="w-7 h-7" />, label: "YouTube", href: "#", color: "red-500" },
-                                { icon: <Facebook className="w-7 h-7" />, label: "Facebook", href: "#", color: "blue-600" },
-                                { icon: <Instagram className="w-7 h-7" />, label: "Instagram", href: "https://www.linkedin.com/in/adiv-singh-207233254/", color: "pink-500" },
-                                { icon: <Linkedin className="w-7 h-7" />, label: "Linkedin", href: "https://www.linkedin.com/in/adiv-singh-207233254/", color: "sky-600" },
-                                { icon: <Twitter className="w-7 h-7" />, label: "Twitter", href: "https://x.com/adivreder", color: "blue-400" },
-                                { icon: <Github className="w-7 h-7" />, label: "Github", href: "https://github.com/adivdeco", color: "gray-400" },
-                            ].map(({ icon, label, href, color }) => (
-                                <li key={label}>
-                                    <a
-                                        href={href}
-                                        className={`flex items-center custom-underline gap-4 group transition-all duration-300 hover:text-${color}`}
-                                    >
-                                        <span className={`transition-transform group-hover:scale-125 group-hover:drop-shadow-[0_0_10px_${color}]`}>
-                                            {icon}
-                                        </span>
-                                        {label}
-                                    </a>
-                                </li>
-                            ))}
+
+                        <ul className="space-y-4  text-muted-foreground font-changa text-xl py-4 ml-1">
+                            <li className="flex items-center gap-4 group text-xl hover:text-red-500 transition">
+                                <YoutubeIcon className=" w-7 h-7 group-hover:scale-125 group-hover:drop-shadow-[0_0_2px_red]" />
+                                <a href="" className="flex items-center custom-underline gap-4 group transition-all duration-200">Youtube</a>
+
+                            </li>
+                            <li className="flex items-center gap-4 group hover:text-blue-600 transition">
+                                <Facebook className=" w-7 h-7 group-hover:scale-125 group-hover:drop-shadow-[3px_3px_2px_blue]" />
+                                <a href="" className="flex items-center custom-underline gap-4 group transition-all duration-200">Facebook</a>
+
+                            </li>
+                            <li className="flex items-center gap-4 group hover:text-sky-500 transition">
+                                <Linkedin className=" w-7 h-7 group-hover:scale-125 group-hover:drop-shadow-[2px_2px_2px_sky]" />
+                                <a href="" className="flex items-center custom-underline gap-4 group transition-all duration-200">Linkedin</a>
+                            </li>
+                            <li className="flex items-center gap-4 group hover:text-blue-400 transition">
+                                <Twitter className=" w-7 h-7 group-hover:scale-125 group-hover:drop-shadow-[2px_2px_2px_blue]" />
+                                <a href="" className="flex items-center custom-underline gap-4 group transition-all duration-200">Twitter</a>
+                            </li>
+                            <li className="flex items-center gap-4 group hover:text-gray-400 transition">
+                                <Github className=" w-7 h-7 group-hover:scale-125 group-hover:drop-shadow-[0_0_2px_gray]" />
+                                <a href="" className="flex items-center custom-underline gap-4 group transition-all duration-200">Github</a>
+                            </li>
+
                         </ul>
+
+
                     </div>
 
                     {/* Contact */}
@@ -107,6 +114,6 @@ export default function Footer() {
                     </button>
                 </div>
             </div>
-        </footer>
+        </footer >
     );
 }
