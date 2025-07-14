@@ -134,11 +134,12 @@ const problemFetch = async (req, res) => {
 const getAllProblem = async (req, res) => {
 
     try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = 9;
-        const skip = (page - 1) * limit;
+        // const page = parseInt(req.query.page) || 1;
+        // const limit = 9;
+        // const skip = (page - 1) * limit;
 
-        const allproblem = await Problem.find().skip(skip).limit(limit);                        //await Problem.find({skip:10,limit:10}); // 
+        const allproblem = await Problem.find()
+        // .skip(skip).limit(limit);                        //await Problem.find({skip:10,limit:10}); // 
         if (allproblem.length === 0) {                                     //await Problem.find({difficulty: "easy",tags:"array"}); 
             return res.status(404).send("No problems found");
         }
@@ -175,6 +176,7 @@ const solvedProblem = async (req, res) => {
 } // gives all unique problems  solved by user not all submissions
 
 
+
 const allsubmission = async (req, res) => {
     const userId = req.finduser._id;
     const problemId = req.params.id
@@ -194,11 +196,25 @@ const allsubmission = async (req, res) => {
     }
 }
 
+const allSolve = async (req, res) => {
+    try {
+        const allsoln = await Solution.find()
+        if (allsoln.length === 0) {
+            return res.status(404).send("No User found");
+        }
+        res.status(200).json({ message: "All solve fetch successfully", allsoln });
+
+    } catch (error) {
+        res.status(500).send("Error: " + error)
+
+    }
+}
 
 
 
 
-module.exports = { createProblem, updateProblem, deleteProblem, problemFetch, getAllProblem, solvedProblem, allsubmission };
+
+module.exports = { createProblem, updateProblem, deleteProblem, problemFetch, getAllProblem, solvedProblem, allsubmission, allSolve };
 
 
 

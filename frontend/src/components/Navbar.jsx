@@ -94,7 +94,10 @@ export default function Navbar() {
                 {/* signup */}
 
 
-                {isAuthenticated === true ? <h1 className="font-aladin text-xl relative inline-block mt-2" > Upgrade to <span className="font-aladin bg-gradient-to-r from-yellow-500 to-orange-600 text-transparent bg-clip-text text-xl font-extrabold">Pro</span></h1>
+                {isAuthenticated === true ?
+                    <NavLink to={"/pricing"}>
+                        <h1 className="font-aladin text-xl relative inline-block mt-2" > Upgrade to <span className="font-aladin bg-gradient-to-r from-yellow-500 to-orange-600 text-transparent bg-clip-text text-xl font-extrabold">Pro</span></h1>
+                    </NavLink>
                     : <NavLink to={"/signup"}>
                         <ShimmerButton>
                             <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white lg:text-lg font-changa">

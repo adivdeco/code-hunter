@@ -6,7 +6,7 @@ import { AuroraText } from "@/components/magicui/aurora-text";
 import Mainpg3 from "./Mainpg3";
 import "../index.css";
 import { AvatarCircles } from "@/components/magicui/avatar-circles";
-
+import FAQSection from "@/components/faq"
 
 import {
   Accordion,
@@ -240,48 +240,48 @@ const ReviewCard = ({ img, name, username, body }) => {
   );
 };
 
-let notifications = [
-  {
-    name: "What Language do we support ",
-    description: "Java, JavaScript, Phyton, C++",
-    time: "15days ago",
-    icon: "📚",
-    color: "#00C9A7",
-  },
-  {
-    name: "Do I need prior coding experience?",
-    description: `Not at all. We guide you through the journey with increasing difficulty.
-     Start with our beginner-friendly problems and work your way up as you build confidence.`,
-    time: "10days ago",
-    icon: "👤",
-    color: "#FFB800",
-  },
+// let notifications = [
+//   {
+//     name: "What Language do we support ",
+//     description: "Java, JavaScript, Phyton, C++",
+//     time: "15days ago",
+//     icon: "📚",
+//     color: "#00C9A7",
+//   },
+//   {
+//     name: "Do I need prior coding experience?",
+//     description: `Not at all. We guide you through the journey with increasing difficulty.
+//      Start with our beginner-friendly problems and work your way up as you build confidence.`,
+//     time: "10days ago",
+//     icon: "👤",
+//     color: "#FFB800",
+//   },
 
-  {
-    name: "How long until I see improvement in my coding interviews?",
-    description: `Most users report significant confidence improvements within 2-3 weeks of consistent training.
-     Measurable skill improvements typically show in our metrics within 3-4 weeks.`,
-    time: "5days ago",
-    icon: "💬",
-    color: "#FF3D71",
-  },
-  {
-    name: "Do you offer any guarantees for job placement?",
-    description:
-      "We don't guarantee specific job outcomes, but we do guarantee measurable skill improvement. Our data shows that members who complete our full training program experience a 74% higher interview success rate.",
-    time: "2month ago",
-    icon: "🗞️",
-    color: "#1E86FF",
-  },
-  {
-    name: "Is this better than LeetCode?",
-    description:
-      "We're not here to compete — we're here to focus. CoderHunter is for those who want a guided, immersive, and themed experience.",
-    time: "2hour ago",
-    icon: "🔥",
-    color: "#1E86FF",
-  },
-];
+//   {
+//     name: "How long until I see improvement in my coding interviews?",
+//     description: `Most users report significant confidence improvements within 2-3 weeks of consistent training.
+//      Measurable skill improvements typically show in our metrics within 3-4 weeks.`,
+//     time: "5days ago",
+//     icon: "💬",
+//     color: "#FF3D71",
+//   },
+//   {
+//     name: "Do you offer any guarantees for job placement?",
+//     description:
+//       "We don't guarantee specific job outcomes, but we do guarantee measurable skill improvement. Our data shows that members who complete our full training program experience a 74% higher interview success rate.",
+//     time: "2month ago",
+//     icon: "🗞️",
+//     color: "#1E86FF",
+//   },
+//   {
+//     name: "Is this better than LeetCode?",
+//     description:
+//       "We're not here to compete — we're here to focus. CoderHunter is for those who want a guided, immersive, and themed experience.",
+//     time: "2hour ago",
+//     icon: "🔥",
+//     color: "#1E86FF",
+//   },
+// ];
 
 const texts = ["CODE", "MASTER", "DOMINATE"];
 
@@ -342,38 +342,12 @@ export default function Mainpg2() {
         <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>
         <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background"></div>
       </div>
-      {/* faq */}
-      <div className="relative flex w-full flex-col items-center justify-center overflow-hidden font-changa text-xl mt-36">
-        <h2 className="text-5xl font-bold mb-5">
-          <AuroraText className="italic">FAQs</AuroraText>
-        </h2>
-        <p className="mb-10">CodeHunter Gets These Questions A Lot.</p>
-      </div>
+
       {/* faq animation */}
 
-      <div
-        className={cn(
-          "relative flex h-[400px] w-full flex-col overflow-hidden mb-5 p-2"
-        )}
-      >
-        <Accordion
-          className="max-w-5xl w-full mx-auto border-black"
-          type="single"
-          collapsible
-        >
-          {notifications.map((item, idx) => (
-            <AccordionItem key={idx} value={item.name}>
-              <AccordionTrigger className="font-changa  text-3xl decoration-0">
-                {item.name}
-                {item.icon}
-              </AccordionTrigger>
-              <AccordionContent className="font-changa  text-lg">
-                {item.description}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </div>
+      <FAQSection />
+
+
       <Mainpg3 />
 
     </div>

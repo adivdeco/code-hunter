@@ -114,7 +114,7 @@ svg path {
     }
 }
 
-
+/* mainpg grid part */
 .sphere-animation {
     position: absolute;
     top: 50%;
@@ -137,6 +137,7 @@ svg path {
     }
 }
 
+/* problem note */
 .bookmark-filled path {
     fill: #facc15 !important;
     /* Tailwind yellow-400 */
@@ -272,4 +273,24 @@ svg path {
 .gutter-horizontal:hover::after {
     opacity: 1;
     color: #ffffff;
+}
+
+/* icon in create problem */
+
+.language-icon path {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+    animation: none !important;
+}
+
+/* Customize react-confirm-alert overlay */
+/* deleat problem part */
+.react-confirm-alert-overlay {
+    background: rgba(10, 10, 10, 0.4) !important;
+    backdrop-filter: blur(5px);
+}
+
+.react-confirm-alert {
+    background: transparent !important;
+    box-shadow: none !important;
 }

@@ -170,5 +170,7 @@ export default {
 
     },
   },
-  plugins: [require("tailwindcss-animate"), daisyui],
+  plugins: [require("tailwindcss-animate"), daisyui
+
+  ],
 };
