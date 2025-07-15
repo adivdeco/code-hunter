@@ -294,3 +294,20 @@ svg path {
     background: transparent !important;
     box-shadow: none !important;
 }
+
+@keyframes float {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-50vh) translateX(20px) rotate(5deg);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+}

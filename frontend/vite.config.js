@@ -18,9 +18,12 @@ import path from "path"
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-    resolve: {
+  resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: ['@react-three/fiber', '@react-three/drei', 'three']
+  }
 })
