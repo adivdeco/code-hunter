@@ -11,7 +11,7 @@ const cors = require("cors");
 const aiRouter = require("./routes/aiChatting");
 const noteRouter = require("./routes/noteSection");
 const bookmarkRouter = require('./routes/bookmark')
-
+const errorHandler = require('./middleware/errorHandler');
 // Only allow your deployed frontend for CORS with credentials
 // app.use(
 //   cors({
@@ -41,6 +41,7 @@ app.use("/submit", submitRouter);
 app.use("/ai", aiRouter);
 app.use("/note", noteRouter);
 app.use("/book", bookmarkRouter)
+app.use(errorHandler);
 
 
 

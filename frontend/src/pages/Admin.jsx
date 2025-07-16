@@ -28,7 +28,7 @@ const adminOptions = [
     icon: Edit,
     color: "from-amber-400 to-orange-600",
     shadow: "shadow-amber-500/30 hover:shadow-amber-500/50",
-    route: "/admin/update",
+    route: "/admin/update/:id",
     accent: "bg-gradient-to-br from-amber-500/10 to-yellow-500/60"
   },
   {
@@ -58,7 +58,7 @@ const adminOptions = [
     icon: Users,
     color: "from-violet-400 to-purple-600",
     shadow: "shadow-violet-500/30 hover:shadow-violet-500/50",
-    route: "/admin/users",
+    route: "/admin/allusers",
     accent: "bg-gradient-to-br from-violet-500/10 to-violet-500/60"
   },
   {

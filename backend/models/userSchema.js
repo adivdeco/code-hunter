@@ -2,50 +2,70 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    
-    name:{
-        type:String,
-        required:true,
-        trim:true,
-        minLength:3,
-        maxLenghth:10,
-        lowercase:true,
+
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        minLength: 3,
+        maxLenghth: 10,
+        lowercase: true,
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true,
-        trim:true,
-        lowercase:true,
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true,
     },
-    password:{
-        type:String,
-        required:true,
-        minLength:4,
+    password: {
+        type: String,
+        required: true,
+        minLength: 4,
         // maxLength:10,
     },
-    role:{
-        type:String,
-        enum:['user', 'admin'],
-        default:'user',
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user',
     },
-     problemSolved:{
-        type:[{
-            type:Schema.Types.ObjectId,
-            ref:'problemdata',
-            // unique:true
+    isPaidUser: {  // New field
+        type: Boolean,
+        default: false
+    },
+    lastActive: {  // New field
+        type: Date,
+        default: Date.now
+    },
+    problemSolved: {
+        type: [{
+            problemId: {
+                type: Schema.Types.ObjectId,
+                ref: 'problemdata',
+            },
+            solvedAt: {  // New subfield
+                type: Date,
+                default: Date.now
+            }
         }],
-        
-        // unique:true
+    },
+    subscription: {  // New field for more detailed subscription info
+        type: {
+            plan: String,
+            startsAt: Date,
+            expiresAt: Date,
+            autoRenew: Boolean
+        },
+        default: null
     },
 
-    
-},{
-    timestamps:true,
+
+}, {
+    timestamps: true,
 });
 
-userSchema.post('findOneAndDelete', async function(doc) {
-    if(doc){
+userSchema.post('findOneAndDelete', async function (doc) {
+    if (doc) {
         await mongoose.model('solution').deleteMany({
             userId: doc._id
         });

@@ -1,379 +1,536 @@
+import React, { useState, useEffect } from 'react';
+import {
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+    Paper, Button, Dialog, DialogTitle, DialogContent, DialogActions,
+    TextField, Select, MenuItem, FormControl, InputLabel, Chip, Avatar,
+    Grid, Card, CardContent, LinearProgress, IconButton, Tooltip, Box,
+    Pagination, Switch, FormControlLabel, Snackbar, Alert
+} from '@mui/material';
+import {
+    Delete, Edit, Visibility, CheckCircle, Cancel,
+    Paid, MoneyOff, AdminPanelSettings, Person
+} from '@mui/icons-material';
+import axios from 'axios';
 
-import { useState, useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
-import Editor from '@monaco-editor/react';
-import { useParams } from 'react-router';
-import axiosClient from "../utils/axiosClint"
-import SubmissionHistory from "../components/SubmissionHistory"
+const UserManagement = () => {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+    const [pagination, setPagination] = useState({
+        page: 1,
+        rowsPerPage: 10,
+        totalUsers: 0
+    });
 
-const langMap = {
-    cpp: 'C++',
-    java: 'Java',
-    javascript: 'JavaScript'
-};
-
-const ProblemPage = () => {
-    const [problem, setProblem] = useState(null);
-    const [selectedLanguage, setSelectedLanguage] = useState('javascript');
-    const [code, setCode] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [runResult, setRunResult] = useState(null);
-    const [submitResult, setSubmitResult] = useState(null);
-    const [activeLeftTab, setActiveLeftTab] = useState('description');
-    const [activeRightTab, setActiveRightTab] = useState('code');
-    const editorRef = useRef(null);
-    let { problemId } = useParams();
-
-    const { handleSubmit } = useForm();
-
-
+    const fetchUsers = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get('/api/alluser');
+            setUsers(response.data.users);
+            setPagination(prev => ({ ...prev, totalUsers: response.data.users.length }));
+        } catch (error) {
+            setSnackbar({ open: true, message: 'Failed to fetch users', severity: 'error' });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchProblem = async () => {
-        };
+        fetchUsers();
+    }, []);
 
-        fetchProblem();
-    }, [problemId]);
-
-
-    // Update code when language changes
-    useEffect(() => {
-        if (problem) {
-            const initialCode = problem.startCode.find(sc => sc.language === langMap[selectedLanguage])?.initialCode;
-            setCode(initialCode);
-        }
-    }, [selectedLanguage, problem]);
-
-
-    const handleEditorChange = (value) => {
-        setCode(value || '');
-    };
-
-    const handleEditorDidMount = (editor) => {
-        editorRef.current = editor;
-    };
-
-    const handleLanguageChange = (language) => {
-        setSelectedLanguage(language);
-    };
-
-    const handleRun = async () => {
-        setLoading(true);
-        setRunResult(null);
-
-
+    const handleRoleChange = async (userId, newRole) => {
         try {
-            const response = await axiosClient.post(`/submit/run/${problemId}`, {
-                code: code,
-                language: selectedLanguage
-            });
-
-            console.log(response.data);
-            setRunResult(response.data);
-            setLoading(false);
-            setActiveRightTab('testcase');
-
+            await axios.patch(`/api/admin/users/${userId}/role`, { role: newRole });
+            setUsers(users.map(user =>
+                user._id === userId ? { ...user, role: newRole } : user
+            ));
+            setSnackbar({ open: true, message: 'Role updated successfully', severity: 'success' });
         } catch (error) {
-            console.error('Error running code:', error);
-            setRunResult({
-                success: false,
-                error: 'Internal server error'
-            });
-            setLoading(false);
-            setActiveRightTab('testcase');
+            setSnackbar({ open: true, message: 'Failed to update role', severity: 'error' });
         }
     };
 
-    const handleSubmitCode = async () => {
-        setLoading(true);
-        setSubmitResult(null);
-
+    const handleSubscriptionChange = async (userId, isPaidUser) => {
         try {
-            const response = await axiosClient.post(`/submit/submit/${problemId}`, {
-                code: code,
-                language: selectedLanguage
-            });
-            console.log(response.data);
-
-            setSubmitResult(response.data); //all data pass by backend by res.json
-            setLoading(false);
-            setActiveRightTab('result');   //default me code hai eska value 
-
+            await axios.patch(`/api/admin/users/${userId}/subscription`, { isPaidUser });
+            setUsers(users.map(user =>
+                user._id === userId ? { ...user, isPaidUser } : user
+            ));
+            setSnackbar({ open: true, message: 'Subscription updated', severity: 'success' });
         } catch (error) {
-            console.error('Error submitting code:', error);
-            setSubmitResult(null);
-            setLoading(false);
-            setActiveRightTab('result');
-        }
-    };
-    // language selector for monaco
-    const getLanguageForMonaco = (lang) => {
-        switch (lang) {
-            case 'javascript': return 'javascript';
-            case 'java': return 'java';
-            case 'cpp': return 'cpp';
-            default: return 'javascript';
-        }
-    };
-    // color of tags..
-    const getDifficultyColor = (difficulty) => {
-        switch (difficulty) {
-            case 'easy': return 'text-green-500';
-            case 'medium': return 'text-yellow-500';
-            case 'hard': return 'text-red-500';
-            default: return 'text-gray-500';
+            setSnackbar({ open: true, message: 'Failed to update subscription', severity: 'error' });
         }
     };
 
-    if (loading && !problem) {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <span className="loading loading-spinner loading-lg"></span>
-            </div>
-        );
-    }
+    const handleCloseSnackbar = () => {
+        setSnackbar({ ...snackbar, open: false });
+    };
 
     return (
-        <div className="h-screen flex bg-base-100">
-            {/* Left Panel */}
+        <Container maxWidth="xl">
+            {/* Snackbar for notifications */}
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+            >
+                <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
 
-
-            {/* Right Panel */}
-            <div className="w-1/2 flex flex-col ">
-                {/* Right Tabs */}
-                <div className="tabs tabs-bordered bg-base-200 px-4">
-                    <button
-                        className={`tab ${activeRightTab === 'code' ? 'tab-active' : ''}`}
-                        onClick={() => setActiveRightTab('code')}
-                    >
-                        Code
-                    </button>
-                    <button
-                        className={`tab ${activeRightTab === 'testcase' ? 'tab-active' : ''}`}
-                        onClick={() => setActiveRightTab('testcase')}
-                    >
-                        Testcase
-                    </button>
-                    <button
-                        className={`tab ${activeRightTab === 'result' ? 'tab-active' : ''}`}
-                        onClick={() => setActiveRightTab('result')}
-                    >
-                        Result
-                    </button>
-                </div>
-
-                {/* Right Content */}
-                <div className="flex-1 flex flex-col ">
-                    {activeRightTab === 'code' && (
-                        <div className="flex-1 flex flex-col">
-                            {/* Language Selector */}
-                            <div className="flex justify-between items-center p-4 border-b border-base-300">
-                                <div className="flex gap-2">
-                                    {['javascript', 'java', 'cpp'].map((lang) => (
-                                        <button
-                                            key={lang}
-                                            className={`btn btn-sm ${selectedLanguage === lang ? 'btn-primary' : 'btn-ghost'}`}
-                                            onClick={() => handleLanguageChange(lang)}
+            {/* Users Table */}
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>User</TableCell>
+                            <TableCell>Email</TableCell>
+                            <TableCell>Role</TableCell>
+                            <TableCell>Subscription</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {users.map((user) => (
+                            <TableRow key={user._id}>
+                                <TableCell>
+                                    <Box display="flex" alignItems="center">
+                                        <Avatar sx={{ mr: 2 }}>
+                                            {user.name.charAt(0).toUpperCase()}
+                                        </Avatar>
+                                        {user.name}
+                                    </Box>
+                                </TableCell>
+                                <TableCell>{user.email}</TableCell>
+                                <TableCell>
+                                    <FormControl size="small">
+                                        <Select
+                                            value={user.role}
+                                            onChange={(e) => handleRoleChange(user._id, e.target.value)}
                                         >
-                                            {lang === 'cpp' ? 'C++' : lang === 'javascript' ? 'JavaScript' : 'Java'}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
+                                            <MenuItem value="user">
+                                                <Box display="flex" alignItems="center">
+                                                    <Person fontSize="small" sx={{ mr: 1 }} />
+                                                    User
+                                                </Box>
+                                            </MenuItem>
+                                            <MenuItem value="admin">
+                                                <Box display="flex" alignItems="center">
+                                                    <AdminPanelSettings fontSize="small" sx={{ mr: 1 }} />
+                                                    Admin
+                                                </Box>
+                                            </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </TableCell>
+                                <TableCell>
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={user.isPaidUser}
+                                                onChange={(e) => handleSubscriptionChange(user._id, e.target.checked)}
+                                                color="primary"
+                                            />
+                                        }
+                                        label={user.isPaidUser ? 'Paid' : 'Free'}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <IconButton onClick={() => {
+                                        setSelectedUser(user);
+                                        setOpenDialog(true);
+                                    }}>
+                                        <Visibility color="primary" />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
 
-                            {/* Monaco Editor */}
-                            <div className="flex-1">
-                                <Editor
-                                    height="80%"
-                                    language={getLanguageForMonaco(selectedLanguage)}
-                                    value={code}
-                                    onChange={handleEditorChange}
-                                    onMount={handleEditorDidMount}
-                                    theme="vs-dark"
-                                    options={{
-                                        fontSize: 14,
-                                        minimap: { enabled: false },
-                                        scrollBeyondLastLine: true,
-                                        automaticLayout: true,
-                                        tabSize: 2,
-                                        insertSpaces: true,
-                                        wordWrap: 'on',
-                                        lineNumbers: 'on',
-                                        glyphMargin: false,
-                                        folding: true,
-                                        lineDecorationsWidth: 10,
-                                        lineNumbersMinChars: 3,
-                                        renderLineHighlight: 'line',
-                                        selectOnLineNumbers: true,
-                                        roundedSelection: false,
-                                        readOnly: false,
-                                        cursorStyle: 'line',
-                                        mouseWheelZoom: true,
-                                    }}
-                                />
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="p-4 border-t border-base-300 flex justify-between">
-                                <div className="flex gap-2">
-                                    <button
-                                        className="btn btn-ghost btn-sm"
-                                        onClick={() => setActiveRightTab('testcase')}
-                                    >
-                                        Console
-                                    </button>
-                                </div>
-                                <div className="flex gap-2">
-                                    <button
-                                        className={`btn btn-outline btn-sm ${loading ? 'loading' : ''}`}
-                                        onClick={handleRun}
-                                        disabled={loading}
-                                    >
-                                        Run
-                                    </button>
-                                    <button
-                                        className={`btn btn-primary btn-sm ${loading ? 'loading' : ''}`}
-                                        onClick={handleSubmitCode}
-                                        disabled={loading}
-                                    >
-                                        Submit
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+            {/* User Details Dialog */}
+            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                <DialogTitle>User Details</DialogTitle>
+                <DialogContent>
+                    {selectedUser && (
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Typography variant="h6">{selectedUser.name}</Typography>
+                            </Grid>
+                            {/* Add more user details here */}
+                        </Grid>
                     )}
-
-                    {activeRightTab === 'testcase' && (
-                        <div className="flex-1 p-4 overflow-y-auto">
-                            <h3 className="font-semibold mb-4">Test Results</h3>
-                            {runResult ? (
-                                <div className={`alert ${runResult.success ? 'alert-success' : 'alert-error'} mb-4`}>
-                                    <div>
-                                        {runResult.success ? (
-                                            <div>
-                                                <h4 className="font-bold">✅ All test cases passed!</h4>
-                                                <p className="text-sm mt-2">Runtime: {runResult.runtime + " sec"}</p>
-                                                <p className="text-sm">Memory: {runResult.memory + " KB"}</p>
-
-                                                <div className="mt-4 space-y-2">
-                                                    {runResult.testCases.map((tc, i) => (
-                                                        <div key={i} className="bg-base-100 p-3 rounded text-xs">
-                                                            <div className="font-mono">
-                                                                <div><strong>Input:</strong> {tc.stdin}</div>
-                                                                <div><strong>Expected:</strong> {tc.expected_output}</div>
-                                                                <div><strong>Output:</strong> {tc.stdout}</div>
-                                                                <div className={'text-green-600'}>
-                                                                    {'✓ Passed'}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <h4 className="font-bold">❌ Error</h4>
-                                                <div className="mt-4 space-y-2">
-                                                    {runResult.testCases.map((tc, i) => (
-                                                        <div key={i} className="bg-base-100 p-3 rounded text-xs">
-                                                            <div className="font-mono">
-                                                                <div><strong>Input:</strong> {tc.stdin}</div>
-                                                                <div><strong>Expected:</strong> {tc.expected_output}</div>
-                                                                <div><strong>Output:</strong> {tc.stdout}</div>
-                                                                <div className={tc.status_id == 3 ? 'text-green-600' : 'text-red-600'}>
-                                                                    {tc.status_id == 3 ? '✓ Passed' : '✗ Failed'}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="text-gray-500">
-                                    Click "Run" to test your code with the example test cases.
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {activeRightTab === 'result' && (
-                        <div className="flex-1 p-4 overflow-y-auto">
-                            <h3 className="font-semibold mb-4">Submission Result</h3>
-                            {submitResult ? (
-                                <div className={`alert ${submitResult.status === "accepted" ? 'alert-success' : 'alert-error'}`}>
-                                    <div>
-                                        {submitResult.status === "accepted" ? (
-                                            <div>
-                                                <h4 className="font-bold text-lg">🎉 Accepted</h4>
-                                                <div className="mt-4 space-y-2">
-                                                    <p>Test Cases Passed: {submitResult.testCasesPassed}/{submitResult.testCasesTotal}</p>
-                                                    <p>Runtime: {submitResult.runtime + " sec"}</p>
-                                                    <p>Memory: {submitResult.memory + "KB"} </p>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <h4 className="font-bold text-lg">❌ {submitResult.status}</h4>
-                                                <div className="mt-4 space-y-2">
-                                                    <p>Test Cases Passed: {submitResult.testCasesPassed}/{submitResult.testCasesTotal}</p>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="text-gray-500">
-                                    Click "Submit" to submit your solution for evaluation.
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenDialog(false)}>Close</Button>
+                </DialogActions>
+            </Dialog>
+        </Container>
     );
 };
 
-export default ProblemPage;
+// export default UserManagement;
 
+import React, { useState, useEffect } from 'react';
+import {
+    Container,
+    Typography,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    TextField,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Chip,
+    Avatar,
+    Grid,
+    Card,
+    CardContent,
+    LinearProgress,
+    IconButton,
+    Tooltip,
+    Box,
+    Pagination,
+    Switch,
+    Snackbar,
+    Alert
+} from '@mui/material';
+import {
+    Delete as DeleteIcon,
+    Visibility as VisibilityIcon,
+    Paid as PaidIcon,
+    MoneyOff as MoneyOffIcon,
+    FilterList as FilterListIcon,
+    Sort as SortIcon,
+    Refresh as RefreshIcon,
+    AdminPanelSettings,
+    Person
+} from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+import { orange, green, red, blue, purple } from '@mui/material/colors';
+import axiosClient from '@/utils/axiosClint';
+import AdminNavbar from './AdminNav';
+import { useSelector } from 'react-redux';
 
-//          `
-You are an expert DSA tutor helping users solve coding problems, strictly limited to DSA - related guidance.
+// Styled components
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+    },
+    '&:hover': {
+        backgroundColor: theme.palette.action.selected,
+    },
+}));
 
-## PROBLEM CONTEXT:
-- Title: ${ title }
-- Description: ${ description }
-- Starter Code: ${ startCode }
+const StatusChip = styled(Chip)(({ theme, paid }) => ({
+    backgroundColor: paid ? green[100] : red[100],
+    color: paid ? green[800] : red[800],
+    fontWeight: 'bold',
+}));
 
-## CAPABILITIES:
-1. Provide step - by - step hints
-2. Review and debug user code
-3. Offer optimal solutions with explanations
-4. Analyze time and space complexity
-5. Suggest algorithmic approaches
-6. Help generate edge test cases
+const UserManagementDashboard = () => {
+    // State management
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
+    const [filters, setFilters] = useState({
+        role: 'all',
+        status: 'all',
+        search: ''
+    });
+    const [sortConfig, setSortConfig] = useState({
+        key: 'name',
+        direction: 'asc'
+    });
+    const [pagination, setPagination] = useState({
+        page: 1,
+        rowsPerPage: 10,
+        totalUsers: 0
+    });
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
 
-## INTERACTION RULES:
-- For hints: guide with questions and intuition, no full answers
-    - For code: identify issues, explain fixes, suggest improvements
-        - For solutions: give clear, commented code and complexity analysis
-            - For approaches: explain and compare multiple strategies
+    // Fetch users from API
+    useEffect(() => {
+        const fetchUsers = async () => {
+            setLoading(true);
+            try {
+                const response = await axiosClient.get('/auth/alluser');
+                setUsers(response.data.alluser || []);
+                setPagination(prev => ({ ...prev, totalUsers: (response.data.alluser || []).length }));
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                setSnackbar({
+                    open: true,
+                    message: 'Failed to fetch users',
+                    severity: 'error'
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUsers();
+    }, []);
 
-## RESPONSE FORMAT:
-- Use clear explanations, code blocks, and examples
-    - Break down complex concepts
-        - Stay relevant to the current problem
-            - Respond in user’s preferred language
+    // Handle role change
+    const handleRoleChange = async (userId, newRole) => {
+        try {
+            await axiosClient.patch(`/auth/admin/users/${userId}/role`, { role: newRole });
+            setUsers(users.map(user =>
+                user._id === userId ? { ...user, role: newRole } : user
+            ));
+            setSnackbar({
+                open: true,
+                message: 'Role updated successfully',
+                severity: 'success'
+            });
+        } catch (error) {
+            console.error('Error updating role:', error);
+            setSnackbar({
+                open: true,
+                message: 'Failed to update role',
+                severity: 'error'
+            });
+        }
+    };
 
-## LIMITATIONS:
-- Only assist with the current DSA problem
-    - Do not help with non - DSA or unrelated topics
+    // Handle subscription change
+    const handleSubscriptionChange = async (userId, isPaidUser) => {
+        try {
+            await axiosClient.patch(`/auth/admin/users/${userId}/subscription`, { isPaidUser });
+            setUsers(users.map(user =>
+                user._id === userId ? { ...user, isPaidUser } : user
+            ));
+            setSnackbar({
+                open: true,
+                message: 'Subscription updated successfully',
+                severity: 'success'
+            });
+        } catch (error) {
+            console.error('Error updating subscription:', error);
+            setSnackbar({
+                open: true,
+                message: 'Failed to update subscription',
+                severity: 'error'
+            });
+        }
+    };
 
-## PHILOSOPHY:
-- Focus on understanding over memorization
-    - Encourage problem - solving and intuition
-        - Emphasize best practices and "why" behind choices
-            `
+    // Filter and sort users
+    const filteredUsers = React.useMemo(() => {
+        let result = [...users];
+
+        // Apply filters
+        if (filters.role !== 'all') {
+            result = result.filter(user => user.role === filters.role);
+        }
+
+        if (filters.status !== 'all') {
+            result = result.filter(user =>
+                filters.status === 'paid' ? user.isPaidUser : !user.isPaidUser
+            );
+        }
+
+        if (filters.search) {
+            const searchTerm = filters.search.toLowerCase();
+            result = result.filter(user =>
+                user.name.toLowerCase().includes(searchTerm) ||
+                user.email.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        // Apply sorting
+        if (sortConfig.key) {
+            result.sort((a, b) => {
+                if (a[sortConfig.key] < b[sortConfig.key]) {
+                    return sortConfig.direction === 'asc' ? -1 : 1;
+                }
+                if (a[sortConfig.key] > b[sortConfig.key]) {
+                    return sortConfig.direction === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+
+        // Update pagination total
+        setPagination(prev => ({ ...prev, totalUsers: result.length }));
+
+        return result;
+    }, [users, filters, sortConfig]);
+
+    // Pagination
+    const paginatedUsers = React.useMemo(() => {
+        const startIndex = (pagination.page - 1) * pagination.rowsPerPage;
+        return filteredUsers.slice(startIndex, startIndex + pagination.rowsPerPage);
+    }, [filteredUsers, pagination.page, pagination.rowsPerPage]);
+
+    // Handlers
+    const handleViewUser = (user) => {
+        setSelectedUser(user);
+        setOpenDialog(true);
+    };
+
+    const handleDeleteClick = (user) => {
+        setUserToDelete(user);
+        setDeleteConfirm(true);
+    };
+
+    const confirmDelete = async () => {
+        try {
+            await axiosClient.delete(`/auth/admin/users/${userToDelete._id}`);
+            setUsers(prev => prev.filter(user => user._id !== userToDelete._id));
+            setDeleteConfirm(false);
+            setUserToDelete(null);
+            setSnackbar({
+                open: true,
+                message: 'User deleted successfully',
+                severity: 'success'
+            });
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            setSnackbar({
+                open: true,
+                message: 'Failed to delete user',
+                severity: 'error'
+            });
+        }
+    };
+
+    const handleSort = (key) => {
+        setSortConfig(prev => ({
+            key,
+            direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
+        }));
+    };
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters(prev => ({ ...prev, [name]: value }));
+        setPagination(prev => ({ ...prev, page: 1 }));
+    };
+
+    const handlePageChange = (event, newPage) => {
+        setPagination(prev => ({ ...prev, page: newPage }));
+    };
+
+    const refreshData = () => {
+        setLoading(true);
+        // Simulate refresh
+        setTimeout(() => setLoading(false), 1000);
+    };
+
+    const handleCloseSnackbar = () => {
+        setSnackbar({ ...snackbar, open: false });
+    };
+
+    const { user } = useSelector((state) => state.auth);
+
+    return (
+        <>
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+            >
+                <Alert
+                    onClose={handleCloseSnackbar}
+                    severity={snackbar.severity}
+                    sx={{ width: '100%' }}
+                >
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
+
+            <nav>
+                <AdminNavbar user={user} />
+            </nav>
+            <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+                {/* ... rest of your component remains the same until the table ... */}
+
+                {/* Users Table */}
+                <TableContainer component={Paper} sx={{ mb: 3 }}>
+                    <Table>
+                        <TableHead>
+                            <TableRow sx={{ bgcolor: blue[100] }}>
+                                {/* ... other table headers ... */}
+                                <TableCell>Role</TableCell>
+                                <TableCell>Subscription</TableCell>
+                                {/* ... other table headers ... */}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {paginatedUsers.map((user) => (
+                                <StyledTableRow key={user._id}>
+                                    {/* ... other table cells ... */}
+                                    <TableCell>
+                                        <FormControl size="small" fullWidth>
+                                            <Select
+                                                value={user.role}
+                                                onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                                            >
+                                                <MenuItem value="user">
+                                                    <Box display="flex" alignItems="center">
+                                                        <Person fontSize="small" sx={{ mr: 1 }} />
+                                                        User
+                                                    </Box>
+                                                </MenuItem>
+                                                <MenuItem value="admin">
+                                                    <Box display="flex" alignItems="center">
+                                                        <AdminPanelSettings fontSize="small" sx={{ mr: 1 }} />
+                                                        Admin
+                                                    </Box>
+                                                </MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Box display="flex" alignItems="center">
+                                            <Switch
+                                                checked={user.isPaidUser || false}
+                                                onChange={(e) => handleSubscriptionChange(user._id, e.target.checked)}
+                                                color="primary"
+                                            />
+                                            <StatusChip
+                                                label={user.isPaidUser ? 'Paid' : 'Free'}
+                                                paid={user.isPaidUser}
+                                                size="small"
+                                                sx={{ ml: 1 }}
+                                            />
+                                        </Box>
+                                    </TableCell>
+                                    {/* ... other table cells ... */}
+                                </StyledTableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                {/* ... rest of your component remains the same ... */}
+            </Container>
+        </>
+    );
+};
+
+export default UserManagementDashboard;

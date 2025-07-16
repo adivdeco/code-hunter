@@ -25,7 +25,20 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
-
+        blob: {
+          '0%': {
+            transform: 'translate(0px, 0px) scale(1)',
+          },
+          '33%': {
+            transform: 'translate(30px, -50px) scale(1.1)',
+          },
+          '66%': {
+            transform: 'translate(-20px, 20px) scale(0.9)',
+          },
+          '100%': {
+            transform: 'translate(0px, 0px) scale(1)',
+          },
+        },
         parallax: {
           '0%': { backgroundPosition: '260px' },
           '100%': { backgroundPosition: '-10000vw' },
@@ -110,6 +123,7 @@ export default {
         },
       },
       animation: {
+        blob: 'blob 10s infinite',
         parallax: 'parallax 600s linear infinite',
         moto: 'moto 5s linear infinite',
         voiture: 'voiture 1s linear infinite',

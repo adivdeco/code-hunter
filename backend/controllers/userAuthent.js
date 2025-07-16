@@ -56,18 +56,39 @@ const login = async (req, res) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res.status(400).send("Email and password are required");
+            return res.status(400).json({
+                success: false,
+                error: "Email and password are required",
+                field: !email ? "email" : "password"
+            });
         }
 
-        const user = await User.findOne({ email });   // Find user by email
+        const user = await User.findOne({ email });
 
-        const match = await bcrypt.compare(password, user.password); //(curentpas,bdpass)
-
-        if (!user || !match) {
-            return res.status(401).send("Invalid email or password");
+        // Check user exists before comparing passwords
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                error: "No account found with this email",
+                field: "email"
+            });
         }
 
-        const token = jwt.sign({ email: email, _id: user._id, role: user.role }, "secreatkey", { expiresIn: 1200 * 1200 }); // 1 hour expiration
+        const match = await bcrypt.compare(password, user.password);
+
+        if (!match) {
+            return res.status(401).json({
+                success: false,
+                error: "Incorrect password",
+                field: "password"
+            });
+        }
+
+        const token = jwt.sign(
+            { email: email, _id: user._id, role: user.role },
+            "secreatkey",
+            { expiresIn: 1200 * 1200 }
+        );
 
         const reply = {
             name: user.name,
@@ -76,20 +97,28 @@ const login = async (req, res) => {
             role: user.role
         }
 
-        res.cookie('token', token, { maxAge: 1200 * 1200 * 1000, httpOnly: true }); // Set cookie with token
-
-        res.status(200).json({
-            user: reply,
-            message: "login sussesfully"
+        res.cookie('token', token, {
+            maxAge: 1200 * 1200 * 1000,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
         });
 
+        res.status(200).json({
+            success: true,
+            user: reply,
+            message: "Login successful"
+        });
 
+    } catch (err) {
+        console.error("Login error:", err);
+        res.status(500).json({
+            success: false,
+            error: "An unexpected error occurred during login",
+            details: process.env.NODE_ENV === 'development' ? err.message : undefined
+        });
     }
-    catch (err) {
-        res.status(500).send("Error: " + err.message);
-    }
-
-}
+};
 
 const logout = async (req, res) => {
 
@@ -150,9 +179,62 @@ const deletedprofil = async (req, res) => {
     }
 }
 
-// const profile = (req, res) => {
+// In your userAuthent.js
+const adminDeleteUser = async (req, res) => {
+    const { userId } = req.params;
 
-// }
+    try {
+        const deluser = await User.findByIdAndDelete(userId);
+        if (!deluser) {
+            return res.status(404).send("User not found");
+        }
+        res.status(200).send("User deleted successfully and all related data deleted");
+    } catch (err) {
+        res.status(500).send("Error: " + err);
+    }
+};
+
+// Add to your existing controller
+const updateUserStatus = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { isPaidUser } = req.body;
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { isPaidUser },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+        res.status(200).json({ message: "User status updated", user });
+    } catch (error) {
+        res.status(500).send("Error: " + error.message);
+    }
+};
+
+const getUserStats = async (req, res) => {
+    try {
+        const totalUsers = await User.countDocuments();
+        const paidUsers = await User.countDocuments({ isPaidUser: true });
+        const activeUsers = await User.countDocuments({
+            problemSolved: { $exists: true, $not: { $size: 0 } }
+        });
+        const admins = await User.countDocuments({ role: 'admin' });
+
+        res.status(200).json({
+            totalUsers,
+            paidUsers,
+            activeUsers,
+            admins
+        });
+    } catch (error) {
+        res.status(500).send("Error: " + error.message);
+    }
+};
 
 
 module.exports = {
@@ -161,18 +243,14 @@ module.exports = {
     logout,
     adminregister,
     deletedprofil,
-    alluser
+    alluser,
+    updateUserStatus,
+    getUserStats,
+    adminDeleteUser
+
 }
 
 
 
 
 
-//  jwt.verify(user._id, "secretkey", (err, decoded) => {
-//             if (err) {
-//                 return res.status(500).send("Error verifying token: " + err.message);
-//             }
-//             const token = jwt.sign({email:email,_id:user._id});
-//             res.cookie('token', token, { maxAge: 60 * 60 * 1000, httpOnly: true }); // Set cookie with token
-//             res.send("Login Successful");
-//         });
