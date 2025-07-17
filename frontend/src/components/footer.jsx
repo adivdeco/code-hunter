@@ -1,10 +1,47 @@
 
 import { AuroraText } from "@/components/magicui/aurora-text";
-import { Facebook, Github, icons, Instagram, Linkedin, Mail, MapPin, Phone, Twitter, YoutubeIcon } from "lucide-react";
+import { Facebook, Github, Instagram, Linkedin, Mail, MapPin, Phone, Twitter, Youtube } from "lucide-react";
+import { FaDiscord, FaInstagram, FaYoutube, FaPhoneAlt, FaMailBulk, } from "react-icons/fa";
+import { IoLocation } from "react-icons/io5";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+
+
 import { clsx } from "clsx";
+import { href } from "react-router";
 
 export default function Footer() {
+
+    const [scrollProgress, setScrollProgress] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (window.scrollY / scrollTotal) * 100;
+            setScrollProgress(progress);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const socialLinks = [
+        { icon: FaYoutube, color: "red-500", href: "#", label: "YouTube" },
+        { icon: Facebook, color: "blue-600", href: "#", label: "Facebook" },
+        { icon: Linkedin, color: "sky-500", href: "https://www.linkedin.com/in/adiv-singh-207233254/", label: "LinkedIn" },
+        { icon: Twitter, color: "blue-400", href: "https://twitter.com/adivdeco", label: "Twitter" },
+        { icon: Github, color: "gray-400", href: "https://github.com/adivdeco", label: "GitHub" },
+        { icon: FaInstagram, color: "pink-700", href: "#", label: "Instagram" },
+        { icon: FaDiscord, color: "blue-600", href: "#", label: "Discord" }
+    ];
+
+    const contactInfo = [
+        { icon: FaMailBulk, color: "blue-500", text: "sadiv120@gmail.com" },
+        { icon: FaPhoneAlt, color: "green-500", text: "+91-8409973038" },
+        { icon: IoLocation, color: "yellow-500", text: "Pochanky Squard-House" }
+    ];
+
     return (
         <footer className="relative bg-black text-white">
             {/* Parallax Animation Curtain */}
@@ -17,103 +54,161 @@ export default function Footer() {
             </div>
 
             {/* Footer Content */}
-            <div className="relative z-10 w-full max-w-6xl mx-auto px-4 py-16">
-                <div className="bg-white/5 backdrop-blur-md rounded-xl p-10 md:grid md:grid-cols-3 gap-24">
-                    {/* Logo + Info */}
-                    <div>
-                        <h3 className="uppercase text-3xl mb-6 font-extrabold font-rocksalt text-white">
-                            <AuroraText className="font-bold">Code Hunter</AuroraText>
-                        </h3>
-                        <p className="text-lg font-changa py-4 text-muted-foreground">
+            {/* Main Content */}
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-20">
+                {/* Grid Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24 mb-16">
+                    {/* Brand Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        viewport={{ once: true }}
+                        className="space-y-6"
+                    >
+                        <AuroraText className="text-4xl font-bold font-rocksalt">
+                            Code Hunter
+                        </AuroraText>
+                        <p className="text-lg text-gray-300 leading-relaxed">
                             Where logic meets ambition, and coders become champions — Crack
                             the toughest problems, climb the highest ranks, and launch your
                             journey with the CodeHunter community.
                         </p>
-                    </div>
+
+                        {/* Newsletter Subscription */}
+                        <div className="mt-6">
+                            <h4 className="text-sm uppercase tracking-wider mb-3 text-gray-400">Stay Updated</h4>
+                            <div className="flex">
+                                <input
+                                    type="email"
+                                    placeholder="Your email"
+                                    className="flex-1 bg-white/10 border border-white/20 px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                                <button className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 rounded-r-lg font-medium hover:opacity-90 transition-opacity">
+                                    Join
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
 
                     {/* Social Links */}
-                    <div>
-                        <h3 className="uppercase text-2xl mb-4 ml-4 font-changa">Connect with us</h3>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        viewport={{ once: true }}
+                        className="space-y-6"
+                    >
+                        <h3 className="text-xl font-bold uppercase tracking-wider">Connect With Us</h3>
+                        <ul className="space-y-3">
+                            {socialLinks.map((item, index) => (
+                                <motion.li
+                                    key={index}
+                                    whileHover={{ x: 5 }}
+                                    className="flex items-center language-icon"
+                                >
+                                    <a
+                                        href={item.href}
+                                        className={`flex items-center gap-4 group text-gray-300 hover:text-${item.color} transition-colors`}
+                                    >
+                                        <item.icon className={`w-5 h-5 group-hover:scale-125 transition-transform group-hover:text-${item.color}`} />
+                                        <span className="text-lg">{item.label}</span>
+                                        <span className="flex-1 border-b border-dashed border-gray-600 group-hover:border-gray-400 mx-2"></span>
+                                        <span className="text-xs opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                                    </a>
+                                </motion.li>
+                            ))}
+                        </ul>
+                    </motion.div>
 
-                        <ul className="space-y-4  text-muted-foreground font-changa text-xl py-4 ml-1">
-                            <li className="flex items-center gap-4 group text-xl hover:text-red-500 transition">
-                                <YoutubeIcon className=" w-7 h-7 group-hover:scale-125 group-hover:drop-shadow-[0_0_2px_red]" />
-                                <a href="" className="flex items-center custom-underline gap-4 group transition-all duration-200">Youtube</a>
-
-                            </li>
-                            <li className="flex items-center gap-4 group hover:text-blue-600 transition">
-                                <Facebook className=" w-7 h-7 group-hover:scale-125 group-hover:drop-shadow-[3px_3px_2px_blue]" />
-                                <a href="" className="flex items-center custom-underline gap-4 group transition-all duration-200">Facebook</a>
-
-                            </li>
-                            <li className="flex items-center gap-4 group hover:text-sky-500 transition">
-                                <Linkedin className=" w-7 h-7 group-hover:scale-125 group-hover:drop-shadow-[2px_2px_2px_sky]" />
-                                <a href="" className="flex items-center custom-underline gap-4 group transition-all duration-200">Linkedin</a>
-                            </li>
-                            <li className="flex items-center gap-4 group hover:text-blue-400 transition">
-                                <Twitter className=" w-7 h-7 group-hover:scale-125 group-hover:drop-shadow-[2px_2px_2px_blue]" />
-                                <a href="" className="flex items-center custom-underline gap-4 group transition-all duration-200">Twitter</a>
-                            </li>
-                            <li className="flex items-center gap-4 group hover:text-gray-400 transition">
-                                <Github className=" w-7 h-7 group-hover:scale-125 group-hover:drop-shadow-[0_0_2px_gray]" />
-                                <a href="" className="flex items-center custom-underline gap-4 group transition-all duration-200">Github</a>
-                            </li>
-
+                    {/* Contact Info */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        viewport={{ once: true }}
+                        className="space-y-6"
+                    >
+                        <h3 className="text-xl font-bold uppercase tracking-wider">Contact Info</h3>
+                        <ul className="space-y-4">
+                            {contactInfo.map((item, index) => (
+                                <motion.li
+                                    key={index}
+                                    whileHover={{ x: 5 }}
+                                    className="flex items-start gap-4 text-gray-300 language-icon"
+                                >
+                                    <item.icon className={`w-5 h-5 mt-1 flex-shrink-0 text-${item.color}`} />
+                                    <span>{item.text}</span>
+                                </motion.li>
+                            ))}
                         </ul>
 
-
-                    </div>
-
-                    {/* Contact */}
-                    <div>
-                        <h3 className="uppercase text-2xl mb-4 font-changa ml-4">Contact</h3>
-                        <ul className="space-y-4 text-base text-muted-foreground font-changa py-4 ml-1">
-                            <li className="flex items-center gap-4 group hover:text-blue-500 transition">
-                                <Mail className="group-hover:scale-125 group-hover:drop-shadow-[0_0_8px_blue]" />
-                                sadiv120@gmail.com
-                            </li>
-                            <li className="flex items-center gap-4 group hover:text-green-500 transition">
-                                <Phone className="group-hover:scale-125 group-hover:drop-shadow-[0_0_8px_green]" />
-                                +91-8409973038
-                            </li>
-                            <li className="flex items-center gap-4 group hover:text-yellow-500 transition">
-                                <MapPin className="group-hover:scale-125 group-hover:drop-shadow-[0_0_8px_yellow]" />
-                                Pochanky Squard-House
-                            </li>
-                        </ul>
-                    </div>
+                        {/* Quick Links */}
+                        <div className="mt-6">
+                            <h4 className="text-sm uppercase tracking-wider mb-3 text-gray-400">Quick Links</h4>
+                            <div className="grid grid-cols-2 gap-2">
+                                {['About', 'Problems', 'Leaderboard', 'Blog', 'Pricing', 'Contact'].map((item, index) => (
+                                    <motion.a
+                                        key={index}
+                                        href="#"
+                                        whileHover={{ scale: 1.05 }}
+                                        className="text-gray-400 hover:text-white text-sm transition-colors"
+                                    >
+                                        {item}
+                                    </motion.a>
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
                 </div>
 
-                {/* Divider */}
-                <div className="h-px w-full bg-gradient-to-r from-transparent via-white to-transparent my-5" />
+                {/* Divider with Scroll Progress */}
+                <div className="relative h-px w-full bg-gradient-to-r from-transparent via-white/30 to-transparent my-10 overflow-visible">
+                    <motion.div
+                        className="absolute top-0 left-0 h-full bg-white"
+                        style={{ width: `${scrollProgress}%` }}
+                        initial={{ width: "0%" }}
+                    />
+                </div>
 
-                {/* Bottom Text + Scroll Button */}
-                <div className="text-center text-sm text-white/80 font-changa  items-center gap-2">
-                    © 2025 <span className="italic font-bold text-white text-xl">CodeHunter</span>. All rights reserved
-                    <a href="https://twitter.com/adivdeco" target="_blank" className="underline  hover:text-blue-500">@adivdeco</a>
+                {/* Bottom Bar */}
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="text-gray-400 text-sm">
+                        © 2025 <span className="font-bold text-white">CodeHunter</span>. All rights reserved.
+                        Crafted by <a href="https://twitter.com/adivdeco" target="_blank" className="underline hover:text-blue-400">@adivdeco</a>
+                    </div>
 
-                    <button
+                    {/* Scroll to Top Button */}
+                    <motion.button
                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                        className="ml-14 bg-white/10 text-white p-2 rounded-full hover:scale-110 transition backdrop-blur-sm"
+                        className="relative group"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
                         title="Back to top"
                     >
-                        <span
-                            className={cn(
-                                "absolute inset-0 block h-full w-full animate-gradient rounded-[inherit] bg-gradient-to-r from-[#ffaa40]/50 via-[#9c40ff]/50 to-[#ffaa40]/50 bg-[length:300%_100%] p-[2px]"
-                            )}
-                            style={{
-                                WebkitMask:
-                                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                                WebkitMaskComposite: "destination-out",
-                                mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                                maskComposite: "subtract",
-                                WebkitClipPath: "padding-box",
-                            }}
-                        />
-                        ⬆
-                    </button>
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity blur-sm"></div>
+                        <div className={cn(
+                            "relative flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20",
+                            "group-hover:bg-white/20 transition-all duration-300"
+                        )}>
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-white"
+                            >
+                                <path d="M18 15l-6-6-6 6" />
+                            </svg>
+                        </div>
+                    </motion.button>
                 </div>
             </div>
+
         </footer >
     );
 }

@@ -17,7 +17,10 @@ import ThreeRingLoader from "@/components/ThreeRingLoader";
 import Pricing from "./pages/Pricing";
 import UserManagement from "@/components/UserManagment"
 import ErrorBoundary from "./components/ErrorBoundary";
-
+import ProblemList from "@/components/user_video";
+import AdminProblemManager from "@/components/AdminVideoManager";
+import AnalyticsDashboard from "@/components/Platform_Analytics"
+import DashboardPage from "./pages/DashboardPage";
 
 
 function App() {
@@ -35,6 +38,16 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
+  useEffect(() => {
+    const handleError = (event) => {
+      if (event.message.includes('WebGL')) {
+        console.warn('WebGL error detected, attempting recovery...');
+        window.location.reload();
+      }
+    };
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
+  }, []);
   // splash screen
   useEffect(() => {
     const splashAlreadyShown = sessionStorage.getItem("splashShown");
@@ -95,8 +108,13 @@ function App() {
         <Route path="/admin/delete" element={isAuthenticated && user?.role === "admin" ? <AdminDelete /> : <Navigate to="/" />}></Route>
         <Route path="/admin/update/:id" element={isAuthenticated && user?.role === "admin" ? <ProblemUpdateComponent /> : <Navigate to={"/"} />} />
         <Route path="/admin/allusers" element={isAuthenticated && user?.role === "admin" ? <ErrorBoundary> <UserManagement /> </ErrorBoundary> : <Navigate to="/" />} />
+        <Route path="/admin/video" element={isAuthenticated && user?.role === "admin" ? <AdminProblemManager /> : <Navigate to="/" />} />
+        <Route path="/admin/analytics" element={isAuthenticated && user?.role === "admin" ? <AnalyticsDashboard /> : <Navigate to="/" />} />
+        <Route path="/user/video" element={isAuthenticated ? <ProblemList /> : <Navigate to="/" />} />
         <Route path="/problem/:problemId" element={<ProblemPage />}></Route>
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/dashbord" element={<DashboardPage />} />
+
 
       </Routes>
     </>

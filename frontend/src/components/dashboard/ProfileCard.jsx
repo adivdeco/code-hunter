@@ -83,8 +83,8 @@ export default function ProfileCard({ user }) {
                         <div className="flex items-center mt-2">
                             <motion.div variants={itemVariants} className="mt-2">
                                 {user?.isPaidUser ? (
-                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-400/20 text-yellow-400">
-                                        <Crown className="h-4 w-4 mr-1" /> Pro Member
+                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium  bg-yellow-400/20 text-yellow-400">
+                                        <Crown className=" h-4 w-4 mr-1" /> Pro Member
                                     </span>
                                 ) : (
                                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-700 text-gray-300">
@@ -117,3 +117,4 @@ export default function ProfileCard({ user }) {
         </motion.div>
     );
 }
+

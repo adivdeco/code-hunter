@@ -47,7 +47,7 @@ const AdminNavbar = ({ user }) => {
         {
             id: "update",
             title: "Update Problem",
-            route: "/admin/update",
+            route: "/admin/update/:id",
         },
         {
             id: "video",

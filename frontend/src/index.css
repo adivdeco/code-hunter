@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* .badge-rainbow {
   @apply badge;
   background: linear-gradient(90deg, red, yellow, green, blue);
@@ -358,37 +359,7 @@
 }
 
 
-/* login animation */
 
-/* src/styles/sphere.css or inside index.css */
-
-/* .animation-wrapper {
-  width: 50%;
-  padding-bottom: 50%;
-}
-
-.sphere-animation {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 580px;
-  height: 580px;
-  margin: -290px 0 0 -290px;
-  z-index: 1;
-}
-
-.sphere path {
-  fill: url(#sphereGradient);
-  stroke-width: 1px;
-  stroke: rgba(80, 80, 80, .35);
-  backface-visibility: hidden;
-}
-
-@media (min-width: 500px) {
-  .sphere path {
-    stroke-width: .4px;
-  }
-} */
 
 /* footer */
 
@@ -408,4 +379,71 @@
 
 .custom-underline:hover::after {
   width: 100%;
+}
+
+/* profile dashbord */
+
+/* --- Keyframe Animations (Unchanged from pure CSS) --- */
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 15px 0px rgba(251, 191, 36, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 25px 8px rgba(251, 191, 36, 0.2);
+  }
+}
+
+/* --- Profile Card Component Styles --- */
+.profile-card {
+  @apply relative w-full max-w-md rounded-3xl p-1 overflow-hidden;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(76, 29, 149, 0.6));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.profile-card-content {
+  @apply relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 p-6 rounded-3xl h-full;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.profile-card-avatar {
+  @apply md:col-span-1 h-36 md:h-full cursor-grab flex items-center justify-center;
+  min-height: 9rem;
+}
+
+.profile-card-info {
+  @apply md:col-span-2 flex flex-col justify-center;
+}
+
+.profile-card-name {
+  @apply text-3xl font-bold text-white tracking-wide;
+}
+
+/* --- Badge Styles --- */
+.badge {
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold border;
+}
+
+.pro-badge {
+  @apply badge bg-yellow-400/10 text-yellow-300 border-yellow-400/30;
+}
+
+/* This is a separate class for the animation, so it can be toggled */
+
+
+/* --- Stats Block Styles --- */
+.stat-block {
+  @apply bg-white p-4 rounded-xl backdrop-blur-sm transition-colors hover:bg-white/10;
+}
+
+.stat-block-label {
+  @apply flex items-center gap-2 text-sm;
+  color: green;
+}
+
+.stat-block-value {
+  @apply text-white font-semibold text-lg mt-1 flex items-center;
 }

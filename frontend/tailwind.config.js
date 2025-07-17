@@ -3,6 +3,7 @@ import daisyui from "daisyui";
 
 export default {
   darkMode: ["class"],
+  darkMode: 'class',
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -25,6 +26,7 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+
         blob: {
           '0%': {
             transform: 'translate(0px, 0px) scale(1)',

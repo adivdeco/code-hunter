@@ -195,6 +195,7 @@ const allsubmission = async (req, res) => {
         res.status(500).send("Error: " + err)
     }
 }
+// all submission for a single problem
 
 const allSolve = async (req, res) => {
     try {
@@ -209,7 +210,7 @@ const allSolve = async (req, res) => {
 
     }
 }
-
+// all submission pass by all user
 
 
 

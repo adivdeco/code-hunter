@@ -24,6 +24,11 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['@react-three/fiber', '@react-three/drei', 'three']
+    include: ['@react-three/fiber', '@react-three/drei', 'three',
+      '@react-three/fiber',
+      '@react-three/drei',
+      'three',
+      'lottie-react'
+    ]
   }
 })
