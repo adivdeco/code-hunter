@@ -17,13 +17,15 @@ export default function DashboardLayout({ userData }) {
                 <main className="flex-1 p-6">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div className="lg:col-span-2 space-y-6">
-                            <ProgressTracker />
+                            <ProfileCard user={userData} />
+
                             <CodingActivity />
                             <SubmissionHistory />
                         </div>
 
                         <div className="space-y-6">
-                            <ProfileCard user={userData} />
+                            <ProgressTracker />
+
                             <QuickActions />
                         </div>
                     </div>

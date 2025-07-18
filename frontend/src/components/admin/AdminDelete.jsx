@@ -2,7 +2,7 @@
 
 // AdminDelete.jsx — Premium Enhanced Version
 import { useEffect, useState } from 'react';
-import axiosClient from '../utils/axiosClint';
+import axiosClient from '@/utils/axiosClint';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { confirmAlert } from 'react-confirm-alert';
@@ -12,7 +12,7 @@ import {
   FiCheckCircle, FiXCircle, FiFilter
 } from 'react-icons/fi';
 import { FaRegSadTear } from "react-icons/fa"
-import ThreeRingLoader from './ThreeRingLoader';
+import ThreeRingLoader from '../ThreeRingLoader';
 
 
 const AdminDelete = () => {

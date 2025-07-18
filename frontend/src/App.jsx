@@ -5,21 +5,21 @@ import Signup from "./pages/Signup";
 import { checkAuth } from "./authSlice"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import AdminPanel from "./components/Add_que";
-import AdminDelete from "./components/AdminDelete";
+import AdminPanel from "./components/admin/Add_que";
+import AdminDelete from "./components/admin/AdminDelete";
 // import AdminUpdate from "./components/ProblemUpdateComponent";
-import ProblemUpdateComponent from './components/ProblemUpdateComponent';
+import ProblemUpdateComponent from './components/admin/ProblemUpdateComponent';
 import ProblemPage from "./pages/ProblemPage"
 import Admin from "./pages/Admin";
 import Page1 from "./pages/page1";
 import Mainpg from "./pages/Mainpg";
 import ThreeRingLoader from "@/components/ThreeRingLoader";
 import Pricing from "./pages/Pricing";
-import UserManagement from "@/components/UserManagment"
+import UserManagement from "@/components/admin/UserManagment"
 import ErrorBoundary from "./components/ErrorBoundary";
 import ProblemList from "@/components/user_video";
-import AdminProblemManager from "@/components/AdminVideoManager";
-import AnalyticsDashboard from "@/components/Platform_Analytics"
+import AdminProblemManager from "@/components/admin/AdminVideoManager";
+import AnalyticsDashboard from "@/components/admin/Platform_Analytics"
 import DashboardPage from "./pages/DashboardPage";
 
 

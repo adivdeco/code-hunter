@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axiosClient from '@/utils/axiosClint';
 import { FiPlay, FiPlus, FiTrash2, FiEdit, FiUpload, FiSearch, FiFilter } from 'react-icons/fi';
-import AdminNavbar from './AdminNav';
+import AdminNavbar from '@/components/admin/AdminNav';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 

@@ -4,11 +4,13 @@
 import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { LogOut, User, Settings, LayoutDashboard, Shield, ChevronDown } from "lucide-react";
+import { FaHandsAslInterpreting } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../authSlice';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { FaHome } from "react-icons/fa";
 
 const NavProfile = ({ user, mobile = false }) => {
     const dispatch = useDispatch();
@@ -40,14 +42,26 @@ const NavProfile = ({ user, mobile = false }) => {
     const menuItems = [
         ...(user?.role === 'admin' ? [{
             label: "Admin Panel",
-            icon: <Shield className="w-4 h-4" />,
+            icon: <Shield className="w-4 h-4 " />,
             path: "/admin",
             color: "text-purple-600 hover:bg-purple-50"
         }] : []),
         {
+            label: "Home",
+            icon: <FaHome className=" language-icon w-5 h-5" />,
+            path: "/",
+            color: "text-orange-500 hover:bg-orange-50 font-changa"
+        },
+        {
+            label: "Problems",
+            icon: <FaHandsAslInterpreting className=" language-icon w-5 h-5" />,
+            path: "/problems",
+            color: "text-pink-600 hover:bg-blue-50"
+        },
+        {
             label: "Dashboard",
             icon: <LayoutDashboard className="w-4 h-4" />,
-            path: "/problems",
+            path: "/dashbord",
             color: "text-blue-600 hover:bg-blue-50"
         },
         {

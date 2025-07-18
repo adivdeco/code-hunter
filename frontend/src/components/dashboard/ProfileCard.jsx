@@ -1,11 +1,8 @@
 
 
-// --- IMPORTS ---
 import { Suspense, useRef, useState } from 'react';
-// import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Icosahedron, Environment, Float } from '@react-three/drei';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { Crown, ShieldAlert, Gem } from 'lucide-react';
+import { Crown } from 'lucide-react';
 import { BsCalendar2DateFill } from "react-icons/bs";
 import { ErrorBoundary } from './ErrorBoundary'; // Assuming this file exists and is correct
 
@@ -68,22 +65,25 @@ export default function ProfileCard({ user }) {
                 className="bg-gradient-to-br from-indigo-900 to-purple-800 rounded-2xl p-6 shadow-2xl"
             >
                 <div className="flex items-center space-x-6">
-                    <div className="h-20 w-20 rounded-xl overflow-hidden">
+                    <div className="h-20 w-20 rounded-xl ">
                         {/* add logo */}
 
                         <div className="h-full font-aladin w-full rounded-full flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium text-3xl border-4 border-white/20 shadow-md">
-                            {user?.name?.[0]?.toUpperCase() || "U"}
+                            {user?.name?.[0]?.toUpperCase() || "U"},
                         </div>
+
 
 
                     </div>
 
                     <div>
-                        <h2 className="text-2xl font-bold text-white">{user?.name}</h2>
+                        <h2 className="text-2xl font-bold font-rocksalt text-white">{user?.name}</h2>
+                        <h3 className="text-md text-white">{user?.email}</h3>
+
                         <div className="flex items-center mt-2">
                             <motion.div variants={itemVariants} className="mt-2">
                                 {user?.isPaidUser ? (
-                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium  bg-yellow-400/20 text-yellow-400">
+                                    <span className="inline-flex items-center px-3 py-1 font-changa rounded-full text-sm font-medium  bg-yellow-400/20 text-yellow-400">
                                         <Crown className=" h-4 w-4 mr-1" /> Pro Member
                                     </span>
                                 ) : (
@@ -97,12 +97,24 @@ export default function ProfileCard({ user }) {
                     </div>
                 </div>
 
-                <div className="mt-6 grid grid-cols-2 gap-4">
+                <div className="mt-6 grid grid-cols-2  gap-4">
                     <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
                         <p className="text-white/70 text-sm">Member Since</p>
                         <p className="text-white font-medium">
                             {new Date(user?.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                         </p>
+                    </div>
+                    <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+                        <p className="text-white/70 text-sm">Current Streak</p>
+                        <div className="flex items-center">
+                            🔥  <p className="text-white font-medium">{user?.streak || 7} days</p>
+                        </div>
+                    </div>
+                    <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+                        <p className="text-white/70 text-sm">Current Streak</p>
+                        <div className="flex items-center">
+                            🔥  <p className="text-white font-medium">{user?.streak || 7} days</p>
+                        </div>
                     </div>
                     <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
                         <p className="text-white/70 text-sm">Current Streak</p>

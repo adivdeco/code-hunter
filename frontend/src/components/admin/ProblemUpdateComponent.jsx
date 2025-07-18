@@ -3,9 +3,9 @@ import { useNavigate, useParams, NavLink } from 'react-router';
 import axiosClient from '@/utils/axiosClint';
 import { toast } from 'react-hot-toast';
 import { FiEdit, FiSave, FiX, FiTrash2, FiPlus, FiXCircle } from 'react-icons/fi';
-import NavProfile from './NavProfile';
+// import NavProfile from './NavProfile';
 import { useSelector } from 'react-redux';
-import AdminNavbar from '@/components/AdminNav';
+import AdminNavbar from '@/components/admin/AdminNav';
 
 
 const ProblemUpdateComponent = () => {

@@ -1,5 +1,4 @@
-// import Lottie from 'react-lottie'
-// import animationData from '../../assets/progress-animation.json'
+
 import { motion } from 'framer-motion'
 
 const progressItems = [

@@ -11,7 +11,7 @@ import {
     FiCheckCircle,
     FiXCircle
 } from 'react-icons/fi';
-import AdminNavbar from './AdminNav';
+import AdminNavbar from '../admin/AdminNav';
 import { useSelector } from 'react-redux';
 
 const AnalyticsDashboard = ({ users }) => {
