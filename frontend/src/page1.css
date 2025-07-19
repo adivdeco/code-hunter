@@ -1,10 +1,9 @@
-svg path {
+/* svg path {
     fill: transparent;
     stroke-width: 1;
     stroke-dasharray: 130;
     stroke-dashoffset: 1300;
     animation: AllAnimation 4s ease-in-out forwards;
-    /* z-index: 4; */
 }
 
 @keyframes AllAnimation {
@@ -20,9 +19,9 @@ svg path {
     100% {
         stroke-dashoffset: 0;
         stroke: rgb(168, 169, 169);
-        /* fill: rgba(255, 255, 255, 0.627); */
+        fill: rgba(255, 255, 255, 0.01);
     }
-}
+} */
 
 
 .page1 svg path {

@@ -33,7 +33,7 @@ export default function ProgressTracker() {
     }
 
     return (
-        <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800">
+        <div className="bg-gradient-to-br from-black via-gray-950 to-purple-950 rounded-2xl p-6 border border-gray-800">
             <div className="flex justify-between items-center mb-6">
                 <h3 className="text-lg font-medium text-white">30-Day Progress</h3>
                 <div className="h-8 w-8">
@@ -41,7 +41,7 @@ export default function ProgressTracker() {
                 </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-2">
                 {progressItems.map((item, i) => (
                     <motion.div
                         key={i}

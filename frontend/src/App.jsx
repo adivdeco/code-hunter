@@ -21,6 +21,9 @@ import ProblemList from "@/components/user_video";
 import AdminProblemManager from "@/components/admin/AdminVideoManager";
 import AnalyticsDashboard from "@/components/admin/Platform_Analytics"
 import DashboardPage from "./pages/DashboardPage";
+import IssueReportingComponent from "./components/dashboard/IssueReportingComponent";
+import FeedbackComponent from "./components/dashboard/FeedbackComponent"
+import AllCode from "./components/dashboard/AllCode"
 
 
 function App() {
@@ -113,7 +116,10 @@ function App() {
         <Route path="/user/video" element={isAuthenticated ? <ProblemList /> : <Navigate to="/" />} />
         <Route path="/problem/:problemId" element={<ProblemPage />}></Route>
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="/dashbord" element={<DashboardPage />} />
+        <Route path="/dashbord" element={isAuthenticated ? <DashboardPage /> : <Homepage />} />
+        <Route path="/report" element={isAuthenticated ? <IssueReportingComponent /> : <Homepage />} />
+        <Route path="/feedback" element={isAuthenticated ? <FeedbackComponent /> : <Homepage />} />
+        <Route path="/feedback" element={isAuthenticated ? <AllCode /> : <Homepage />} />
 
 
       </Routes>

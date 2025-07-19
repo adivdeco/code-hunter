@@ -107,7 +107,7 @@ const SubmissionHistory = ({ problemId }) => {
                     <td className="font-mono">{sub.language}</td>
                     <td>
                       <span className={`badge ${getStatusColor(sub.status)} capitalize`}>
-                        {sub.status}
+                        jn{sub.status}
                       </span>
                     </td>
                     <td>{sub.runtime}s</td>
@@ -145,7 +145,7 @@ const SubmissionHistory = ({ problemId }) => {
             <div className="mb-4 space-y-2">
               <div className="flex flex-wrap gap-2 text-sm">
                 <span className={`badge ${getStatusColor(selectedSubmission.status)} capitalize`}>
-                  {selectedSubmission.status}
+                  bjk{selectedSubmission.status}
                 </span>
                 <span className="badge badge-outline">
                   Runtime: {selectedSubmission.runtime}s

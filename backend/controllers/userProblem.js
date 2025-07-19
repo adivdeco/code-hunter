@@ -154,26 +154,20 @@ const getAllProblem = async (req, res) => {
 
 const solvedProblem = async (req, res) => {
     try {
-        // const count = req.finduser.problemSolved.length;
-        // if(count === 0){
-        //     return res.status(404).send("No problems solved yet");
-        // }
-        // res.status(200).send(count + " problems solved by user"); 
-
-        //****** another approach to get all solved problems
-
         const userId = req.finduser._id;
+        // Populate problemSolved.problemId with full problem details
         const user = await User.findById(userId).populate({
-            path: 'problemSolved',
-            select: '_id title description tags'
-        }); // populate the problemSolved field with problem data
-
+            path: 'problemSolved2.problemdata',
+            select: '_id title description '
+        });
+        // Optionally, you can format the response to only send problemSolved array
+        // res.status(200).json({ problemSolved: user.problemSolved });
         res.status(200).send(user);
     }
     catch (err) {
         res.status(500).send("Error: " + err)
     }
-} // gives all unique problems  solved by user not all submissions
+} // gives all unique problems solved by user not all submissions
 
 
 
@@ -199,7 +193,10 @@ const allsubmission = async (req, res) => {
 
 const allSolve = async (req, res) => {
     try {
-        const allsoln = await Solution.find()
+        const allsoln = await Solution.find().populate({
+            path: 'problemId',
+            select: '_id title description tags difficulty companies '
+        })
         if (allsoln.length === 0) {
             return res.status(404).send("No User found");
         }
@@ -213,9 +210,26 @@ const allSolve = async (req, res) => {
 // all submission pass by all user
 
 
+// all submission ofa single-user
+const allUserSubmissions = async (req, res) => {
+    try {
+        const userId = req.finduser._id;
+
+        const submissions = await Solution.find({ userId })
+            .populate({
+                path: 'problemId',
+                select: '_id title' // Only get problem ID and title
+            })
+            .sort({ createdAt: -1 }); // Newest first
+
+        res.status(200).json(submissions);
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching submissions", error: err.message });
+    }
+}
 
 
-module.exports = { createProblem, updateProblem, deleteProblem, problemFetch, getAllProblem, solvedProblem, allsubmission, allSolve };
+module.exports = { createProblem, updateProblem, deleteProblem, problemFetch, getAllProblem, solvedProblem, allsubmission, allSolve, allUserSubmissions };
 
 
 

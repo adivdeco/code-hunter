@@ -10,7 +10,7 @@ const items = [
     {
         title: "Solve Problems",
         description: "Continue your coding journey",
-        link: "/problems",
+        link: "#",
         icon: <CodeIcon className="h-6 w-6 text-indigo-400" />
     },
     {
@@ -35,9 +35,9 @@ const items = [
 
 export default function QuickActions() {
     return (
-        <div className="bg-gray-900 rounded-2xl p-6 border font-changa border-gray-800">
+        <div className="bg-gradient-to-br from-black via-gray-950 to-purple-950  rounded-2xl p-4 border font-changa ">
             <h3 className="text-lg font-medium text-white/90 font-chango mb-6">Quick Actions</h3>
-            <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 gap-2">
                 {items.map((item, index) => (
                     <a
                         key={index}

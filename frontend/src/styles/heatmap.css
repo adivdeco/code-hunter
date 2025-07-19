@@ -5,7 +5,7 @@
 }
 
 .react-calendar-heatmap .color-empty {
-    fill: black;
+    fill: green;
     rx: 50%;
     ry: 50%;
     border-radius: 100%;

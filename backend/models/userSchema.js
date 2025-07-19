@@ -46,9 +46,23 @@ const userSchema = new Schema({
             solvedAt: {  // New subfield
                 type: Date,
                 default: Date.now
-            }
+            },
+            // problemsoln: {
+            //     type: Schema.Types.ObjectId,
+            //     ref: 'solution',
+            // },
         }],
     },
+    problemSolved2: {
+        type: [{
+            problemdata: {
+                type: Schema.Types.ObjectId,
+                ref: 'problemdata',
+            }
+
+        }],
+    },
+
     subscription: {  // New field for more detailed subscription info
         type: {
             plan: String,
