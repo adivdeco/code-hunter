@@ -23,7 +23,7 @@ import DashboardPage from "./pages/DashboardPage";
 import IssueReportingComponent from "./components/dashboard/IssueReportingComponent";
 import FeedbackComponent from "./components/dashboard/FeedbackComponent"
 import AllCode from "./components/dashboard/AllCode"
-
+import { axios } from "axios";
 
 function App() {
 
