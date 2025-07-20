@@ -96,7 +96,15 @@ function App() {
 
 
 
-
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/`)
+      .then(res => {
+        console.log("Backend live:", res.data);
+      })
+      .catch(err => {
+        console.error("Backend not reachable", err);
+      });
+  }, []);
 
   return (
     <>

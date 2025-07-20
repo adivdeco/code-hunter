@@ -13,10 +13,11 @@ const bookmarkRouter = require('./routes/bookmark')
 const errorHandler = require('./middleware/errorHandler');
 // Only allow your deployed frontend for CORS with credentials
 const cors = require("cors");
+const FRONTEND_URL = "https://code-hunter-sable.vercel.app";
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: FRONTEND_URL,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
