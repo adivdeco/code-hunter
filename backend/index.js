@@ -18,7 +18,8 @@ app.use(
     origin: "https://code-hunter-sable.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    exposedHeaders: ["Set-Cookie"],
   })
 );
 // app.use(
@@ -29,10 +30,12 @@ app.use(
 // )
 
 app.get("/", (req, res) => {
-  res.status(200).json({ sucess: true, message: "All is well" })
+  res.status(200).json({ success: true, message: "All is well" })
 })
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// app.use(express.static("public"));
 app.use(cookieParser()); // Middleware to parse cookies
 
 app.use("/auth", authRoutre); // user  login,registration,logout and progile view code
@@ -45,7 +48,7 @@ app.use(errorHandler);
 
 
 
-const surver = async () => {
+const server = async () => {
   try {
     await Promise.all([main(), redisClint.connect()]);
 
@@ -58,7 +61,7 @@ const surver = async () => {
     console.error("Error connecting to MongoDB:", err);
   }
 };
-surver();
+server();
 module.exports = app;
 
 // main()
