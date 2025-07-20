@@ -1,65 +1,41 @@
-
-
 "use client"
 
 import { useState, useEffect } from 'react'
-// import { Badge } from '@mantine/core'
-import axiosClient from '@/utils/axiosClint';
+// import axiosClient from '@/utils/axiosClint';
+import { useDashboardData } from "@/contexts/DashboardDataContext"
+
 
 export default function SubmissionHistory() {
-    const [selectedStatus, setSelectedStatus] = useState('all')
-    const [submissions, setSubmissions] = useState([]) // Initialize as empty array
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [stats, setStats] = useState({
-        avgRuntime: 0,
-        avgMemory: 0
-    })
+    const dateCounts = {}
+    const { submissions, loading, error, stats } = useDashboardData();
+    const [selectedStatus, setSelectedStatus] = useState('all');
 
-    useEffect(() => {
-        const fetchSubmissions = async () => {
-            try {
-                setLoading(true)
+    // const a = submissions.map((x) => x.createdAt)
+    // const b = a.map((c) => c.split('T')[0])
+// 1
+    // const f = b.reduce((acc, date) => {
+    //     const fond = acc.find(item => item.date === date);
+    //     if (fond) {
+    //         find.value += 1
+    //     } else {
+    //         acc.push({ date, value: 1 });
+    //     }
+    //     return acc;
+    // }, []);
 
-                const response = await axiosClient.get(`/problem/submissions`);
+    // 2
+    // for (let data of b) {
+    //     dateCounts[data] = (dateCounts[data] ? +1 : 0)
+    // }
+    // const result = Object.entries(dateCounts).map(([date, value]) => ({
+    //     date,
+    //     value
+    // }));
+
+    // console.log(result);
+    // console.log(b);
 
 
-                console.log(response.data);
-
-                // Ensure response data is an array
-                const submissionsData = Array.isArray(response.data) ? response.data : [response.data]
-                setSubmissions(submissionsData)
-                console.log(submissionsData);
-
-                // Calculate stats only if we have submissions
-                if (submissionsData.length > 0) {
-                    const acceptedSubs = submissionsData.filter(s => s.status === 'accepted')
-                    const totalRuntime = acceptedSubs.reduce((sum, sub) => sum + (sub.runtime || 0), 0)
-                    const totalMemory = acceptedSubs.reduce((sum, sub) => sum + (sub.memory || 0), 0)
-
-                    setStats({
-                        avgRuntime: acceptedSubs.length > 0 ? (totalRuntime / acceptedSubs.length).toFixed(4) : 0,
-                        avgMemory: acceptedSubs.length > 0 ? (totalMemory / acceptedSubs.length / 1024).toFixed(2) : 0
-                    })
-                }
-
-            } catch (err) {
-                console.error('Error fetching submissions:', err)
-                setError(err.response?.data?.message || err.message || 'Failed to fetch submissions')
-                setSubmissions([]) // Reset to empty array on error
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        fetchSubmissions()
-    }, [])
-
-    // const filteredSubmissions = Array.isArray(submissions) ?
-    //     submissions.filter(sub => {
-    //         if (selectedStatus === 'all') return true
-    //         return sub.status === selectedStatus
-    //     }) : []
     const filteredSubmissions = Array.isArray(submissions) ?
         submissions.filter(sub => {
             if (selectedStatus === 'all') return true;

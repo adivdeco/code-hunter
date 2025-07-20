@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import AdminPanel from "./components/admin/Add_que";
 import AdminDelete from "./components/admin/AdminDelete";
-// import AdminUpdate from "./components/ProblemUpdateComponent";
 import ProblemUpdateComponent from './components/admin/ProblemUpdateComponent';
 import ProblemPage from "./pages/ProblemPage"
 import Admin from "./pages/Admin";
@@ -119,7 +118,7 @@ function App() {
         <Route path="/dashbord" element={isAuthenticated ? <DashboardPage /> : <Homepage />} />
         <Route path="/report" element={isAuthenticated ? <IssueReportingComponent /> : <Homepage />} />
         <Route path="/feedback" element={isAuthenticated ? <FeedbackComponent /> : <Homepage />} />
-        <Route path="/feedback" element={isAuthenticated ? <AllCode /> : <Homepage />} />
+        <Route path="/shots" element={isAuthenticated ? <AllCode /> : <Homepage />} />
 
 
       </Routes>

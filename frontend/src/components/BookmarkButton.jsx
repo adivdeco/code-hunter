@@ -52,7 +52,7 @@ function BookmarkButton({ problemId, user, onBookmarkChange }) {
         <button onClick={toggleBookmark} className="text-lg">
             <Bookmark
                 size={25}
-                strokeWidth={10}
+                // strokeWidth={10}
                 className={isBookmarked ? "bookmark-filled" : "text-white"}
             />
         </button>
