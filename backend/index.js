@@ -7,21 +7,23 @@ const cookieParser = require("cookie-parser");
 const redisClint = require("./config/redis");
 const problemRouter = require("./routes/problemCreator");
 const submitRouter = require("./routes/submit");
-const cors = require("cors");
 const aiRouter = require("./routes/aiChatting");
 const noteRouter = require("./routes/noteSection");
 const bookmarkRouter = require('./routes/bookmark')
 const errorHandler = require('./middleware/errorHandler');
 // Only allow your deployed frontend for CORS with credentials
+const cors = require("cors");
+
 app.use(
   cors({
-    origin: "https://code-hunter-sable.vercel.app",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
     exposedHeaders: ["Set-Cookie"],
   })
 );
+
 // app.use(
 //   cors({
 //     origin: ['http://localhost:5173', 'http://localhost:5174'],
