@@ -23,7 +23,7 @@ import DashboardPage from "./pages/DashboardPage";
 import IssueReportingComponent from "./components/dashboard/IssueReportingComponent";
 import FeedbackComponent from "./components/dashboard/FeedbackComponent"
 import AllCode from "./components/dashboard/AllCode"
-import { axios } from "axios";
+// import { axios } from "axios";
 
 function App() {
 
@@ -96,15 +96,15 @@ function App() {
 
 
 
-  useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/`)
-      .then(res => {
-        console.log("Backend live:", res.data);
-      })
-      .catch(err => {
-        console.error("Backend not reachable", err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`${import.meta.env.VITE_API_URL}/`)
+  //     .then(res => {
+  //       console.log("Backend live:", res.data);
+  //     })
+  //     .catch(err => {
+  //       console.error("Backend not reachable", err);
+  //     });
+  // }, []);
 
   return (
     <>

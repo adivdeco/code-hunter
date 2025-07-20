@@ -20,7 +20,7 @@ authRoutre.delete('/profile', userMiddleware, deletedprofil);
 // Admin deletion of any user
 authRoutre.delete('/admin/users/:userId', adminMiddleware, adminDeleteUser);
 
-authRoutre.get("/check", (req, res) => {
+authRoutre.get("/check", userMiddleware, (req, res) => {
 
 
     const reply = {
