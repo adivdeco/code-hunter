@@ -6,7 +6,7 @@ const { getlanguageById, submitBatch, submitToken } = require('../utils/Problems
 
 
 const createProblem = async (req, res) => {
-    console.log("Creating problem with data:", req.body);
+    // console.log("Creating problem with data:", req.body);
 
     const { title, description, tags, visibleTestCases,
         hiddenTestCases, startCode, referenceSolution, problemCreator } = req.body;
@@ -18,7 +18,7 @@ const createProblem = async (req, res) => {
         for (const { language, completeCode } of referenceSolution) {
 
             const languageId = getlanguageById(language);
-            console.log("Language ID:", languageId);
+            // console.log("Language ID:", languageId);
 
 
             const submissions = visibleTestCases.map((testCase) => ({

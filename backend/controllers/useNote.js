@@ -8,7 +8,7 @@ const creatNote = async (req, res) => {
         const problemId = req.params.id;
 
         if (!problemId || !userId) {
-            console.log("user id or problem id missing");
+            // console.log("user id or problem id missing");
 
         }
 

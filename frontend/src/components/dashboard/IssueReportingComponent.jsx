@@ -98,7 +98,7 @@ const IssueReportingComponent = () => {
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        console.log('Issue submitted:', formData);
+        // console.log('Issue submitted:', formData);
         setSubmitted(true);
         setIsSubmitting(false);
     };

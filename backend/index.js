@@ -52,10 +52,10 @@ const server = async () => {
   try {
     await Promise.all([main(), redisClint.connect()]);
 
-    console.log("Connected to MongoDB and Redis");
+    // console.log("Connected to MongoDB and Redis");
 
     app.listen(5500, () => {
-      console.log("Server is running on port 5500");
+      // console.log("Server is running on port 5500");
     });
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);

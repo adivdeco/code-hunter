@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Send } from "lucide-react";
 import { useSelector } from 'react-redux';
 import ChatMessage from "@/components/AiCodeWriter"; // adjust path if needed
+import axiosClient from "@/utils/axiosClint";
 
 
 
@@ -48,7 +49,7 @@ function ChatAi({ problem }) {
     setMessages((prev) => [...prev, modelMessage]);
 
     try {
-      const response = await fetch("http://localhost:5500/ai/chat", {
+      const response = await fetch("https://code-hunter-1l2w.vercel.app/ai/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

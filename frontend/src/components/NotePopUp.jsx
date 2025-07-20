@@ -22,7 +22,7 @@ const NotePopup = ({ problemId, onClose }) => {
                 const res = await axiosClient.get(`/note/getnote/${problemId}`);
                 const noteContent = res.data.allnote[0]?.content || ''; // ✅ Safe fallback
                 setNoteContent(noteContent);
-                console.log(noteContent);
+                // console.log(noteContent);
 
 
             } catch (err) {

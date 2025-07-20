@@ -17,7 +17,7 @@ const ProblemList = ({ user }) => {
             try {
                 const response = await axiosClient.get('/problem/allProblems');
                 setProblems(response.data.allproblem);
-                console.log(response.data);
+                // console.log(response.data);
 
                 setLoading(false);
             } catch (err) {
