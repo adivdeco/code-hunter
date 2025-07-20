@@ -18,5 +18,8 @@
     "redis": "^5.1.0",
     "validator": "^13.15.0",
     "zod": "^3.25.23"
+  },
+  "scripts": {
+    "start": "node index.js"
   }
 }
