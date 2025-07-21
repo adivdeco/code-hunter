@@ -13,24 +13,24 @@ const bookmarkRouter = require('./routes/bookmark')
 const errorHandler = require('./middleware/errorHandler');
 // Only allow your deployed frontend for CORS with credentials
 const cors = require("cors");
-const FRONTEND_URL = "https://code-hunter-sable.vercel.app";
-
-app.use(
-  cors({
-    origin: FRONTEND_URL,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
-    exposedHeaders: ["Set-Cookie"],
-  })
-);
+// const FRONTEND_URL = "https://code-hunter-sable.vercel.app";
 
 // app.use(
 //   cors({
-//     origin: ['http://localhost:5173', 'http://localhost:5174'],
-//     credentials: true
+//     origin: FRONTEND_URL,
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+//     exposedHeaders: ["Set-Cookie"],
 //   })
-// )
+// );
+
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    credentials: true
+  })
+)
 
 app.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "All is well" })

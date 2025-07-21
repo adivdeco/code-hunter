@@ -23,23 +23,21 @@ import DashboardPage from "./pages/DashboardPage";
 import IssueReportingComponent from "./components/dashboard/IssueReportingComponent";
 import FeedbackComponent from "./components/dashboard/FeedbackComponent"
 import AllCode from "./components/dashboard/AllCode"
-// import { axios } from "axios";
+
 
 function App() {
-
-  // code likhna isAuthentciated
   const dispatch = useDispatch();
   const location = useLocation();
   const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
-
-  const [showSplash, setShowSplash] = useState(false); // for first-time loader
+  const [showSplash, setShowSplash] = useState(false);
   const [slideUp, setSlideUp] = useState(false);
 
-
+  // Authentication check
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
 
+  // WebGL error handling
   useEffect(() => {
     const handleError = (event) => {
       if (event.message.includes('WebGL')) {
@@ -47,40 +45,28 @@ function App() {
         window.location.reload();
       }
     };
+
     window.addEventListener('error', handleError);
     return () => window.removeEventListener('error', handleError);
   }, []);
-  // splash screen
+
+  // Splash screen logic
   useEffect(() => {
     const splashAlreadyShown = sessionStorage.getItem("splashShown");
-    const skipSplash = location.pathname === "/signup" || location.pathname === "/login";
+    const skipSplashPaths = ["/signup", "/login"];
+    const shouldSkipSplash = skipSplashPaths.includes(location.pathname);
 
-    if (!splashAlreadyShown && !skipSplash) {
+    if (!splashAlreadyShown && !shouldSkipSplash) {
       setShowSplash(true);
 
+      // Start slide up animation after 4 seconds (reduced from 6 for better UX)
       const slideTimer = setTimeout(() => {
-        setSlideUp(true); // Start fading
-      }, 6000);
+        setSlideUp(true);
+      }, 5000);
 
-      // const hideTimer = setTimeout(() => {
-      //   setShowSplash(false);
-      //   sessionStorage.setItem("splashShown", "true"); // set flag
-      // }, 10000);
-      return () => {
-        clearTimeout(slideTimer);
-        // clearTimeout(hideTimer);
-      }
-    };
+      return () => clearTimeout(slideTimer);
+    }
   }, [location.pathname]);
-
-  console.log(isAuthenticated);
-
-
-  if (loading) {
-    return <ThreeRingLoader />;
-  }
-
-
 
   const handleSplashAnimationEnd = () => {
     if (slideUp) {
@@ -89,22 +75,22 @@ function App() {
     }
   };
 
+  if (loading) {
+    return <ThreeRingLoader />;
+  }
 
+  // Render splash screen if needed
   if (showSplash) {
-    return <Page1 slideUp={slideUp} onAnimationEnd={handleSplashAnimationEnd} />;
+    return (
+      <Page1
+        slideUp={slideUp}
+        onAnimationEnd={handleSplashAnimationEnd}
+      />
+    );
   }
 
 
 
-  // useEffect(() => {
-  //   axios.get(`${import.meta.env.VITE_API_URL}/`)
-  //     .then(res => {
-  //       console.log("Backend live:", res.data);
-  //     })
-  //     .catch(err => {
-  //       console.error("Backend not reachable", err);
-  //     });
-  // }, []);
 
   return (
     <>
@@ -123,7 +109,7 @@ function App() {
         <Route path="/user/video" element={isAuthenticated ? <ProblemList /> : <Navigate to="/" />} />
         <Route path="/problem/:problemId" element={<ProblemPage />}></Route>
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="/dashbord" element={isAuthenticated ? <DashboardPage /> : <Homepage />} />
+        <Route path="/dashbord" element={isAuthenticated ? <DashboardPage /> : <Mainpg />} />
         <Route path="/report" element={isAuthenticated ? <IssueReportingComponent /> : <Homepage />} />
         <Route path="/feedback" element={isAuthenticated ? <FeedbackComponent /> : <Homepage />} />
         <Route path="/shots" element={isAuthenticated ? <AllCode /> : <Homepage />} />

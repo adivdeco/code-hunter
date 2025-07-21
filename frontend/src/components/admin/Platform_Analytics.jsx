@@ -292,7 +292,7 @@ const AnalyticsDashboard = ({ users }) => {
                     <div className="divide-y">
                         <div className="p-4 hover:bg-gray-50 flex justify-between items-center">
                             <div>
-                                <p className="font-medium">"Regular Expression Matching"</p>
+                                <p className="font-medium text-black">"Regular Expression Matching"</p>
                                 <p className="text-sm text-gray-500">Success rate below 20% - consider adding hints</p>
                             </div>
                             <button className="px-3 py-1 bg-red-100 text-red-700 rounded text-sm">
@@ -301,7 +301,7 @@ const AnalyticsDashboard = ({ users }) => {
                         </div>
                         <div className="p-4 hover:bg-gray-50 flex justify-between items-center">
                             <div>
-                                <p className="font-medium">15 Problems without solutions</p>
+                                <p className="font-medium text-black">15 Problems without solutions</p>
                                 <p className="text-sm text-gray-500">Users are requesting video explanations</p>
                             </div>
                             <button className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">
@@ -310,7 +310,7 @@ const AnalyticsDashboard = ({ users }) => {
                         </div>
                         <div className="p-4 hover:bg-gray-50 flex justify-between items-center">
                             <div>
-                                <p className="font-medium">"Binary Search" video solution</p>
+                                <p className="font-medium text-black">"Binary Search" video solution</p>
                                 <p className="text-sm text-gray-500">Low completion rate (32%) - may be too long</p>
                             </div>
                             <button className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded text-sm">

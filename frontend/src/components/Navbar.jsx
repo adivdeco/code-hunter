@@ -84,6 +84,17 @@ export default function Navbar() {
                 <p className="cursor-pointer hover:underline hover:text-purple-700  hover:bg-purple-200 p-2 rounded-2xl border-dashed ">
                     Explore
                 </p>
+
+                <NavLink to="/dashbord"
+                    className={({ isActive }) =>
+                        `cursor-pointer p-2 rounded-2xl ${isActive
+                            ? "text-green-700  underline"
+                            : "hover:text-green-700 hover:bg-green-200 hover:underline"
+                        }`
+                    }
+                >
+                    Dashbord
+                </NavLink>
             </div>
 
 

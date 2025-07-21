@@ -10,7 +10,7 @@ const items = [
     {
         title: "Solve Problems",
         description: "Continue your coding journey",
-        link: "#",
+        link: "/problems",
         icon: <CodeIcon className="h-6 w-6 text-indigo-400" />
     },
     {

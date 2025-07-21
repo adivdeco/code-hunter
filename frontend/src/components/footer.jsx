@@ -27,13 +27,13 @@ export default function Footer() {
     }, []);
 
     const socialLinks = [
-        { icon: FaYoutube, color: "red-500", href: "#", label: "YouTube" },
-        { icon: Facebook, color: "blue-600", href: "#", label: "Facebook" },
-        { icon: Linkedin, color: "sky-500", href: "https://www.linkedin.com/in/adiv-singh-207233254/", label: "LinkedIn" },
-        { icon: Twitter, color: "blue-400", href: "https://twitter.com/adivdeco", label: "Twitter" },
-        { icon: Github, color: "gray-400", href: "https://github.com/adivdeco", label: "GitHub" },
+        { icon: FaYoutube, color: "red-700", href: "#", label: "YouTube" },
+        { icon: Facebook, color: "blue-700", href: "#", label: "Facebook" },
+        { icon: Linkedin, color: "indigo-700", href: "https://www.linkedin.com/in/adiv-singh-207233254/", label: "LinkedIn" },
+        { icon: Twitter, color: "blue-400", href: "https://x.com/adivreder", label: "Twitter" },
+        { icon: Github, color: "gray-700", href: "https://github.com/adivdeco", label: "GitHub" },
         { icon: FaInstagram, color: "pink-700", href: "#", label: "Instagram" },
-        { icon: FaDiscord, color: "blue-600", href: "#", label: "Discord" }
+        { icon: FaDiscord, color: "blue-700", href: "#", label: "Discord" }
     ];
 
     const contactInfo = [
@@ -175,7 +175,7 @@ export default function Footer() {
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="text-gray-400 text-sm">
                         © 2025 <span className="font-bold text-white">CodeHunter</span>. All rights reserved.
-                        Crafted by <a href="https://twitter.com/adivdeco" target="_blank" className="underline hover:text-blue-400">@adivdeco</a>
+                        Crafted by <a href="https://x.com/adivreder" target="_blank" className="underline hover:text-blue-400">@adivdeco</a>
                     </div>
 
                     {/* Scroll to Top Button */}

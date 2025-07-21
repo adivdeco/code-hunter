@@ -502,10 +502,10 @@ const FeedbackComponent = () => {
                                         },
                                         transition: 'all 0.3s ease',
                                         bgcolor: getFeedbackTypeColor(),
-                                        '&:hover': {
-                                            bgcolor: getFeedbackTypeColor(),
-                                            opacity: 0.9
-                                        }
+                                        // '&:hover': {
+                                        //     bgcolor: getFeedbackTypeColor(),
+                                        //     opacity: 0.9
+                                        // }
                                     }}
                                     disabled={isSubmitting}
                                 >
