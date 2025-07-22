@@ -25,8 +25,8 @@ import FeedbackComponent from "./components/dashboard/FeedbackComponent"
 import AllCode from "./components/dashboard/AllCode"
 
 
-
 function App() {
+
   const dispatch = useDispatch();
   const location = useLocation();
   const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
@@ -93,9 +93,10 @@ function App() {
 
   // console.log(`User Role: ${user?.role}, Is Authenticated: ${isAuthenticated}`);
 
-
   return (
+
     <>
+
       <Routes>
         <Route path="/" element={<Mainpg />} />
         <Route path="/problems" element={isAuthenticated ? <Homepage></Homepage> : <Navigate to="/login" />}></Route>

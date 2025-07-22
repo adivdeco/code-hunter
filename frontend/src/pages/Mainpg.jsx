@@ -11,6 +11,15 @@ import Mainpg2 from "./Mainpg2";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/footer";
 import "../page1.css";
+import TawkManager from "@/components/TawkToWidget";
+import useTawkTo from '@/hooks/useTawkTo';
+// import TawkToWidget from "@/components/TawkToWidget";
+// import { useEffect } from "react";
+// import useTawkTo from "@/hooks/useTawkTo";
+
+
+// import { useState, useRef, Suspense, lazy, useEffect } from "react";
+
 
 const slugs = [
   "typescript",
@@ -43,7 +52,9 @@ const iconMap = {
   nodejs: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
 };
 
+
 export default function Mainpg() {
+  useTawkTo()
   // const images = slugs.map(
   //   (slug) => `https://cdn.simpleicons.org/${slug}/${slug}`,
   //   // (slug) => `https://img.icons8.com/?size=100&id=${slug}&format=png&color=000000`
@@ -51,10 +62,14 @@ export default function Mainpg() {
   const images = slugs.map((slug) => iconMap[slug]);
 
   return (
+
     <div className="bg-white">
+
+      <TawkManager />
       <div className="relative">
         {/* Navbar */}
         <Navbar />
+
 
         {/* Hero Section */}
         <div className="relative  flex h-[810px] w-full flex-col items-center justify-center px-4 mt-0 text-center bg-white overflow-hidden">
@@ -118,9 +133,10 @@ export default function Mainpg() {
           </NavLink>
         </div>
         <div className="absolute  top-0 flex size-full items-center justify-center overflow-hidden z-4 ">
-          <IconCloud images={images} />
+          {/* <IconCloud images={images} /> */}
         </div>
       </div>
+
       <Mainpg2 />
 
       {/* <div className=" mb-[75vh]"> */}

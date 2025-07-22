@@ -8,12 +8,7 @@ import "../index.css";
 import { AvatarCircles } from "@/components/magicui/avatar-circles";
 import FAQSection from "@/components/faq"
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+
 
 import {
   Braces,
@@ -160,19 +155,19 @@ const reviews = [
     name: "Rohit",
     username: "@Hunter",
     body: "best platform for dominating in codeing.",
-    img: "https://avatar.vercel.sh/jack",
+    img: "https://avatar.vercel.sh/jill",
   },
   {
     name: "Rupesh",
     username: "@Sparta",
     body: "I really love the ai feature.",
-    img: "https://avatar.vercel.sh/jack",
+    img: "https://avatar.vercel.sh/jenny",
   },
   {
     name: "Suraj",
     username: "@Undertaker",
     body: "Only focus on dout-solving.",
-    img: "https://avatar.vercel.sh/jack",
+    img: "https://avatar.vercel.sh/james",
   },
   {
     name: "Himanshu",
@@ -286,6 +281,7 @@ const ReviewCard = ({ img, name, username, body }) => {
 const texts = ["CODE", "MASTER", "DOMINATE"];
 
 export default function Mainpg2() {
+
   return (
     <div className="min-h-screen w-full bg-white  mt-5">
       {/* Section Header */}

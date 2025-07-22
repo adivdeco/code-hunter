@@ -256,6 +256,7 @@ const ProblemPage = () => {
 
   return (
     <div className="h-screen overflow-hidden px-2 flex flex-col bg-black text-white">
+
       <nav className="h-12 w-full bg-black px-3 flex items-center justify-between text-white shadow-sm">
 
         {/* left */}
@@ -448,6 +449,7 @@ const ProblemPage = () => {
                       {/* 🔥 Header Row with Title + Clear Button */}
                       <div className="flex justify-between items-center mb-4">
                         <h2 className="text-2xl font-changa">CHAT-AI</h2>
+
                         <button
                           onClick={() => {
                             localStorage.removeItem(`chat-${problem._id}`);
