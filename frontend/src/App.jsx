@@ -25,6 +25,7 @@ import FeedbackComponent from "./components/dashboard/FeedbackComponent"
 import AllCode from "./components/dashboard/AllCode"
 
 
+
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -90,6 +91,7 @@ function App() {
   }
 
 
+  // console.log(`User Role: ${user?.role}, Is Authenticated: ${isAuthenticated}`);
 
 
   return (
@@ -97,8 +99,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Mainpg />} />
         <Route path="/problems" element={isAuthenticated ? <Homepage></Homepage> : <Navigate to="/login" />}></Route>
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/problems" /> : <Login />}></Route>
-        <Route path="/signup" element={isAuthenticated ? <Navigate to="/problems" /> : <Signup></Signup>}></Route>
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/dashbord" /> : <Login />}></Route>
+        <Route path="/signup" element={isAuthenticated ? <Navigate to="/dashbord" /> : <Signup></Signup>}></Route>
         <Route path="/admin" element={isAuthenticated && user?.role === "admin" ? <Admin /> : <Navigate to="/" />}></Route>
         <Route path="/admin/create" element={isAuthenticated && user?.role === "admin" ? <AdminPanel /> : <Navigate to="/" />}></Route>
         <Route path="/admin/delete" element={isAuthenticated && user?.role === "admin" ? <AdminDelete /> : <Navigate to="/" />}></Route>

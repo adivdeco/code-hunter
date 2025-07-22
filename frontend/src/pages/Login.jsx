@@ -46,10 +46,12 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, navigate]);
 
+
   // Auto-focus the email field on component mount for better UX
   useEffect(() => {
     setFocus('email');
   }, [setFocus]);
+
 
   const onSubmit = async (data) => {
     try {

@@ -37,7 +37,9 @@ export const loginUser = createAsyncThunk(
       const response = await axiosClient.post('/auth/login', credentials, {
         withCredentials: true
       });
-      return response.data;
+      const authResponse = await axiosClient.get('/auth/check', { withCredentials: true });
+      return authResponse.data?.user;
+
     } catch (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
@@ -68,7 +70,7 @@ export const checkAuth = createAsyncThunk(
   'auth/checkthunk',
   async (_, { rejectWithValue }) => {
     // try {
-    //   const res = await axios.get("/auth/check");
+    //   const res = await axiosClient.get("/auth/check");
     //   return res.data?.user;
     // } catch (err) {
     //   return rejectWithValue(err.response?.data?.message || "Something went wrong");
@@ -77,6 +79,8 @@ export const checkAuth = createAsyncThunk(
       const { data } = await axiosClient.get('/auth/check', { withCredentials: true });
       return data?.user;
     } catch (error) {
+      console.log('Error in checkAuth:', error);
+
       return rejectWithValue(error);
     }
   }
@@ -89,7 +93,11 @@ export const logoutUser = createAsyncThunk(
       await axiosClient.post('/auth/logout');
       return null;
     } catch (error) {
+      console.log('Error in login:', error);
+
       return rejectWithValue(error);
+
+
     }
   }
 );

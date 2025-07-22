@@ -8,42 +8,39 @@ import { IconCloud } from "@/components/magicui/icon-cloud";
 
 const slugs = [
   "typescript",
-  "javascript",
-  "dart",
-  "java",
   "react",
-  "flutter",
-  "android",
-  "html5",
-  "css3",
-  "nodedotjs",
-  "express",
-  "nextdotjs",
-  "prisma",
-  "amazonaws",
-  "postgresql",
-  "firebase",
-  "nginx",
-  "vercel",
-  "testinglibrary",
-  "jest",
-  "cypress",
-  "docker",
-  "git",
-  "jira",
+  "go", "go", "go", "go", "go", "go", "go",
+  "python", "python", "python", "python", "python", "python", "python", "python",
+  "cplusplus", "cplusplus", "cplusplus", "cplusplus", "cplusplus",
   "github",
   "gitlab",
-  "visualstudiocode",
-  "androidstudio",
-  "sonarqube",
-  "figma",
+  "javascript", "javascript", "javascript", "javascript", "javascript",
+  "express",
+  "nextjs",
+  "nodejs",
+  "ruby", "ruby", "ruby", "ruby", "ruby",
+  "java", "java", "java", "java", "java", "java", "java", "java", "java"
 ];
+const iconMap = {
+  go: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg",
+  react: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+  java: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
+  python: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+  cplusplus: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
+  github: "https://img.icons8.com/material-outlined/96/github.png",
+  gitlab: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg",
+  nextjs: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
+  typescript: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+  javascript: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+  express: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+  ruby: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg",
+  nodejs: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+};
 
 
 export default function Mainpg3() {
-  const images = slugs.map(
-    (slug) => `https://cdn.simpleicons.org/${slug}/${slug}`
-  );
+  const images = slugs.map((slug) => iconMap[slug]);
+
 
   return (
     <div className="min-h-screen w-full bg-white flex items-center justify-center   ">
@@ -91,8 +88,12 @@ export default function Mainpg3() {
           </div>
         </NavLink>
 
-        <div className="absolute  h-full top-0 flex size-full items-center justify-center overflow-hidden ">
+        {/* <div className="absolute  h-full top-0 flex size-full items-center justify-center overflow-hidden ">
           <IconCloud images={images} />
+        </div> */}
+        <div className="absolute  top-0 flex size-full items-center justify-center overflow-hidden z-4 ">
+          <IconCloud images={images} />
+
         </div>
       </div>
 
