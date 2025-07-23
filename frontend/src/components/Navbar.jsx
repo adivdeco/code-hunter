@@ -78,7 +78,7 @@ export default function Navbar() {
                         className={({ isActive }) =>
                             `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
                                 ? "text-purple-600 underline bg-purple-100/20"
-                                : "hover:text-purple-600 hover:bg-purple-200/30 hover:underline"
+                                : "hover:text-white hover:bg-purple-200/30 hover:underline"
                             }`
                         }
                     >
@@ -89,7 +89,7 @@ export default function Navbar() {
                         className={({ isActive }) =>
                             `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
                                 ? "text-indigo-700 underline bg-indigo-100/20"
-                                : "hover:text-indigo-700 hover:bg-indigo-200/30 hover:underline"
+                                : "hover:text-white hover:bg-indigo-200/30 hover:underline"
                             }`
                         }
                     >
@@ -100,29 +100,31 @@ export default function Navbar() {
                         className={({ isActive }) =>
                             `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
                                 ? "text-pink-700 underline bg-pink-100/20"
-                                : "hover:text-pink-700 hover:bg-pink-200/30 hover:underline"
+                                : "hover:text-white hover:bg-pink-200/30 hover:underline"
                             }`
                         }
                     >
                         Pricing
                     </NavLink>
 
-                    <NavLink to="#"
+                    <NavLink to="/contribution
+"
                         className={({ isActive }) =>
                             `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
-                                ? "text-purple-700 underline bg-purple-100/20"
-                                : "hover:text-purple-700 hover:bg-purple-200/30 hover:underline"
+                                ? "text-white underline bg-green-100/20"
+                                : "hover:text-white hover:bg-green-200/30 hover:underline"
                             }`
                         }
                     >
-                        Explore
+                        Contribution
+
                     </NavLink>
 
                     <NavLink to="/dashbord"
                         className={({ isActive }) =>
                             `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
                                 ? "text-green-700 underline bg-green-100/20"
-                                : "hover:text-green-700 hover:bg-green-200/30 hover:underline"
+                                : "hover:text-white hover:bg-green-200/30 hover:underline"
                             }`
                         }
                     >

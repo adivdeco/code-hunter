@@ -204,7 +204,7 @@ const adminDeleteUser = async (req, res) => {
     }
 };
 
-// Add to your existing controller
+// Update user status (e.g., isPaidUser)
 const updateUserStatus = async (req, res) => {
     try {
         const { userId } = req.params;

@@ -9,7 +9,6 @@ import {
 } from '@heroicons/react/24/outline'
 import { MdLeaderboard } from "react-icons/md";
 
-import { Navigate, NavLink, useNavigate } from "react-router";
 
 export default function Sidebar({ darkMode, setDarkMode, user }) {
 
@@ -43,7 +42,8 @@ export default function Sidebar({ darkMode, setDarkMode, user }) {
                             {
                                 name: 'Contests',
                                 icon: <TrophyIcon className="h-5 w-5" />,
-                                active: false
+                                active: false,
+                                link: "/contest"
                             },
                             {
                                 name: 'Discuss',
@@ -53,12 +53,14 @@ export default function Sidebar({ darkMode, setDarkMode, user }) {
                             {
                                 name: 'Leaderboard',
                                 icon: <MdLeaderboard className="h-5 w-5" />,
-                                active: false
+                                active: false,
+                                link: "/leaderbord"
                             },
                             {
                                 name: 'Settings',
                                 icon: <CogIcon className="h-5 w-5" />,
-                                active: false
+                                active: false,
+                                link: '/setting'
                             },
                         ].map((item) => (
                             <a

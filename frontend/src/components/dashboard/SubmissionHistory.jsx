@@ -6,13 +6,13 @@ import { useDashboardData } from "@/contexts/DashboardDataContext"
 
 
 export default function SubmissionHistory() {
-    const dateCounts = {}
+    // const dateCounts = {}
     const { submissions, loading, error, stats } = useDashboardData();
     const [selectedStatus, setSelectedStatus] = useState('all');
 
     // const a = submissions.map((x) => x.createdAt)
     // const b = a.map((c) => c.split('T')[0])
-// 1
+    // 1
     // const f = b.reduce((acc, date) => {
     //     const fond = acc.find(item => item.date === date);
     //     if (fond) {

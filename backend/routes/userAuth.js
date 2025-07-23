@@ -31,6 +31,8 @@ authRoutre.get("/check", userMiddleware, (req, res) => {
         isPaidUser: req.finduser.isPaidUser,
         problemSolved: req.finduser.problemSolved,
         createdAt: req.finduser.createdAt,
+        country: req.finduser.country,
+        avatar: req.finduser.avatar,
         streak: req.finduser.streak, // Uncomment if streak exists in your schema
     };
 
@@ -103,6 +105,37 @@ authRoutre.patch('/admin/users/:userId/subscription', adminMiddleware, async (re
             message: "Error updating user subscription",
             error: error.message
         });
+    }
+});
+
+authRoutre.patch('/profile', userMiddleware, async (req, res) => {
+    // We only allow specific fields to be updated via this endpoint
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['name', 'country']; // Define what the user is allowed to change
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+
+    if (!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates!' });
+    }
+
+    try {
+        // req.user should be populated by your authMiddleware
+        const user = req.finduser;
+
+        updates.forEach((update) => user[update] = req.body[update]);
+        await user.save();
+
+        // Don't send the password back! Create a method to filter user data.
+        // For now, we manually build a response object.
+        res.status(200).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            country: user.country,
+        });
+
+    } catch (error) {
+        res.status(400).send(error);
     }
 });
 

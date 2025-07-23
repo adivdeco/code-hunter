@@ -23,7 +23,10 @@ import DashboardPage from "./pages/DashboardPage";
 import IssueReportingComponent from "./components/dashboard/IssueReportingComponent";
 import FeedbackComponent from "./components/dashboard/FeedbackComponent"
 import AllCode from "./components/dashboard/AllCode"
-
+import ContestsPage from "@/components/layout/ContestsPage"
+import LeaderboardPage from "@/components/layout/LeaderboardPage";
+import ProfileSettingsPage from "@/components/layout/ProfileSettingsPage";
+import ContributionPage from "@/pages/ContributionPage";
 
 function App() {
 
@@ -113,10 +116,13 @@ function App() {
         <Route path="/problem/:problemId" element={<ProblemPage />}></Route>
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/dashbord" element={isAuthenticated ? <DashboardPage /> : <Mainpg />} />
-        <Route path="/report" element={isAuthenticated ? <IssueReportingComponent /> : <Homepage />} />
-        <Route path="/feedback" element={isAuthenticated ? <FeedbackComponent /> : <Homepage />} />
-        <Route path="/shots" element={isAuthenticated ? <AllCode /> : <Homepage />} />
-
+        <Route path="/report" element={isAuthenticated ? <IssueReportingComponent /> : <Mainpg />} />
+        <Route path="/feedback" element={isAuthenticated ? <FeedbackComponent /> : <Mainpg />} />
+        <Route path="/shots" element={isAuthenticated ? <AllCode /> : <Mainpg />} />
+        <Route path="/contest" element={isAuthenticated ? <ContestsPage /> : <Mainpg />} />
+        <Route path="/leaderbord" element={isAuthenticated ? <LeaderboardPage /> : <Mainpg />} />
+        <Route path="/setting" element={isAuthenticated ? <ProfileSettingsPage /> : <Mainpg />} />
+        <Route path="/contribution" element={isAuthenticated ? <ContributionPage /> : <Navigate to="/" />} />
 
       </Routes>
     </>

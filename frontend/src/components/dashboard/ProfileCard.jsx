@@ -3,7 +3,6 @@
 import { Suspense, useRef, useState } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Crown } from 'lucide-react';
-import { BsCalendar2DateFill } from "react-icons/bs";
 import { ErrorBoundary } from './ErrorBoundary'; // Assuming this file exists and is correct
 import { CalendarDateRangeIcon } from '@heroicons/react/24/outline';
 import { SiCounterstrike } from "react-icons/si";
@@ -11,7 +10,8 @@ import { FaFortAwesome, FaFortAwesomeAlt } from "react-icons/fa6";
 import { GoGoal } from "react-icons/go";
 
 
-export default function ProfileCard({ user }) {
+
+export default function ProfileCard({ user, rank }) {
     // --- STATE FOR ROBUST TWO-STAGE RENDERING ---
     const [isCardAnimationComplete, setCardAnimationComplete] = useState(false);
 
@@ -85,7 +85,7 @@ export default function ProfileCard({ user }) {
                         <h3 className="text-md text-white">{user?.email}</h3>
 
                         <div className="flex items-center mt-4">
-                            <motion.div variants={itemVariants} className="mt-2">
+                            <motion.div variants={itemVariants} className="mt-2 gap-2 flex items-center">
                                 {user?.isPaidUser ? (
                                     <span className="inline-flex items-center px-3 py-1 font-changa rounded-full text-sm font-medium  bg-yellow-400/20 text-yellow-400">
                                         <Crown className=" h-4 w-4 mr-1" /> Pro Member
@@ -95,13 +95,20 @@ export default function ProfileCard({ user }) {
                                         Free Tier
                                     </span>
                                 )}
+                                <span className="inline-flex items-center px-3 py-1 font-changa  rounded-full text-sm font-medium bg-purple-600/60 text-yellow-400">
+                                    🚀 Rank #{rank || "N/A"}
+                                </span>
                             </motion.div>
 
                         </div>
+                        {/* <motion.div variants={itemVariants} className="mt-5">
+                            
+                        </motion.div> */}
+
                     </div>
                 </div>
 
-                <div className="mt-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {/* Member Since Box */}
                     <div className="bg-white/10 p-4 rounded-xl backdrop-blur-sm flex items-center">
                         <div className="mr-4 p-2 bg-blue-600/30 rounded-lg">

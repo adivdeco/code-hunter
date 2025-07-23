@@ -18,7 +18,7 @@ const NavProfile = ({ user, mobile = false }) => {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
     const firstInitial = user?.name?.[0]?.toUpperCase() || "U";
-    const avatarUrl = user?.avatar || '';
+    // const avatarUrl = user?.avatar || '';
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -93,17 +93,17 @@ const NavProfile = ({ user, mobile = false }) => {
                 aria-expanded={open}
             >
                 <div className="relative h-9 w-9">
-                    {avatarUrl ? (
+                    {/* {avatarUrl ? (
                         <img
                             src={avatarUrl}
                             alt={user?.name}
                             className="h-full w-full rounded-full object-cover border-2 border-white/70 shadow-md"
                         />
-                    ) : (
-                        <div className="h-full font-aladin w-full rounded-full flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium border-4 border-white/20 shadow-md">
-                            {firstInitial}
-                        </div>
-                    )}
+                    ) : ( */}
+                    <div className="h-full font-aladin w-full rounded-full flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium border-4 border-white/20 shadow-md">
+                        {firstInitial}
+                    </div>
+                    {/* )} */}
                 </div>
                 {!mobile && (
                     <motion.div

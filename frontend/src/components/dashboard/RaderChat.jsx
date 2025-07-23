@@ -17,16 +17,18 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from '@/components/ui/chart'
+import { useDashboardData } from "@/contexts/DashboardDataContext"
+import { useState, useEffect } from "react"
 
 
-const chartData = [
-    { month: "Python", problemSolved: 4 },
-    { month: "Js", problemSolved: 7 },
-    { month: "Java", problemSolved: 3 },
-    { month: "C++", problemSolved: 3 },
-    { month: "GO", problemSolved: 2 },
+// const chartData = [
+//     { month: "Python", problemSolved: 4 },
+//     { month: "Js", problemSolved: 7 },
+//     { month: "Java", problemSolved: 3 },
+//     { month: "C++", problemSolved: 3 },
+//     { month: "GO", problemSolved: 2 },
 
-]
+// ]
 
 const chartConfig = {
     problemSolved: {
@@ -37,6 +39,38 @@ const chartConfig = {
 // satisfies, ChartConfig
 
 export default function Component() {
+    const { submissions, loading, error, stats } = useDashboardData();
+    // console.log('submissions', submissions);
+    const [chartData, setChartData] = useState([])
+
+
+    useEffect(() => {
+        if (!Array.isArray(submissions)) return;
+        const dataCounts = {}
+
+        submissions.forEach(submissions => {
+            const data = submissions.language;
+            if (!dataCounts[data]) {
+                dataCounts[data] = 0
+            }
+            dataCounts[data]++
+        })
+        console.log(dataCounts);
+
+
+        // Convert to array format and sort by date
+        const processedData = Object.entries(dataCounts)
+            .map(([month, problemSolved]) => ({
+                month: String(month),
+                problemSolved: Number(problemSolved)
+            }))
+        setChartData(processedData)
+    }, [submissions])
+
+
+    if (loading) return <div className="text-center py-8 text-gray-400">Loading chart data...</div>
+    if (error) return <div className="text-center py-8 text-red-500">{error}</div>
+
     return (
 
         <Card className="bg-gradient-to-br from-black via-gray-950 to-purple-950 rounded-2xl  border border-gray-800">

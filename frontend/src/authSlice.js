@@ -69,12 +69,6 @@ export const loginUser = createAsyncThunk(
 export const checkAuth = createAsyncThunk(
   'auth/checkthunk',
   async (_, { rejectWithValue }) => {
-    // try {
-    //   const res = await axiosClient.get("/auth/check");
-    //   return res.data?.user;
-    // } catch (err) {
-    //   return rejectWithValue(err.response?.data?.message || "Something went wrong");
-    // }
     try {
       const { data } = await axiosClient.get('/auth/check', { withCredentials: true });
       return data?.user;

@@ -47,10 +47,6 @@ const userSchema = new Schema({
                 type: Date,
                 default: Date.now
             },
-            // problemsoln: {
-            //     type: Schema.Types.ObjectId,
-            //     ref: 'solution',
-            // },
         }],
     },
     problemSolved2: {
@@ -72,6 +68,19 @@ const userSchema = new Schema({
         },
         default: null
     },
+    country: {
+        type: String,
+        uppercase: true,
+        trim: true,
+        maxlength: 2,
+        default: 'IN',
+    },
+    avatar: {
+        type: String,
+        default: "🤡",
+    },
+
+
 
 
 }, {
