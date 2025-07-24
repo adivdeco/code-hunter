@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { Messages } = require('openai/resources/chat/completions.js');
 const { Schema } = mongoose;
 
 
@@ -85,7 +86,22 @@ const problemSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true
-    }
+    },
+
+    messages: [
+        {
+            role: {
+                type: String,
+                enum: ['user', 'admin'],
+                required: true
+            },
+            content: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+
 
 
 })

@@ -47,7 +47,9 @@ const alluser = async (req, res) => {
         }
         res.status(200).json({ message: "All User fetched successfully", alluser });
     } catch (error) {
-        res.send("Error: " + err)
+        res.send("Error in fetch: " + err)
+
+
     }
 }
 

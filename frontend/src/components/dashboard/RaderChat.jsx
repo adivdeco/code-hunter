@@ -55,7 +55,7 @@ export default function Component() {
             }
             dataCounts[data]++
         })
-        console.log(dataCounts);
+        // console.log(dataCounts);
 
 
         // Convert to array format and sort by date

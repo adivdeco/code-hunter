@@ -48,7 +48,8 @@ export default function Sidebar({ darkMode, setDarkMode, user }) {
                             {
                                 name: 'Discuss',
                                 icon: <UsersIcon className="h-5 w-5" />,
-                                active: false
+                                active: false,
+                                link: "/duscission"
                             },
                             {
                                 name: 'Leaderboard',
@@ -100,9 +101,9 @@ export default function Sidebar({ darkMode, setDarkMode, user }) {
                         <div className="flex items-center px-3 py-3">
                             <div className="relative opacity-0 group-hover:opacity-100">
                                 <img
-                                    className="h-8 w-8 rounded-full"
-                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                    alt="User profile"
+                                    src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${user.avatar}`}
+                                    alt={`${user.name}'s avatar`}
+                                    className="w-14 h-14  rounded-full "
                                 />
                                 <span className="absolute bottom-0 right-0 block h-2 w-2 rounded-full bg-green-500 ring-2 ring-white dark:ring-gray-900"></span>
                             </div>

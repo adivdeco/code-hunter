@@ -67,7 +67,7 @@ const NavProfile = ({ user, mobile = false }) => {
         {
             label: "Profile Settings",
             icon: <Settings className="w-4 h-4" />,
-            path: "/settings",
+            path: "/setting",
             color: "text-gray-600 hover:bg-gray-50"
         },
         {

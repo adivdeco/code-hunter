@@ -9,7 +9,7 @@ import ChatAi from '../components/Chat-Ai';
 import ThreeRingLoader from "@/components/ThreeRingLoader";
 import Split from 'react-split';
 import { Bookmark, RotateCcw, ChevronUp, ChevronDown, Maximize2, Minimize2, Minimize, CheckSquare, Volleyball, CloudUpload, Trash2, SettingsIcon, Timer } from 'lucide-react';
-import { Code, Bot, StickyNote, FileText, Edit3, CheckCircle, Palette, Pause, Play, ChevronLeft } from "lucide-react";
+import { Code, Bot, StickyNote, FileText, Edit3, CheckCircle, Palette, Pause, Play, ChevronLeft, MessageSquareText } from "lucide-react";
 import { Maximize } from 'lucide-react';
 import { triggerSideCannonsConfetti } from "@/lib/confettiTrigger";
 import NavProfile from "@/components/NavProfile"
@@ -58,6 +58,7 @@ const ProblemPage = () => {
 
   const { handleSubmit } = useForm();
 
+  // console.log(user);
 
 
   useEffect(() => {
@@ -270,10 +271,15 @@ const ProblemPage = () => {
 
         {/* center */}
         <div className="hidden md:flex items-center gap-6 text-sm text-gray-300">
-          <NavLink to={"/login"}>
+          <NavLink to={"/problems"}>
             <button className="hover:text-yellow-400 transition">Practice</button>
           </NavLink>
-          <button className="hover:text-yellow-400 transition">Leaderboard</button>
+
+
+          <NavLink to={"/leaderbord"}>
+            <button className="hover:text-yellow-400 transition">Leaderboard</button>
+
+          </NavLink>
 
           {/* Timer Button */}
           <div className="w-full flex justify-center my-4">
@@ -281,9 +287,14 @@ const ProblemPage = () => {
           </div>
 
 
+          <NavLink to={"/duscission"}>
+            <button className="hover:text-yellow-400 transition">Discuss</button>
+          </NavLink>
 
-          <button className="hover:text-yellow-400 transition">Discuss</button>
-          <button className="hover:text-yellow-400 transition">Contests</button>
+          <NavLink to={"/contest"}>
+            <button className="hover:text-yellow-400 transition">Contests</button>
+          </NavLink>
+
         </div>
 
         {/* right */}
@@ -311,23 +322,24 @@ const ProblemPage = () => {
               {[
                 { key: 'description', label: 'Description', icon: <FileText size={16} /> },
                 { key: 'editorial', label: 'Editorial', icon: <Edit3 size={16} /> },
-                { key: 'solutions', label: 'Solutions', icon: <CheckCircle size={16} /> },
-                { key: 'submissions', label: 'Submissions', icon: <Code size={16} /> },
+                user?.role === 'admin' ? { key: 'solutions', label: 'Solutions', icon: <CheckCircle size={16} /> } : null,
+                { key: 'discussion', label: 'Discussion', icon: <MessageSquareText size={18} /> },
                 { key: 'note', label: 'Note', icon: <StickyNote size={16} /> },
                 { key: 'chatAi', label: 'ChatAI', icon: <Bot size={22} /> },
-              ].map(({ key, label, icon }) => (
-                <button
-                  key={key}
-                  className={`flex items-center gap-2 py-2 px-3 h-9 hover:bg-slate-700 rounded-lg transition-colors duration-200 hover:text-yellow-100 ${activeLeftTab === key
-                    ? 'text-yellow-500 border-b-2 border-primary font-semibold'
-                    : 'text-gray-500'
-                    }`}
-                  onClick={() => setActiveLeftTab(key)}
-                >
-                  {icon}
-                  <span>{label}</span>
-                </button>
-              ))}
+              ].filter(Boolean)
+                .map(({ key, label, icon }) => (
+                  <button
+                    key={key}
+                    className={`flex items-center gap-2 py-2 px-3 h-9 hover:bg-slate-700 rounded-lg transition-colors duration-200 hover:text-yellow-100 ${activeLeftTab === key
+                      ? 'text-yellow-500 border-b-2 border-primary font-semibold'
+                      : 'text-gray-500'
+                      }`}
+                    onClick={() => setActiveLeftTab(key)}
+                  >
+                    {icon}
+                    <span>{label}</span>
+                  </button>
+                ))}
 
             </div>
 
@@ -382,6 +394,7 @@ const ProblemPage = () => {
                     </div>
                   )}
 
+
                   {activeLeftTab === 'solutions' && (
                     <div>
                       <h2 className="text-xl font-bold mb-4">Solutions</h2>
@@ -397,7 +410,16 @@ const ProblemPage = () => {
                               </pre>
                             </div>
                           </div>
-                        )) || <p className="text-gray-500">Solutions will be available after you solve the problem.</p>}
+                        )) || <p className="text-gray-500">Fetching Data</p>}
+                      </div>
+                    </div>
+                  )}
+
+                  {activeLeftTab === 'discussion' && (
+                    <div>
+                      <h2 className="text-xl font-bold mb-4">Question Based Discussion.</h2>
+                      <div className="text-gray-500">
+                        <Discussion problemId={problemId} />
                       </div>
                     </div>
                   )}

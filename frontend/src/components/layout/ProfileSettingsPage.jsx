@@ -4,33 +4,40 @@ import { FaUser, FaGlobeAmericas, FaSpinner, FaCheckCircle } from 'react-icons/f
 import { countryList } from '@/utils/countries';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/footer';
+import { useSelector } from 'react-redux';
+import axiosClient from '@/utils/axiosClint';
 
-// MOCK: Replace this with your actual user fetching logic (e.g., from a context or a hook)
-const fetchUserData = async () => ({
-    name: 'adiv',
-    email: 'sadiv320@gmail.com',
-    country: 'IN', // This would come from your DB
-});
+
+
 
 const ProfileSettingsPage = () => {
+    const { user } = useSelector((state) => state.auth);
+    console.log(user);
+
+    // const dispatch = useDispatch(); // For updating Redux state
+
     const [name, setName] = useState('');
     const [country, setCountry] = useState('');
-    const [originalCountry, setOriginalCountry] = useState(''); // To check if changed
+    const [avatarSeed, setAvatarSeed] = useState('');
+    // const [originalCountry, setOriginalCountry] = useState(''); // To check if changed
 
     const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [message, setMessage] = useState(null); // { type: 'success' | 'error', text: '...' }
 
-    // Fetch user data on component mount
+
+
+
     useEffect(() => {
-        setIsLoading(true);
-        fetchUserData().then(data => {
-            setName(data.name || '');
-            setCountry(data.country || '');
-            setOriginalCountry(data.country || '');
+        if (user) {
+            setName(user.name || '');
+            setCountry(user.country || '');
+            // Assumes you might store the seed in the user object, otherwise defaults to name
+            setAvatarSeed(user.avatar || '');
             setIsLoading(false);
-        });
-    }, []);
+        }
+    }, [user]);
+
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -40,29 +47,24 @@ const ProfileSettingsPage = () => {
         // This is where you call your API
         // MOCK API CALL
         try {
-            const token = "YOUR_JWT_TOKEN"; // Get this from your auth context/storage
-            const response = await fetch('/api/users/profile', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ name, country }),
+            const response = await axiosClient.patch('/auth/profile', {
+                name,
+                country,
+                avatar: avatarSeed
             });
+            console.log('Updating profile with:', { name, country, avatar: avatarSeed });
 
-            if (!response.ok) {
-                throw new Error('Failed to update profile.');
-            }
+            // Use response.data for axios
+            setName(response.data.name);
+            setCountry(response.data.country);
+            setAvatarSeed(response.data.avatar);
 
-            const updatedUser = await response.json();
-            setOriginalCountry(updatedUser.country); // Update original country on success
             setMessage({ type: 'success', text: 'Profile updated successfully!' });
 
         } catch (error) {
-            setMessage({ type: 'error', text: error.message });
+            setMessage({ type: 'error', text: `Error updating profile: ${error.response?.data?.error || error.message}` });
         } finally {
             setIsSaving(false);
-            // Hide success message after 3 seconds
             setTimeout(() => setMessage(null), 3000);
         }
     };
@@ -90,6 +92,7 @@ const ProfileSettingsPage = () => {
                             </div>
                         ) : (
                             <form onSubmit={handleSave} className="space-y-6">
+
                                 {/* Name Input */}
                                 <div className="relative">
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-1">Name</label>
@@ -122,6 +125,25 @@ const ProfileSettingsPage = () => {
                                             <option key={c.code} value={c.code}>{c.name}</option>
                                         ))}
                                     </select>
+                                </div>
+
+                                {/* //  avatar */}
+                                <div className="relative">
+                                    <label className="block text-sm font-medium text-gray-400 mb-1">Avatar</label>
+                                    <div className="flex items-center space-x-4">
+                                        <img
+                                            src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${avatarSeed}`}
+                                            alt="Avatar"
+                                            className="w-16 h-16 rounded-full"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={avatarSeed}
+                                            onChange={(e) => setAvatarSeed(e.target.value)}
+                                            placeholder="Enter text to generate avatar"
+                                            className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
+                                        />
+                                    </div>
                                 </div>
 
                                 {/* Save Button and Message */}

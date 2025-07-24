@@ -10,7 +10,7 @@ authRoutre.post('/register', register)
 authRoutre.post('/login', login);
 authRoutre.post('/logout', userMiddleware, logout);
 authRoutre.post('/admin/register', adminMiddleware, adminregister);
-authRoutre.get('/alluser', adminMiddleware, alluser)
+authRoutre.get('/alluser', userMiddleware, alluser)
 
 authRoutre.patch('/user/:userId/status', adminMiddleware, updateUserStatus);
 authRoutre.get('/stats', adminMiddleware, getUserStats);
@@ -111,7 +111,7 @@ authRoutre.patch('/admin/users/:userId/subscription', adminMiddleware, async (re
 authRoutre.patch('/profile', userMiddleware, async (req, res) => {
     // We only allow specific fields to be updated via this endpoint
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['name', 'country']; // Define what the user is allowed to change
+    const allowedUpdates = ['name', 'country', 'avatar']; // Define what the user is allowed to change
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
     if (!isValidOperation) {
@@ -119,23 +119,23 @@ authRoutre.patch('/profile', userMiddleware, async (req, res) => {
     }
 
     try {
-        // req.user should be populated by your authMiddleware
+
         const user = req.finduser;
 
         updates.forEach((update) => user[update] = req.body[update]);
         await user.save();
 
-        // Don't send the password back! Create a method to filter user data.
-        // For now, we manually build a response object.
+
         res.status(200).json({
             _id: user._id,
             name: user.name,
+            avatar: user.avatar,
             email: user.email,
             country: user.country,
         });
 
     } catch (error) {
-        res.status(400).send(error);
+        res.status(400).send("what", error);
     }
 });
 

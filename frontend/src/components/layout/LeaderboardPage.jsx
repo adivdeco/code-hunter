@@ -6,12 +6,14 @@ import { motion } from 'framer-motion';
 import { FaCrown, FaSpinner } from 'react-icons/fa';
 import ReactCountryFlag from "react-country-flag";
 import { AuroraText } from '../magicui/aurora-text';
-import axiosClient from '@/utils/axiosClint';
+// import axiosClient from '@/utils/axiosClint';
 import { useSelector } from 'react-redux';
 import { fetchLeaderboard } from '@/leaderboardSlice';
 import { useDispatch } from 'react-redux';
 
 // --- Sub-components (No changes needed here, but included for completeness) ---
+
+
 
 const PodiumCard = ({ user, rank }) => {
     const podiumStyles = {
@@ -20,6 +22,8 @@ const PodiumCard = ({ user, rank }) => {
         3: { border: 'border-amber-700/80', shadow: 'shadow-amber-700/20', crown: 'text-amber-600' },
     };
     const style = podiumStyles[rank];
+    console.log(user);
+
 
     return (
         <motion.div
@@ -29,7 +33,10 @@ const PodiumCard = ({ user, rank }) => {
             className={`flex flex-col items-center bg-gray-900/40 backdrop-blur-md p-6 rounded-2xl border ${style.border} shadow-lg ${style.shadow} ${rank === 1 ? 'md:scale-110' : ''}`}
         >
             <div className={`text-5xl ${rank === 1 ? 'mb-4' : 'mb-2'} ${style.crown}`}><FaCrown /></div>
-            <div className="text-6xl mb-2">{user.avatar || '🧑‍💻'}</div>
+            {/* <div className="text-6xl mb-2">{user?.avatard || '🧑‍💻'}</div> */}
+            <img src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${user.avatar}`} alt={`${user.name}'s avatar`}
+                className="w-20 h-20 rounded-full border-2 border-purple-500/50"
+            />
             <h3 className="text-xl font-bold text-white font-mono">{user.name}</h3>
             <p className="text-sm text-gray-400">Score: <span className="font-bold text-gray-200">{user.score}</span></p>
         </motion.div>
@@ -41,6 +48,8 @@ const LeaderboardRow = ({ user, isCurrentUser }) => {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0, transition: { type: "spring" } },
     };
+    console.log(user);
+
 
     return (
         <motion.div
@@ -52,7 +61,11 @@ const LeaderboardRow = ({ user, isCurrentUser }) => {
         >
             <div className="w-12 text-center text-xl font-bold text-gray-400">{user.rank}</div>
             <div className="flex-1 flex items-center ml-4">
-                <div className="text-3xl mr-4">{user.avatar || '🧑‍💻'}</div>
+                <img
+                    src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${user.avatar}`}
+                    alt={`${user.name}'s avatar`}
+                    className="w-14 h-14 mr-4 rounded-full border-2 border-purple-500/50"
+                />
                 <div>
                     <span className="font-bold text-lg text-white">{user.name}</span>
                     <div className="flex items-center text-sm text-gray-400">
@@ -67,6 +80,8 @@ const LeaderboardRow = ({ user, isCurrentUser }) => {
 };
 
 const MyRankBanner = ({ user }) => {
+    console.log(user);
+
     if (!user) return null;
     return (
         <motion.div
