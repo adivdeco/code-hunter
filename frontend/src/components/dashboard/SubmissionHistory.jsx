@@ -89,8 +89,9 @@ export default function SubmissionHistory() {
     return (
         <div className="bg-gradient-to-br from-purple-950 via-indigo-950 to-black rounded-2xl p-6 border border-gray-800">
             <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-medium text-white">Submission History</h3>
-                <div className="flex space-x-2">
+                <h3 className="font-chango text-lg text-white/80 ">Submission History</h3>
+
+                <div className="flex space-x-2 font-changa">
                     <button
                         onClick={() => setSelectedStatus('all')}
                         className={`px-3 py-1 rounded-full text-xs ${selectedStatus === 'all'
@@ -122,12 +123,12 @@ export default function SubmissionHistory() {
             </div>
 
             {submissions.length > 0 && (
-                <div className="text-sm text-gray-400 mb-4">
+                <div className="text-sm text-gray-400 mb-4 font-changa">
                     Average Runtime: {stats.avgRuntime}ms • Average Memory: {stats.avgMemory}MB
                 </div>
             )}
 
-            <div className="overflow-auto h-64 ">
+            <div className="overflow-auto h-72 ">
                 {filteredSubmissions.length > 0 ? (
                     <table className="w-full ">
                         <thead>

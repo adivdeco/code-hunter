@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
+import { toast, Toaster } from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaRegClock, FaUsers, FaTrophy, FaCodeBranch, FaCheckCircle, FaGift } from 'react-icons/fa';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/footer';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaRegClock, FaUsers, FaTrophy, FaCodeBranch, FaPlus } from 'react-icons/fa';
 import { useCountdown } from '@/hooks/useCountdown';
-import { FaGift } from 'react-icons/fa6';
+
 
 
 // --- MOCK DATA ---
-// In a real app, this would come from an API
 const contests = [
     { id: 1, title: 'Galactic Coding Showdown', status: 'Upcoming', startsIn: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), participants: 1250, prize: 'Galactic Trophy & $5000' },
     { id: 2, title: 'Starlight Algorithm Challenge', status: 'Upcoming', startsIn: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), participants: 880, prize: '$2000' },
@@ -19,8 +19,8 @@ const contests = [
     { id: 6, title: 'Cosmic Drift - Weekly 403', status: 'Ended', prize: ' Tajmahal', winner: 'JET🤦🏻‍♂️', participants: 3900 },
 ];
 
-// --- Sub-components for better structure ---
 
+// --- Countdown Timer Sub-component ---
 const CountdownTimer = ({ targetDate }) => {
     const { days, hours, minutes, seconds, isFinished } = useCountdown(targetDate);
     if (isFinished) {
@@ -36,7 +36,9 @@ const CountdownTimer = ({ targetDate }) => {
     );
 };
 
-const ContestCard = ({ contest }) => {
+
+// --- Contest Card Sub-component ---
+const ContestCard = ({ contest, isRegistered, onRegister }) => {
     const statusColor = {
         Upcoming: 'border-cyan-400/50',
         Live: 'border-green-400/50',
@@ -51,7 +53,7 @@ const ContestCard = ({ contest }) => {
 
     return (
         <motion.div
-            layout // This makes the re-ordering animated
+            layout
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -50, scale: 0.9 }}
@@ -70,7 +72,6 @@ const ContestCard = ({ contest }) => {
                         <div className="flex items-center text-sm mb-2"><FaRegClock className="mr-2 text-purple-400" /> Starts in:</div>
                         <CountdownTimer targetDate={contest.startsIn} />
                         <div className="flex items-center gap-2 mt-3 text-sm mb-2"><FaTrophy className=" text-yellow-400" /> {contest.prize}</div>
-
                     </div>
                 )}
                 {contest.status === 'Live' && (
@@ -87,43 +88,72 @@ const ContestCard = ({ contest }) => {
                     <div className="flex items-center text-sm">
                         <FaUsers className="mr-2" /> {contest.participants.toLocaleString()} Participants
                     </div>
-                    <button className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300
-                         ${contest.status === 'Upcoming' ? 'bg-purple-600 hover:bg-purple-500 text-white' : ''}
-                         ${contest.status === 'Live' ? 'bg-green-600 hover:bg-green-500 text-white' : ''}
-                         ${contest.status === 'Ended' ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : ''}`}
-                    >
-                        {contest.status === 'Upcoming' && 'Register'}
-                        {contest.status === 'Live' && 'Join Contest'}
-                        {contest.status === 'Ended' && 'View Standings'}
-                    </button>
+                    <div>
+                        {contest.status === 'Upcoming' && (
+                            <button
+                                onClick={() => onRegister(contest.id, contest.title)}
+                                disabled={isRegistered}
+                                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 w-28 ${isRegistered
+                                    ? 'bg-green-600 text-white/90 cursor-not-allowed'
+                                    : 'bg-purple-600 hover:bg-purple-500 text-white'
+                                    }`}
+                            >
+                                {isRegistered && <FaCheckCircle />}
+                                {isRegistered ? 'Registered' : 'Register'}
+                            </button>
+                        )}
+                        {contest.status === 'Live' && (
+                            <button className="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 bg-green-600 hover:bg-green-500 text-white">
+                                Join Contest
+                            </button>
+                        )}
+                        {contest.status === 'Ended' && (
+                            <button className="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 bg-gray-700 hover:bg-gray-600 text-gray-200">
+                                View Standings
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         </motion.div>
     );
 };
 
-// --- THE MAIN PAGE COMPONENT ---
-const ContestsPage = () => {
-    const [activeTab, setActiveTab] = useState('Upcoming');
 
-    // useMemo will re-calculate only when contests or activeTab changes
+// --- The Main Page Component ---
+export default function ContestsPage() {
+    const [activeTab, setActiveTab] = useState('Upcoming');
+    const [registeredContests, setRegisteredContests] = useState(new Set());
+    const tabs = ['Upcoming', 'Live', 'Ended'];
+
     const filteredContests = useMemo(
         () => contests.filter(c => c.status === activeTab),
         [activeTab]
     );
 
-    const tabs = ['Upcoming', 'Live', 'Ended'];
+    const handleRegister = (contestId, contestTitle) => {
+        if (registeredContests.has(contestId)) return;
+        setRegisteredContests(prevSet => new Set(prevSet).add(contestId));
+        toast.success(`Registered for ${contestTitle}!`, {
+            duration: 4000,
+            position: 'top-center',
+            icon: '🚀',
+            style: {
+                background: '#1a1a2e',
+                color: '#e0e0e0',
+                border: '1px solid #4a4a7f',
+            },
+        });
+    };
 
     return (
         <>
-            <nav className='text-white'>
-                <Navbar />
-            </nav>
-
-            <div className="min-h-screen bg-gradient-to-br from-black via-gray-950 to-purple-950 text-white overflow-x-hidden pt-24">
-                <main className="max-w-7xl mb-[40vh] mx-auto px-4 sm:px-6 lg:px-8">
-
-                    {/* --- Page Header Animation --- */}
+            <Toaster />
+            <div className="min-h-screen bg-gradient-to-br from-black via-gray-950 to-purple-950 text-white overflow-x-hidden">
+                <nav className='text-white fixed top-0 w-full z-50'>
+                    <Navbar />
+                </nav>
+                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24">
                     <motion.div
                         initial={{ opacity: 0, y: -40, x: 40 }}
                         animate={{ opacity: 1, y: 0, x: 0 }}
@@ -137,8 +167,6 @@ const ContestsPage = () => {
                             Test your skills, climb the ranks, and achieve greatness. The next challenge awaits.
                         </p>
                     </motion.div>
-
-                    {/* --- Filter Tabs --- */}
                     <div className="flex justify-center mb-10">
                         <div className="flex space-x-2 bg-black/20 p-2 rounded-xl border border-gray-800">
                             {tabs.map(tab => (
@@ -161,12 +189,9 @@ const ContestsPage = () => {
                             ))}
                         </div>
                     </div>
-
-                    {/* --- Contest Grid --- */}
-                    {/* AnimatePresence is key for exit animations when filtering */}
                     <AnimatePresence mode="wait">
                         <motion.div
-                            key={activeTab} // Change key to trigger re-animation on tab change
+                            key={activeTab}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -174,12 +199,15 @@ const ContestsPage = () => {
                             className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
                         >
                             {filteredContests.map(contest => (
-                                <ContestCard key={contest.id} contest={contest} />
+                                <ContestCard
+                                    key={contest.id}
+                                    contest={contest}
+                                    isRegistered={registeredContests.has(contest.id)}
+                                    onRegister={handleRegister}
+                                />
                             ))}
                         </motion.div>
                     </AnimatePresence>
-
-                    {/* --- "We're Working On It" Section --- */}
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -206,10 +234,10 @@ const ContestsPage = () => {
                         <p className="mt-6 text-sm text-gray-500 font-mono">Status: IN_PROGRESS // ETA: SOON™</p>
                     </motion.div>
                 </main>
-                <Footer />
+                <div className="mt-[40vh]">
+                    <Footer />
+                </div>
             </div>
         </>
     );
-};
-
-export default ContestsPage;
+}

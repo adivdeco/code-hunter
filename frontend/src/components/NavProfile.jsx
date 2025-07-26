@@ -18,7 +18,7 @@ const NavProfile = ({ user, mobile = false }) => {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
     const firstInitial = user?.name?.[0]?.toUpperCase() || "U";
-    // const avatarUrl = user?.avatar || '';
+    const avatarUrl = user?.avatar || '';
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -44,37 +44,37 @@ const NavProfile = ({ user, mobile = false }) => {
             label: "Admin Panel",
             icon: <Shield className="w-4 h-4 " />,
             path: "/admin",
-            color: "text-purple-600 hover:bg-purple-50"
+            color: "text-purple-600 hover:bg-purple-100"
         }] : []),
         {
             label: "Home",
             icon: <FaHome className=" language-icon w-5 h-5" />,
             path: "/",
-            color: "text-orange-500 hover:bg-orange-50 font-changa"
+            color: "text-orange-500 hover:bg-orange-100 font-changa"
         },
         {
             label: "Problems",
             icon: <FaHandsAslInterpreting className=" language-icon w-5 h-5" />,
             path: "/problems",
-            color: "text-pink-600 hover:bg-blue-50"
+            color: "text-pink-600 hover:bg-blue-100"
         },
         {
             label: "Dashboard",
             icon: <LayoutDashboard className="w-4 h-4" />,
             path: "/dashbord",
-            color: "text-blue-600 hover:bg-blue-50"
+            color: "text-blue-600 hover:bg-blue-100"
         },
         {
             label: "Profile Settings",
-            icon: <Settings className="w-4 h-4" />,
+            icon: <Settings className="w-5 h-5" />,
             path: "/setting",
-            color: "text-gray-600 hover:bg-gray-50"
+            color: "text-gray-600 hover:bg-gray-100"
         },
         {
             label: "Log Out",
-            icon: <LogOut className="w-4 h-4" />,
+            icon: <LogOut className="w-5 h-4" />,
             action: handleLogout,
-            color: "text-red-600 hover:bg-red-50"
+            color: "text-red-600 hover:bg-red-100"
         }
     ];
 
@@ -85,25 +85,25 @@ const NavProfile = ({ user, mobile = false }) => {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setOpen(!open)}
                 className={cn(
-                    "flex items-center gap-2 p-1 rounded-full transition-all",
+                    "flex items-center gap-2 p-1 rounded-full transition-all hover:bg-pink-800 dark:hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2",
                     mobile ? "text-white" : "hover:bg-gray-300 dark:hover:bg-gray-800",
-                    open && "bg-gray-300 dark:bg-gray-800"
+                    open && "bg-gradient-to-br from-purple-600 to-pink-500 dark:bg-gradient-to-br from-pink-700 to-cyan-500"
                 )}
                 aria-label="User menu"
                 aria-expanded={open}
             >
-                <div className="relative h-9 w-9">
-                    {/* {avatarUrl ? (
+                <div className="relative h-12 w-12">
+                    {avatarUrl ? (
                         <img
-                            src={avatarUrl}
-                            alt={user?.name}
-                            className="h-full w-full rounded-full object-cover border-2 border-white/70 shadow-md"
+                            src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${user.avatar}`}
+                            alt={`${user.name}'s avatar`}
+                            className="h-full w-full rounded-full object-cover border shadow-md"
                         />
-                    ) : ( */}
-                    <div className="h-full font-aladin w-full rounded-full flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium border-4 border-white/20 shadow-md">
-                        {firstInitial}
-                    </div>
-                    {/* )} */}
+                    ) : (
+                        <div className="h-full font-aladin w-full rounded-full flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium border-4 border-white/20 shadow-md">
+                            {firstInitial}
+                        </div>
+                    )}
                 </div>
                 {!mobile && (
                     <motion.div
@@ -125,16 +125,16 @@ const NavProfile = ({ user, mobile = false }) => {
                         exit={{ opacity: 0, y: -10, x: 30 }}
                         transition={{ duration: 0.5, ease: "easeOut" }}
                         className={cn(
-                            "absolute right-0 mt-2 w-64 origin-top-right rounded-xl bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black/5 dark:ring-white/10 focus:outline-none z-50",
+                            "absolute right-0 mt-2 w-64 origin-top-right rounded-xl bg-white dark:bg-gray-300 shadow-lg ring-1 ring-black/5 dark:ring-white/50 focus:outline-none z-50",
                             mobile ? "top-12" : "top-full"
                         )}
                     >
                         {/* User Info */}
-                        <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-                            <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                        <div className="px-4 py-3 border-b border-gray-500 dark:border-gray-700">
+                            <p className="text-sm font-semibold text-gray-900 dark:text-black truncate">
                                 {user?.name || "User"}
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                            <p className="text-xs text-gray-500 dark:text-black truncate">
                                 {user?.email}
                             </p>
                         </div>

@@ -67,7 +67,7 @@ function App() {
       // Start slide up animation after 4 seconds (reduced from 6 for better UX)
       const slideTimer = setTimeout(() => {
         setSlideUp(true);
-      }, 5000);
+      }, 8000);
 
       return () => clearTimeout(slideTimer);
     }

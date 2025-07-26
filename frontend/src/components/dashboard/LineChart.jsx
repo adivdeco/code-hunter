@@ -58,8 +58,8 @@ export default function SubmissionsChart() {
     return (
         <Card className="bg-gradient-to-br from-black via-gray-950 to-purple-950 rounded-2xl p-3 border border-gray-800">
             <CardHeader>
-                <CardTitle>Daily Submissions</CardTitle>
-                <CardDescription>Number of problems submitted per day</CardDescription>
+                <CardTitle className="font-chango text-lg text-white/70 ">Daily Submissions</CardTitle>
+                <CardDescription className="font-changa" >Number of problems submitted per day</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">

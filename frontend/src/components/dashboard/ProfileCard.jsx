@@ -14,6 +14,8 @@ import { GoGoal } from "react-icons/go";
 export default function ProfileCard({ user, rank }) {
     // --- STATE FOR ROBUST TWO-STAGE RENDERING ---
     const [isCardAnimationComplete, setCardAnimationComplete] = useState(false);
+    const avatarUrl = user?.avatar || '';
+
 
     // --- HOOKS, CALLED CORRECTLY AT THE TOP LEVEL OF THE COMPONENT ---
     const cardRef = useRef(null);
@@ -69,17 +71,28 @@ export default function ProfileCard({ user, rank }) {
                 className="bg-gradient-to-br from-indigo-900 via-purple-950 to-gray-900 rounded-2xl p-6 shadow-2xl"
             >
                 <div className="flex items-center  space-x-6">
-                    <div className="h-20 w-20 rounded-xl ">
-                        {/* add logo */}
+                    {/* logo */}
+
+                    <div className="h-20 w-20 rounded-xl  ">
+
 
                         <div className="h-full font-aladin w-full rounded-full flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium text-3xl border-4 border-white/20 shadow-md">
-                            {user?.name?.[0]?.toUpperCase() || "U"},
+
+                            {avatarUrl ? (
+                                <img
+                                    src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${user.avatar}`}
+                                    alt={`${user.name}'s avatar`}
+                                    className="h-full w-full  rounded-full object-cover border shadow-md"
+                                />
+                            ) : (
+                                <div className="h-full font-aladin w-full rounded-full flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium border-4 border-white/20 shadow-md">
+                                    {firstInitial}
+                                </div>
+                            )}
+
                         </div>
-
-
-
                     </div>
-
+                    {/*info */}
                     <div>
                         <h2 className="text-2xl  font-bold font-rocksalt text-white">{user?.name}</h2>
                         <h3 className="text-md text-white">{user?.email}</h3>
@@ -106,7 +119,13 @@ export default function ProfileCard({ user, rank }) {
                         </motion.div> */}
 
                     </div>
+
+
                 </div>
+
+
+
+                {/* </div> */}
 
                 <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {/* Member Since Box */}
@@ -161,7 +180,7 @@ export default function ProfileCard({ user, rank }) {
             </motion.div>
 
 
-        </motion.div>
+        </motion.div >
 
     );
 }

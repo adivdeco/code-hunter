@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/footer';
 import { useSelector } from 'react-redux';
 import axiosClient from '@/utils/axiosClint';
+import { Email, Password } from '@mui/icons-material';
 
 
 
@@ -19,6 +20,7 @@ const ProfileSettingsPage = () => {
     const [name, setName] = useState('');
     const [country, setCountry] = useState('');
     const [avatarSeed, setAvatarSeed] = useState('');
+    const [email, setEmail] = useState(user?.email || '');
     // const [originalCountry, setOriginalCountry] = useState(''); // To check if changed
 
     const [isLoading, setIsLoading] = useState(false);
@@ -50,9 +52,10 @@ const ProfileSettingsPage = () => {
             const response = await axiosClient.patch('/auth/profile', {
                 name,
                 country,
-                avatar: avatarSeed
+                avatar: avatarSeed,
+                email
             });
-            console.log('Updating profile with:', { name, country, avatar: avatarSeed });
+            // console.log('Updating profile with:', { name, country, avatar: avatarSeed });
 
             // Use response.data for axios
             setName(response.data.name);
@@ -105,6 +108,34 @@ const ProfileSettingsPage = () => {
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         className="w-full pl-10 pr-4 py-2 bg-gray-900/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
+                                    />
+                                </div>
+
+                                <div className="relative">
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none pt-7">
+                                        <Email className="text-gray-500 " />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        id="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        className="w-full pl-10 pr-4 py-2 bg-gray-900/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
+                                    />
+                                </div>
+
+                                <div className="relative">
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-1">Password</label>
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none pt-7">
+                                        <Password className="text-gray-500" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        id="password"
+                                        value="To change password, please contact support team"
+                                        // onChange={(e) => setEmail(e.target.value)}
+                                        className="w-full text-gray-500 cursor-not-allowed pl-10 pr-4 py-2 bg-gray-900/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
                                     />
                                 </div>
 

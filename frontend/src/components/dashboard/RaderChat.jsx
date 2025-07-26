@@ -75,8 +75,8 @@ export default function Component() {
 
         <Card className="bg-gradient-to-br from-black via-gray-950 to-purple-950 rounded-2xl  border border-gray-800">
             <CardHeader className="items-center pb-4">
-                <CardTitle>Language Proficiency</CardTitle>
-                <CardDescription className="text-center">
+                <CardTitle className="font-chango text-xl text-white/80 ">Language Proficiency</CardTitle>
+                <CardDescription className="text-center font-changa">
                     Visual representation of the number of questions attempted across different programming languages.
                 </CardDescription>
             </CardHeader>

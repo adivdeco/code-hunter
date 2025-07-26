@@ -88,7 +88,7 @@ export default function Navbar() {
                     <NavLink to={"/problems"}
                         className={({ isActive }) =>
                             `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
-                                ? "text-indigo-700 underline bg-indigo-100/20"
+                                ? "text-indigo-400 underline bg-indigo-100/20"
                                 : "hover:text-white hover:bg-indigo-200/30 hover:underline"
                             }`
                         }
@@ -111,7 +111,7 @@ export default function Navbar() {
 "
                         className={({ isActive }) =>
                             `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
-                                ? "text-white underline bg-green-100/20"
+                                ? "text-yellow-400 underline bg-yellow-100/20"
                                 : "hover:text-white hover:bg-green-200/30 hover:underline"
                             }`
                         }
@@ -123,7 +123,7 @@ export default function Navbar() {
                     <NavLink to="/dashbord"
                         className={({ isActive }) =>
                             `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
-                                ? "text-green-700 underline bg-green-100/20"
+                                ? "text-green-400 underline bg-green-100/20"
                                 : "hover:text-white hover:bg-green-200/30 hover:underline"
                             }`
                         }

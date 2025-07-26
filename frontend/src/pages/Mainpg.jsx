@@ -133,7 +133,7 @@ export default function Mainpg() {
           </NavLink>
         </div>
         <div className="absolute  top-0 flex size-full items-center justify-center overflow-hidden z-4 ">
-          {/* <IconCloud images={images} /> */}
+          <IconCloud images={images} />
         </div>
       </div>
 
