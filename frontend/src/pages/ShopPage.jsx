@@ -1,7 +1,7 @@
 // src/pages/ShopPage.jsx
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import Footer from '@/components/footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Zap, Shirt, Puzzle, Coffee } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
