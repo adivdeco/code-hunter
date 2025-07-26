@@ -16,7 +16,7 @@ const getCorsOptions = () => {
                 callback(new Error('Not allowed by CORS'));
             }
         },
-        credentials: true, // Allow cookies, authorization headers, etc.
+        credentials: true,
     };
 };
 

@@ -15,7 +15,7 @@ const userMiddleware = async (req, res, next) => {
         }
 
 
-        const payload = jwt.verify(token, "secreatkey")
+        const payload = jwt.verify(token, "secretkey")
 
 
         const { _id } = payload;
@@ -28,7 +28,8 @@ const userMiddleware = async (req, res, next) => {
             return res.status(404).send("User not found");
         }
 
-        const IsBlocked = await redisClient.exists(`blocked:${token}`); // Check if user is blocked in Redis
+        const IsBlocked = await redisClient.exists(`blocked:${token}`);
+
         if (IsBlocked) {
             return res.status(403).send("Forbidden: User is blocked");
         }

@@ -11,7 +11,7 @@ const adminMiddleware = async (req, res, next) => {
             return res.status(401).send("Token is not provided")
         }
 
-        const payload = jwt.verify(token, "secreatkey")
+        const payload = jwt.verify(token, "secretkey")
 
         const { _id, role } = payload;
         if (!_id || role !== 'admin') {
@@ -24,7 +24,8 @@ const adminMiddleware = async (req, res, next) => {
         }
         // Redis ke blockList mein persent toh nahi hai
 
-        const IsBlocked = await redisClient.exists(`token:${token}`);
+        const IsBlocked = await redisClient.exists(`blocked:${token}`);
+
 
         if (IsBlocked)
             throw new Error("Invalid Token");
@@ -34,7 +35,7 @@ const adminMiddleware = async (req, res, next) => {
 
     }
     catch (err) {
-        throw new Error("Error in adminMiddleware: " + err.message);
+        return res.status(500).send("Error in adminMiddleware: " + err.message);
     }
 }
 

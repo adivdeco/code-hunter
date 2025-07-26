@@ -19,7 +19,7 @@ const register = async (req, res) => {
         const user = await User.create(req.body);   // add data to database
 
 
-        const token = jwt.sign({ _id: user._id, email: email, role: 'user' }, "secreatkey", { expiresIn: 1200 * 1200 }); // 1 hour expiration
+        const token = jwt.sign({ _id: user._id, email: email, role: 'user' }, "secretkey", { expiresIn: 1200 * 1200 }); // 1 hour expiration
 
 
         const reply = {
@@ -90,7 +90,7 @@ const login = async (req, res) => {
 
         const token = jwt.sign(
             { email: email, _id: user._id, role: user.role },
-            "secreatkey",
+            "secretkey",
             { expiresIn: 1200 * 1200 }
         );
 
@@ -109,10 +109,9 @@ const login = async (req, res) => {
         res.cookie('token', token, {
             maxAge: 1200 * 1200 * 1000,
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            // sameSite: 'None'
-            sameSite: 'Lax',
-            // secure: false
+            // secure: process.env.NODE_ENV === 'production',
+            secure: true,            // REQUIRED for cross-origin in HTTPS
+            sameSite: 'None'
 
         });
 
@@ -162,7 +161,7 @@ const adminregister = async (req, res) => {
         req.body.password = await bcrypt.hash(password, 10);
 
         const user = await User.create(req.body);
-        const token = jwt.sign({ email: email, _id: user._id, role: user.role }, "secreatkey", { expiresIn: 120 * 120 }); // 1 hour expiration
+        const token = jwt.sign({ email: email, _id: user._id, role: user.role }, "secretkey", { expiresIn: 120 * 120 }); // 1 hour expiration
         res.cookie('token', token, { maxAge: 120 * 120 * 1000, httpOnly: true }); // Set cookie with token
         res.send("Admin User Created Successfully");
     }
