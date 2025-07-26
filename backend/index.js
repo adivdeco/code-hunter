@@ -1,140 +1,84 @@
+// --- Core Node.js Modules ---
+const http = require('http');
+
+// --- Third-Party Modules ---
+require("dotenv").config(); // Load environment variables first
 const express = require("express");
-const app = express();
-const main = require("./config/database");
-require("dotenv").config();
-const authRoutre = require("./routes/userAuth");
 const cookieParser = require("cookie-parser");
-const redisClint = require("./config/redis");
+const cors = require("cors");
+
+// --- Local Modules ---
+const dbConnection = require("./config/database");
+const redisClient = require("./config/redis");
+const { getCorsOptions } = require("./config/corsOptions");
+const { initializeSocket } = require('./socket/socketHandler');
+
+// Routes
+const authRouter = require("./routes/userAuth");
 const problemRouter = require("./routes/problemCreator");
 const submitRouter = require("./routes/submit");
 const aiRouter = require("./routes/aiChatting");
 const noteRouter = require("./routes/noteSection");
-const bookmarkRouter = require('./routes/bookmark')
+const bookmarkRouter = require('./routes/bookmark');
+
+// Middleware
 const errorHandler = require('./middleware/errorHandler');
-// const discussRouter = require('./routes/discussSection');
 
-// Only allow your deployed frontend for CORS with credentials
-const cors = require("cors");
-const http = require('http');
-const { Server } = require("socket.io");
-const Chat = require('./models/chatSchema');
-// const FRONTEND_URL = "https://code-hunter-sable.vercel.app";
+// --- Application Constants ---
+const PORT = process.env.PORT || 5500;
+const app = express();
+const httpServer = http.createServer(app);
 
-// app.use(
-//   cors({
-//     origin: FRONTEND_URL,
-//     credentials: true,
-//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
-//     exposedHeaders: ["Set-Cookie"],
-//   })
-// );
+// --- Middleware Setup ---
+app.use(cors(getCorsOptions())); // Use centralized CORS configuration
+app.use(express.json()); // To parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // To parse URL-encoded bodies
+app.use(cookieParser()); // To parse cookies
 
-app.use(
-  cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
-    credentials: true,
-  })
-)
+// --- API Routes ---
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "UP", message: "Server is healthy" });
+});
 
-app.get("/", (req, res) => {
-  res.status(200).json({ success: true, message: "All is well" })
-})
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-// app.use(express.static("public"));
-app.use(cookieParser()); // Middleware to parse cookies
-
-app.use("/auth", authRoutre); // user  login,registration,logout and progile view code
+app.use("/auth", authRouter);
 app.use("/problem", problemRouter);
 app.use("/submit", submitRouter);
 app.use("/ai", aiRouter);
 app.use("/note", noteRouter);
-app.use("/book", bookmarkRouter)
-// app.use("/discuss", discussRouter);
-// app.use(errorHandler);
+app.use("/book", bookmarkRouter);
+
+// --- Error Handling Middleware (must be last) ---
+// 1. Handle 404 Not Found for any unhandled routes
+app.use((req, res, next) => {
+  const error = new Error(`Not Found - ${req.originalUrl}`);
+  res.status(404);
+  next(error);
+});
+
+// 2. Global error handler to catch all other errors
+app.use(errorHandler);
 
 
-
-const server = async () => {
+// --- Server Startup ---
+const startServer = async () => {
   try {
-    await Promise.all([main(), redisClint.connect()]);
+    // 1. Connect to essential services (Database, Redis) in parallel
+    await Promise.all([dbConnection(), redisClient.connect()]);
+    console.log("✅ Connected to MongoDB and Redis");
 
-    console.log("Connected to MongoDB and Redis");
+    // 2. Initialize Socket.io after successful connections
+    initializeSocket(httpServer);
 
-    const server = http.createServer(app);
-
-    // 3.
-    const io = new Server(server, {
-      cors: {
-        // Re-define origins for socket.io
-        origin: ['http://localhost:5173', 'http://localhost:5174', "https://code-hunter-sable.vercel.app"],
-        methods: ["GET", "POST"]
-      }
-    });
-
-    // 4. Define all Socket.io connection logic here
-    io.on('connection', async (socket) => {
-      console.log('A user connected via WebSocket:', socket.id);
-
-      // Send chat history to the newly connected user
-      try {
-        const last50Messages = await Chat.find()
-          .sort({ createdAt: -1 }) // Get newest first to limit, then reverse on client if needed
-          .limit(50)
-          .populate('userId', 'name avatarSeed') // Populate with essential user details
-          .lean(); // Use .lean() for faster read-only operations
-
-        // Reverse to show oldest first in the chat window
-        socket.emit('initialMessages', last50Messages.reverse());
-
-      } catch (error) {
-        console.error("Error fetching initial messages:", error);
-      }
-
-      // Listen for a new message from a client
-      socket.on('sendMessage', async (data) => {
-        const { userId, message } = data;
-
-        if (!userId || !message || message.trim() === "") {
-          // You can optionally emit an error back to the user
-          // socket.emit('chatError', { message: 'Invalid message or user.' });
-          return;
-        }
-
-        try {
-          // Save the new message to the database
-          const newMessage = new Chat({ userId, message: message.trim() });
-          let savedMessage = await newMessage.save();
-
-          // Populate the user info before broadcasting
-          savedMessage = await savedMessage.populate('userId', 'name avatarSeed');
-
-          // Broadcast the new message to ALL connected clients, including the sender
-          io.emit('newMessage', savedMessage);
-        } catch (error) {
-          console.error('Error saving or broadcasting message:', error);
-          // socket.emit('chatError', { message: 'Could not send message.' });
-        }
-      });
-
-      socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
-      });
-    });
-
-
-    server.listen(5500, () => {
-      console.log("🚀 Server is running on port 5500");
+    // 3. Start listening for HTTP requests
+    httpServer.listen(PORT, () => {
+      console.log(`🚀 Server is running on port ${PORT}`);
     });
   } catch (err) {
-    console.error("Error connecting to MongoDB:", err);
-    process.exit(1); // Exit if critical connections fail
-
+    console.error("❌ Failed to start the server:", err);
+    process.exit(1); // Exit process with failure code if critical services fail
   }
 };
-server();
+
+startServer();
+
 module.exports = app;
-
-

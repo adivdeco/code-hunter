@@ -28,6 +28,7 @@ import LeaderboardPage from "@/components/layout/LeaderboardPage";
 import ProfileSettingsPage from "@/components/layout/ProfileSettingsPage";
 import ContributionPage from "@/pages/ContributionPage";
 import GlobalChatPage from "@/pages/GlobalChatPage";
+import ShopPage from '@/pages/ShopPage';
 
 function App() {
 
@@ -125,7 +126,7 @@ function App() {
         <Route path="/setting" element={isAuthenticated ? <ProfileSettingsPage /> : <Mainpg />} />
         <Route path="/contribution" element={isAuthenticated ? <ContributionPage /> : <Navigate to="/" />} />
         <Route path="/duscission" element={<GlobalChatPage />} />
-
+        <Route path="/shop" element={<ShopPage />} />
       </Routes>
     </>
   )

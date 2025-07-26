@@ -107,6 +107,17 @@ export default function Navbar() {
                         Pricing
                     </NavLink>
 
+                    <NavLink to="/shop"
+                        className={({ isActive }) =>
+                            `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
+                                ? "text-teal-400 underline bg-teal-100/20"
+                                : "hover:text-white hover:bg-teal-200/30 hover:underline"
+                            }`
+                        }
+                    >
+                        Shop
+                    </NavLink>
+
                     <NavLink to="/contribution
 "
                         className={({ isActive }) =>
