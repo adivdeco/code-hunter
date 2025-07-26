@@ -1,8 +1,7 @@
 
 import React from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-// import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import docco from 'react-syntax-highlighter/dist/styles/hybrid';
 
 
 
@@ -46,7 +45,7 @@ const ChatMessage = ({ content }) => {
 
 
     return (
-        <div className="space-y-2 text-white font-changa">
+        <div className="space-y-2 text-white/70 font-changa">
             {blocks
                 .filter((b) => b.type === "code" || b.content) // remove empty paragraphs
                 .map((block, i) =>
@@ -61,7 +60,7 @@ const ChatMessage = ({ content }) => {
 
                             <SyntaxHighlighter
                                 language={block.language}
-                                style={vscDarkPlus}
+                                style={docco}
                                 customStyle={{ borderRadius: "10px", padding: "1rem" }}
                             >
                                 {block.content}

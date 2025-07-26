@@ -38,7 +38,7 @@ const solveDoubt = async (req, res) => {
   try {
     const { messages, title, description, testCases, startCode } = req.body;
 
-    const ai = new GoogleGenAI({ apiKey: 'AIzaSyCXSG2r7ioQNe2QAagiDaLzqo-fzNOOSI8' });
+    const ai = new GoogleGenAI({ apiKey: process.env.GoogleGenAI });
 
     const result = await ai.models.generateContentStream({
       model: "gemini-1.5-flash",

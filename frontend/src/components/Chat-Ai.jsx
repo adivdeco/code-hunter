@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Send } from "lucide-react";
 import { useSelector } from 'react-redux';
 import ChatMessage from "@/components/AiCodeWriter"; // adjust path if needed
-import axiosClient from "@/utils/axiosClint";
+
 
 
 
@@ -66,27 +66,6 @@ function ChatAi({ problem }) {
 
       if (!response.body) throw new Error("No response stream");
 
-      // const reader = response.body.getReader();
-      // const decoder = new TextDecoder("utf-8");
-
-      // let streamedText = "";
-
-      // while (true) {
-      //   const { value, done } = await reader.read();
-      //   if (done) break;
-
-      //   streamedText += decoder.decode(value, { stream: true });
-
-      //   // Update the last message (model's response)
-      //   setMessages((prev) => {
-      //     const updated = [...prev];
-      //     updated[updated.length - 1] = {
-      //       ...updated[updated.length - 1],
-      //       text: streamedText,
-      //     };
-      //     return updated;
-      //   });
-      // }
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
 
