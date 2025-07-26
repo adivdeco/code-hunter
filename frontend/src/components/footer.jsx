@@ -42,6 +42,15 @@ export default function Footer() {
         { icon: IoLocation, color: "yellow-500", text: "Pochanky Squard-House" }
     ];
 
+    const quickAction = [
+        { name: 'Privacy', links: "/privacy" },
+        { name: 'Shipping', links: "/shipping" },
+        { name: 'Terms&Condition', links: "/terms-and-conditions" },
+        { name: 'Cancellation&Refund', links: "/cancellation-and-refunds" },
+        { name: 'Pricing', links: "/pricing" },
+        { name: 'Contact', links: "#" },
+    ]
+
     return (
         <footer className="relative bg-black text-white">
             {/* Parallax Animation Curtain */}
@@ -147,14 +156,14 @@ export default function Footer() {
                         <div className="mt-6">
                             <h4 className="text-sm uppercase tracking-wider mb-3 text-gray-400">Quick Links</h4>
                             <div className="grid grid-cols-2 gap-2">
-                                {['About', 'Problems', 'Leaderboard', 'Blog', 'Pricing', 'Contact'].map((item, index) => (
+                                {quickAction.map((item, index) => (
                                     <motion.a
                                         key={index}
-                                        href="#"
+                                        href={item.links}
                                         whileHover={{ scale: 1.05 }}
                                         className="text-gray-400 hover:text-white text-sm transition-colors"
                                     >
-                                        {item}
+                                        {item.name}
                                     </motion.a>
                                 ))}
                             </div>

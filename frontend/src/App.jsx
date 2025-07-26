@@ -29,6 +29,12 @@ import ProfileSettingsPage from "@/components/layout/ProfileSettingsPage";
 import ContributionPage from "@/pages/ContributionPage";
 import GlobalChatPage from "@/pages/GlobalChatPage";
 import ShopPage from '@/pages/ShopPage';
+import CancellationPage from '@/pages/CancellationPage'
+import TermsPage from '@/pages/TermsPage'
+import ShippingPage from "@/pages/ShippingPage"
+import PrivacyPage from "@/pages/PrivacyPage"
+
+
 
 function App() {
 
@@ -127,6 +133,10 @@ function App() {
         <Route path="/contribution" element={isAuthenticated ? <ContributionPage /> : <Navigate to="/" />} />
         <Route path="/duscission" element={<GlobalChatPage />} />
         <Route path="/shop" element={<ShopPage />} />
+        <Route path="/cancellation-and-refunds" element={<CancellationPage />} />
+        <Route path="/terms-and-conditions" element={<TermsPage />} />
+        <Route path="/shipping" element={<ShippingPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
       </Routes>
     </>
   )
