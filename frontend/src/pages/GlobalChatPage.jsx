@@ -8,7 +8,7 @@ import { formatDistanceToNow } from 'date-fns';
 import Navbar from '@/components/Navbar';
 import ThreeRingLoader from '@/components/ThreeRingLoader';
 
-const socket = io("http://localhost:5500", { autoConnect: false }); // move outside component
+const socket = io("https://code-hunter-backend.onrender.com", { autoConnect: false }); // move outside component
 
 const GlobalChatPage = () => {
     const { user, isAuthenticated } = useSelector((state) => state.auth);

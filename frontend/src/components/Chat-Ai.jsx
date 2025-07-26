@@ -49,7 +49,7 @@ function ChatAi({ problem }) {
     setMessages((prev) => [...prev, modelMessage]);
 
     try {
-      const response = await fetch("http://localhost:5500/ai/chat", {
+      const response = await fetch("https://code-hunter-backend.onrender.com/ai/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
