@@ -9,7 +9,7 @@ const cors = require("cors");
 
 // --- Local Modules ---
 const dbConnection = require("./config/database");
-const redisClint = require("./config/redis");
+const redisClient = require("./config/redis");
 const { getCorsOptions } = require("./config/corsOptions");
 const { initializeSocket } = require('./socket/socketHandler');
 
@@ -39,6 +39,20 @@ app.use(cookieParser()); // To parse cookies
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "UP", message: "Server is healthy" });
 });
+app.get('/', (req, res) => {
+  res.send('Code Hunter Backend API is running 🚀');
+});
+process.on('SIGINT', async () => {
+  console.log('🔌 Shutting down server...');
+  await redisClient.quit();
+  // Optionally close DB connection if needed
+  httpServer.close(() => {
+    console.log('🛑 Server stopped.');
+    process.exit(0);
+  });
+});
+
+
 
 app.use("/auth", authRouter);
 app.use("/problem", problemRouter);
@@ -63,7 +77,7 @@ app.use(errorHandler);
 const startServer = async () => {
   try {
     // 1. Connect to essential services (Database, Redis) in parallel
-    await Promise.all([dbConnection(), redisClint.connect()]);
+    await Promise.all([dbConnection(), redisClient.connect()]);
     console.log("✅ Connected to MongoDB and Redis");
 
     // 2. Initialize Socket.io after successful connections

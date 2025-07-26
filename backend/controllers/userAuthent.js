@@ -2,7 +2,7 @@ const User = require('../models/userSchema')
 const bcrypt = require('bcrypt');
 const validateuser = require('../utils/validators');
 const jwt = require('jsonwebtoken');
-const redisClint = require('../config/redis');
+const redisClient = require('../config/redis');
 
 
 
@@ -140,8 +140,8 @@ const logout = async (req, res) => {
         const payload = jwt.decode(token);
         // console.log("Payload:", payload);
 
-        await redisClint.set(`blocked:${token}`, 'blocked');
-        await redisClint.expireAt(`blocked:${token}`, payload.exp); // Set expiration same as token expiration
+        await redisClient.set(`blocked:${token}`, 'blocked');
+        await redisClient.expireAt(`blocked:${token}`, payload.exp); // Set expiration same as token expiration
         // res.clearCookie('token'); // Clear the cookie
 
         res.cookie('token', null, { expires: new Date(Date.now()) }); // Clear the cookie {maxAge:0, httpOnly:true}   
@@ -162,7 +162,7 @@ const adminregister = async (req, res) => {
         req.body.password = await bcrypt.hash(password, 10);
 
         const user = await User.create(req.body);
-        const token = jwt.sign({ email: email, _id: user._id, role: user.role }, "secretkey", { expiresIn: 120 * 120 }); // 1 hour expiration
+        const token = jwt.sign({ email: email, _id: user._id, role: user.role }, "secreatkey", { expiresIn: 120 * 120 }); // 1 hour expiration
         res.cookie('token', token, { maxAge: 120 * 120 * 1000, httpOnly: true }); // Set cookie with token
         res.send("Admin User Created Successfully");
     }

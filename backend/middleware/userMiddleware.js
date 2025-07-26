@@ -1,7 +1,7 @@
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/userSchema');
-const redisClint = require('../config/redis');
+const redisClient = require('../config/redis');
 
 
 const userMiddleware = async (req, res, next) => {
@@ -28,7 +28,7 @@ const userMiddleware = async (req, res, next) => {
             return res.status(404).send("User not found");
         }
 
-        const IsBlocked = await redisClint.exists(`blocked:${token}`); // Check if user is blocked in Redis
+        const IsBlocked = await redisClient.exists(`blocked:${token}`); // Check if user is blocked in Redis
         if (IsBlocked) {
             return res.status(403).send("Forbidden: User is blocked");
         }

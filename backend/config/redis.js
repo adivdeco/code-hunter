@@ -1,7 +1,7 @@
 
-const  { createClient } = require('redis');
+const { createClient } = require('redis');
 
-const redisClint = createClient({
+const redisClient = createClient({
     username: 'default',
     password: 'uCdfsRVkf8g8htrOGtIiHOCiGUSmkyZK',
     socket: {
@@ -9,6 +9,9 @@ const redisClint = createClient({
         port: 16054
     }
 });
+redisClient.on('error', (err) => {
+    console.error("❌ Redis connection error:", err);
+});
 
-module.exports = redisClint
+module.exports = redisClient
 
