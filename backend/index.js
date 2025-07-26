@@ -9,7 +9,7 @@ const cors = require("cors");
 
 // --- Local Modules ---
 const dbConnection = require("./config/database");
-const redisClient = require("./config/redis");
+const redisClint = require("./config/redis");
 const { getCorsOptions } = require("./config/corsOptions");
 const { initializeSocket } = require('./socket/socketHandler');
 
@@ -63,7 +63,7 @@ app.use(errorHandler);
 const startServer = async () => {
   try {
     // 1. Connect to essential services (Database, Redis) in parallel
-    await Promise.all([dbConnection(), redisClient.connect()]);
+    await Promise.all([dbConnection(), redisClint.connect()]);
     console.log("✅ Connected to MongoDB and Redis");
 
     // 2. Initialize Socket.io after successful connections
