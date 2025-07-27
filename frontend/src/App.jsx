@@ -28,12 +28,13 @@ import LeaderboardPage from "@/components/layout/LeaderboardPage";
 import ProfileSettingsPage from "@/components/layout/ProfileSettingsPage";
 import ContributionPage from "@/pages/ContributionPage";
 import GlobalChatPage from "@/pages/GlobalChatPage";
-import ShopPage from '@/pages/ShopPage';
 import CancellationPage from '@/pages/CancellationPage'
 import TermsPage from '@/pages/TermsPage'
 import ShippingPage from "@/pages/ShippingPage"
 import PrivacyPage from "@/pages/PrivacyPage"
-
+import UPIFormSection from "@/components/UPIFormSection"
+import ShopPage from './pages/ShopPage';
+import ManualPaymentPage from '@/pages/ManualPaymentPage';
 
 
 function App() {
@@ -132,11 +133,13 @@ function App() {
         <Route path="/setting" element={isAuthenticated ? <ProfileSettingsPage /> : <Mainpg />} />
         <Route path="/contribution" element={isAuthenticated ? <ContributionPage /> : <Navigate to="/" />} />
         <Route path="/duscission" element={<GlobalChatPage />} />
-        <Route path="/shop" element={<ShopPage />} />
         <Route path="/cancellation-and-refunds" element={<CancellationPage />} />
         <Route path="/terms-and-conditions" element={<TermsPage />} />
         <Route path="/shipping" element={<ShippingPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/upiform" element={<UPIFormSection />} />
+        <Route path="/shop" element={<ShopPage />} />
+        <Route path="/pay" element={<ManualPaymentPage />} />
       </Routes>
     </>
   )

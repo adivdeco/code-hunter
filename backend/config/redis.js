@@ -15,3 +15,5 @@ redisClient.on('error', (err) => {
 
 module.exports = redisClient
 
+//  redis-cli -u redis://default:uCdfsRVkf8g8htrOGtIiHOCiGUSmkyZK
+//  @redis-16054.crce179.ap-south-1-1.ec2.redns.redis-cloud.com:16054
