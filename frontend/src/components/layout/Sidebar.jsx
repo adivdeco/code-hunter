@@ -180,7 +180,7 @@ export default function Sidebar({ darkMode, setDarkMode, user }) {
                         </NavLink>
 
                         {/* Discuss Link (typo corrected) */}
-                        <NavLink to="/discussion" className={getLinkClassName}>
+                        <NavLink to="/duscission" className={getLinkClassName}>
                             <span className="flex-shrink-0"><UsersIcon className="h-5 w-5" /></span>
                             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                                 Discuss
@@ -188,7 +188,7 @@ export default function Sidebar({ darkMode, setDarkMode, user }) {
                         </NavLink>
 
                         {/* Leaderboard Link (typo corrected) */}
-                        <NavLink to="/leaderboard" className={getLinkClassName}>
+                        <NavLink to="/leaderbord" className={getLinkClassName}>
                             <span className="flex-shrink-0"><MdLeaderboard className="h-5 w-5" /></span>
                             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                                 Leaderboard
