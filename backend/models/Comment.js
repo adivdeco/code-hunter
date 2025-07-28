@@ -12,12 +12,12 @@ const commentSchema = new Schema({
     },
     user: {
         type: mongoose.Schema.ObjectId,
-        ref: 'User', // Make sure you have a 'User' model
+        ref: 'userdata', // Make sure you have a 'User' model
         required: true
     },
     problem: {
         type: mongoose.Schema.ObjectId,
-        ref: 'Problem', // Make sure you have a 'Problem' model
+        ref: 'problemdata', // Make sure you have a 'Problem' model
         required: true
     },
     // For future "reply-to" functionality
@@ -32,7 +32,7 @@ const commentSchema = new Schema({
 commentSchema.pre(/^find/, function (next) {
     this.populate({
         path: 'user',
-        select: 'name profilePicture' // Fetch only name and profile picture from the User model
+        select: 'name avatar'
     });
     next();
 });

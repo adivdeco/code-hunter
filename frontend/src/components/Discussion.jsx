@@ -39,7 +39,7 @@ const Discussion = ({ problemId }) => {
         const fetchComments = async () => {
             try {
                 setLoading(true);
-                const response = await axiosClient.get(`/discussion/${problemId}`);
+                const response = await axiosClient.get(`/api/discussion/getcom/${problemId}`);
                 setComments(response.data.data);
                 setError(null);
             } catch (err) {
@@ -60,7 +60,7 @@ const Discussion = ({ problemId }) => {
 
         setIsSubmitting(true);
         try {
-            const response = await axiosClient.post(`/discussion/${problemId}`, {
+            const response = await axiosClient.post(`/api/discussion/postcom/${problemId}`, {
                 content: data.content
             });
             // Add the new comment to the top of the list for an instant update
@@ -154,3 +154,5 @@ const Discussion = ({ problemId }) => {
 };
 
 export default Discussion;
+
+

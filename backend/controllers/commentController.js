@@ -1,14 +1,12 @@
-// controllers/commentController.js
+
 const Comment = require('../models/Comment.js');
 const Problem = require('../models/problemSchema.js')
-// @desc    Get all comments for a problem
-// @route   GET /api/discussion/:problemId
-// @access  Public
+
 const getCommentsForProblem = async (req, res) => {
     try {
         const { problemId } = req.params;
         const comments = await Comment.find({ problem: problemId, parentComment: null })
-            .sort({ createdAt: -1 }); // Newest first
+            .sort({ createdAt: -1 });
 
         res.status(200).json({
             success: true,
@@ -20,14 +18,16 @@ const getCommentsForProblem = async (req, res) => {
     }
 };
 
-// @desc    Create a new comment
-// @route   POST /api/discussion/:problemId
-// @access  Private (requires authentication)
+
 const createComment = async (req, res) => {
     try {
+        console.log("🧪 req.finduser:", req.finduser);
+
         const { problemId } = req.params;
         const { content } = req.body;
-        const userId = req.user.id; // Assumes your auth middleware adds `req.user`
+        const userId = req.finduser._id;
+        console.log(userId, content);
+
 
         if (!content || content.trim() === '') {
             return res.status(400).json({ success: false, error: 'Comment content is required.' });
@@ -47,7 +47,8 @@ const createComment = async (req, res) => {
             data: populatedComment
         });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'Server Error' });
+        console.error("❌ Error creating comment:", error); // 🪵 Add this
+        res.status(500).json({ message: "Error creating comment", error: error.message });
     }
 };
 

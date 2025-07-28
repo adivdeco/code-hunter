@@ -5,8 +5,8 @@ const userMiddleware = require('../middleware/userMiddleware.js'); // You need a
 
 const discussionRoutes = express.Router();
 
-discussionRoutes.get('/:problemId', getCommentsForProblem)
+discussionRoutes.get('/getcom/:problemId', getCommentsForProblem)
 
-discussionRoutes.post('/:problemId', userMiddleware, createComment); // Use your auth middleware here
+discussionRoutes.post('/postcom/:problemId', userMiddleware, createComment); // Use your auth middleware here
 
-module.exports = discussionRoutes
+module.exports = discussionRoutes 
