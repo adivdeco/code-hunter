@@ -33,17 +33,18 @@ const SubmissionHistory = ({ problemId }) => {
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
       case 'accepted':
-        return 'badge-success';
-      case 'wrong':
-        return 'badge-error';
+        return ' bg-green-500/20 text-green-300 border border-green-500';
       case 'error':
-        return 'badge-warning';
+        return 'bg-red-500/20 text-red-300 border border-red-500';
+      case 'wrong':
+        return 'bg-amber-500/20 text-amber-300 border border-amber-500';
       case 'pending':
-        return 'badge-info';
+        return 'bg-blue-500/20 text-blue-300 border border-blue-500';
       default:
         return 'badge-neutral';
     }
   };
+
 
   const formatMemory = (memory) => {
     if (memory < 1024) return `${memory} kB`;
@@ -95,7 +96,7 @@ const SubmissionHistory = ({ problemId }) => {
                   <th>Status</th>
                   <th>Runtime</th>
                   <th>Memory</th>
-                  <th>Test Cases</th>
+                  <th className='items-center'>Test<br /> Cases</th>
                   <th>Submitted</th>
                   <th>Code</th>
                 </tr>
@@ -107,7 +108,7 @@ const SubmissionHistory = ({ problemId }) => {
                     <td className="font-mono">{sub.language}</td>
                     <td>
                       <span className={`badge ${getStatusColor(sub.status)} capitalize`}>
-                        jn{sub.status}
+                        {sub.status}
                       </span>
                     </td>
                     <td>{sub.runtime}s</td>
@@ -145,7 +146,7 @@ const SubmissionHistory = ({ problemId }) => {
             <div className="mb-4 space-y-2">
               <div className="flex flex-wrap gap-2 text-sm">
                 <span className={`badge ${getStatusColor(selectedSubmission.status)} capitalize`}>
-                  bjk{selectedSubmission.status}
+                  {selectedSubmission.status}
                 </span>
                 <span className="badge badge-outline">
                   Runtime: {selectedSubmission.runtime}s

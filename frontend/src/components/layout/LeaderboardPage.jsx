@@ -48,7 +48,7 @@ const LeaderboardRow = ({ user, isCurrentUser }) => {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0, transition: { type: "spring" } },
     };
-    console.log(user);
+    // console.log(user);
 
 
     return (

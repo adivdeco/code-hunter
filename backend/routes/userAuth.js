@@ -111,7 +111,7 @@ authRoutre.patch('/admin/users/:userId/subscription', adminMiddleware, async (re
 authRoutre.patch('/profile', userMiddleware, async (req, res) => {
     // We only allow specific fields to be updated via this endpoint
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['name', 'country', 'avatar']; // Define what the user is allowed to change
+    const allowedUpdates = ['name', 'country', 'avatar', 'email']; // Define what the user is allowed to change
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
     if (!isValidOperation) {
@@ -135,7 +135,9 @@ authRoutre.patch('/profile', userMiddleware, async (req, res) => {
         });
 
     } catch (error) {
-        res.status(400).send("what", error);
+        console.error(error);
+
+        res.status(400).send({ error: error.message });
     }
 });
 

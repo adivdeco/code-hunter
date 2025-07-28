@@ -8,7 +8,7 @@ import SubmissionHistory from "../components/SubmissionHistory"
 import ChatAi from '../components/Chat-Ai';
 import ThreeRingLoader from "@/components/ThreeRingLoader";
 import Split from 'react-split';
-import { Bookmark, RotateCcw, ChevronUp, ChevronDown, Maximize2, Minimize2, Minimize, CheckSquare, Volleyball, CloudUpload, Trash2, SettingsIcon, Timer } from 'lucide-react';
+import { Bookmark, RotateCcw, ChevronUp, ChevronDown, Maximize2, Minimize2, Minimize, CheckSquare, Volleyball, CloudUpload, BrainCircuit, Trash2, SettingsIcon, Timer, Layers } from 'lucide-react';
 import { Code, Bot, StickyNote, FileText, Edit3, CheckCircle, Palette, Pause, Play, ChevronLeft, MessageSquareText } from "lucide-react";
 import { Maximize } from 'lucide-react';
 import { triggerSideCannonsConfetti } from "@/lib/confettiTrigger";
@@ -16,6 +16,7 @@ import NavProfile from "@/components/NavProfile"
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router';
 import TimerBar from '@/components/TimeBar';
+import Discussion from '@/components/Discussion'
 
 const langMap = {
   javascript: 'javascript',
@@ -323,6 +324,7 @@ const ProblemPage = () => {
                 { key: 'description', label: 'Description', icon: <FileText size={16} /> },
                 { key: 'editorial', label: 'Editorial', icon: <Edit3 size={16} /> },
                 user?.role === 'admin' ? { key: 'solutions', label: 'Solutions', icon: <CheckCircle size={16} /> } : null,
+                { key: 'submissions', label: 'Submissions', icon: <Layers size={16} /> },
                 { key: 'discussion', label: 'Discussion', icon: <MessageSquareText size={18} /> },
                 { key: 'note', label: 'Note', icon: <StickyNote size={16} /> },
                 { key: 'chatAi', label: 'ChatAI', icon: <Bot size={22} /> },
@@ -343,7 +345,7 @@ const ProblemPage = () => {
 
             </div>
 
-            <div className="flex-1 overflow-y-auto px-4 py-3 bg-[rgb(38,38,38)] w-full h-full">
+            <div className="flex-1 overflow-y-auto px-4 py-1 bg-[rgb(38,38,38)] w-full h-full">
               {problem && (
                 <>
                   {activeLeftTab === 'description' && (
@@ -417,7 +419,7 @@ const ProblemPage = () => {
 
                   {activeLeftTab === 'discussion' && (
                     <div>
-                      <h2 className="text-xl font-bold mb-4">Question Based Discussion.</h2>
+                      {/* <h2 className="text-xl font-bold mb-4">Question Based Discussion.</h2> */}
                       <div className="text-gray-500">
                         <Discussion problemId={problemId} />
                       </div>
@@ -467,10 +469,13 @@ const ProblemPage = () => {
 
 
                   {activeLeftTab === 'chatAi' && (
-                    <div className="prose max-w-none">
-                      {/* 🔥 Header Row with Title + Clear Button */}
-                      <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-2xl font-changa">CHAT-AI</h2>
+                    <div>
+                      <div className="flex justify-between items-center px-3 py-2 bg-black rounded-md">
+                        <div className='flex-shrink-0  border-b border-purple-500/20 bg-black/20 font-chango flex items-center space-x-2'>
+                          <BrainCircuit className="text-pink-400" />
+                          <h2 className="text-lg font-bold text-white">AI Code Assistant</h2>
+                        </div>
+
 
                         <button
                           onClick={() => {

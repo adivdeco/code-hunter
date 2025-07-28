@@ -1,6 +1,6 @@
 
 
-import { Suspense, useRef, useState } from 'react';
+import { Suspense, useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Crown } from 'lucide-react';
 import { ErrorBoundary } from './ErrorBoundary'; // Assuming this file exists and is correct
@@ -8,6 +8,8 @@ import { CalendarDateRangeIcon } from '@heroicons/react/24/outline';
 import { SiCounterstrike } from "react-icons/si";
 import { FaFortAwesome, FaFortAwesomeAlt } from "react-icons/fa6";
 import { GoGoal } from "react-icons/go";
+import { useDashboardData } from "@/contexts/DashboardDataContext"
+import { DatasetController } from 'chart.js';
 
 
 
@@ -16,6 +18,40 @@ export default function ProfileCard({ user, rank }) {
     const [isCardAnimationComplete, setCardAnimationComplete] = useState(false);
     const avatarUrl = user?.avatar || '';
 
+    // --usecontest wala code
+    const { submissions, loading, error } = useDashboardData();
+    const [strike, setStrike] = useState([])
+
+    // console.log(submissions);
+    useEffect(() => {
+
+
+        if (!Array.isArray(submissions)) return;
+        const dateCounts = {}
+
+        submissions.forEach(submission => {
+            const date = new Date(submission.createdAt).toISOString().split('T')[0]
+            if (!dateCounts[date]) {
+                dateCounts[date] = 0
+            }
+            dateCounts[date]++
+            // console.log(dateCounts);
+            // console.log(dateCounts.length);
+            const processData = Object.entries(dateCounts)
+                .map(([date, value]) => ({
+                    date,
+                    value: Number(value)
+                }))
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+            setStrike(processData.length)
+            // console.log(processData.length);
+
+        })
+
+
+    }, [submissions]);
+
+    console.log(strike);
 
     // --- HOOKS, CALLED CORRECTLY AT THE TOP LEVEL OF THE COMPONENT ---
     const cardRef = useRef(null);
@@ -150,7 +186,7 @@ export default function ProfileCard({ user, rank }) {
                             <p className="text-white/70 text-sm mb-1">Current Streak</p>
                             <div className="flex items-center gap-2">
                                 <span className="text-yellow-400">🔥</span>
-                                <p className="text-white font-medium text-lg">{user?.streak || 7} days</p>
+                                <p className="text-white font-medium text-lg">{strike} days</p>
                             </div>
                         </div>
                     </div>
