@@ -72,10 +72,10 @@ app.use((req, res, next) => {
 
 // 2. Global error handler to catch all other errors
 app.use(errorHandler);
-app.use((err, req, res, next) => {
-  console.error("🔴 Error Middleware:", err.stack || err);
-  res.status(500).json({ success: false, error: err.message });
-});
+// app.use((err, req, res, next) => {
+//   console.error("🔴 Error Middleware:", err.stack || err);
+//   res.status(500).json({ success: false, error: err.message });
+// });
 
 
 // --- Server Startup ---
