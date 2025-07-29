@@ -61,6 +61,7 @@ const commentSchema = new Schema({
         ref: 'problemdata',
         required: true
     },
+    // "reply-to" functionality,
     parentComment: {
         type: mongoose.Schema.ObjectId,
         ref: 'Comment',
