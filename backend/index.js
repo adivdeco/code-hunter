@@ -22,7 +22,7 @@ const noteRouter = require("./routes/noteSection");
 const bookmarkRouter = require('./routes/bookmark');
 const discussionRoutes = require('./routes/discussionRoutes');
 const videoRouter = require("./routes/videoCtrator")
-
+const cloudinary = require('cloudinary').v2; // <-- THIS IS THE MISSING LINE
 
 const errorHandler = require('./middleware/errorHandler');
 
