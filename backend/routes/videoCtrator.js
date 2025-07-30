@@ -21,6 +21,7 @@ const {
 
 const adminMiddleware = require('../middleware/adminMiddleware');
 const authMiddleware = require('../middleware/userMiddleware.js');
+const { upload } = require('../middleware/multer.middleware.js');
 
 const videoRouter = express.Router();
 
@@ -29,7 +30,16 @@ videoRouter.get("/problem/:problemId", getAllVideosForProblem);
 
 // Route to upload a video (Admin only)
 // Note: This is now a single endpoint that handles everything
-videoRouter.post("/upload/:problemId", adminMiddleware, uploadVideo);
+// videoRouter.post("/upload/:problemId", adminMiddleware, uploadVideo);
+videoRouter.post(
+    "/upload/:problemId",
+    adminMiddleware,
+    upload.fields([
+        { name: "video", maxCount: 1 },
+        { name: "thumbnail", maxCount: 1 }
+    ]),
+    uploadVideo
+);
 
 // Route to delete a specific video by ITS OWN ID (Admin only)
 videoRouter.delete("/:videoId", adminMiddleware, deleteVideo);
