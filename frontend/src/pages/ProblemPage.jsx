@@ -71,9 +71,9 @@ const ProblemPage = () => {
       setLoading(true);
       try {
         const response = await axiosClient.get(`/problem/find/${problemId}`);
-        // console.log("Fetched problem:", response.data.findproblem);
+        console.log("Fetched problem:", response.data);
 
-        const matchedStartCode = response.data.findproblem.startCode.find(
+        const matchedStartCode = response.data.startCode.find(
           sc => sc.language === langMap[selectedLanguage] // or use langMap[selectedLanguage] if needed
         );
 
@@ -84,7 +84,7 @@ const ProblemPage = () => {
         const initialcode = matchedStartCode?.initialCode || '';
 
 
-        setProblem(response.data.findproblem);
+        setProblem(response.data);
         setLoading(false);
 
         setInitialCode(initialcode); // ✅ store starter code

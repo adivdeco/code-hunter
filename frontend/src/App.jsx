@@ -17,7 +17,7 @@ import Pricing from "./pages/Pricing";
 import UserManagement from "@/components/admin/UserManagment"
 import ErrorBoundary from "./components/ErrorBoundary";
 import ProblemList from "@/components/user_video";
-import AdminProblemManager from "@/components/admin/AdminVideoManager";
+// import AdminProblemManager from "@/components/admin/AdminVideoManager";
 import AnalyticsDashboard from "@/components/admin/Platform_Analytics"
 import DashboardPage from "./pages/DashboardPage";
 import IssueReportingComponent from "./components/dashboard/IssueReportingComponent";
@@ -36,7 +36,7 @@ import UPIFormSection from "@/components/UPIFormSection"
 import ShopPage from './pages/ShopPage';
 import ManualPaymentPage from '@/pages/ManualPaymentPage';
 import TawkManager from "@/components/TawkToWidget";
-
+import AdminProblemManager from "@/components/admin/AdminProblemManager";
 
 function App() {
 

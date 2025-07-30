@@ -425,3 +425,51 @@
 
 
 /* graph */
+
+
+
+
+/* video */
+
+/* Custom styling for video player range inputs (progress & volume) */
+.video-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* --- Progress Bar Thumb --- */
+.video-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 14px;
+  width: 14px;
+  background-color: white;
+  border-radius: 50%;
+  margin-top: -5px;
+  /* Vertically center the thumb */
+  border: none;
+  transition: transform 0.2s ease-in-out;
+}
+
+.video-range:hover::-webkit-slider-thumb {
+  transform: scale(1.9);
+  margin-left: 15px;
+  margin-top: 5px;
+
+}
+
+/* --- Volume Slider Thumb --- */
+/* .volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  width: 8px;
+  background-color: white;
+  border-radius: 50%;
+  margin-top: 5px;
+
+  border: none;
+} */

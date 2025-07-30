@@ -307,7 +307,7 @@ const toggleDislike = async (req, res) => {
         if (isDisliked) {
             video.dislikes.pull(userId); // Undislike
         } else {
-            video.disdislikes.push(userId); // Dislike
+            video.dislikes.push(userId); // Dislike
         }
 
         await video.save();
