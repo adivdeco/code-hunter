@@ -35,6 +35,7 @@ import PrivacyPage from "@/pages/PrivacyPage"
 import UPIFormSection from "@/components/UPIFormSection"
 import ShopPage from './pages/ShopPage';
 import ManualPaymentPage from '@/pages/ManualPaymentPage';
+import TawkManager from "@/components/TawkToWidget";
 
 
 function App() {
@@ -108,7 +109,7 @@ function App() {
   return (
 
     <>
-
+      <TawkManager />
       <Routes>
         <Route path="/" element={<Mainpg />} />
         <Route path="/problems" element={isAuthenticated ? <Homepage></Homepage> : <Navigate to="/login" />}></Route>

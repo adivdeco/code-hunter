@@ -115,17 +115,50 @@ const deleteProblem = async (req, res) => {
 
 const problemFetch = async (req, res) => {
 
+    // try {
+
+    //     const { id } = req.params
+    //     const findproblem = await Problem.findById(id);
+    //     if (!findproblem) {
+    //         return res.status(404).send("Problem not found");
+    //     }
+    //     res.status(200).send({ message: "Problem find successfully", findproblem });
+    // }
+    // catch (err) {
+    //     res.status(500).send("error: " + err)
+    // }
+    const { id } = req.params;
     try {
 
-        const { id } = req.params
-        const findproblem = await Problem.findById(id);
-        if (!findproblem) {
-            return res.status(404).send("Problem not found");
+        if (!id)
+            return res.status(400).send("ID is Missing");
+
+        const getProblem = await Problem.findById(id).select('_id title description difficulty tags visibleTestCases startCode referenceSolution ');
+
+        // video ka jo bhi url wagera le aao
+
+        if (!getProblem)
+            return res.status(404).send("Problem is Missing");
+
+        const videos = await SolutionVideo.findOne({ problemId: id });
+
+        if (videos) {
+
+            const responseData = {
+                ...getProblem.toObject(),
+                secureUrl: videos.secureUrl,
+                thumbnailUrl: videos.thumbnailUrl,
+                duration: videos.duration,
+            }
+
+            return res.status(200).send(responseData);
         }
-        res.status(200).send({ message: "Problem find successfully", findproblem });
+
+        res.status(200).send(getProblem);
+
     }
     catch (err) {
-        res.status(500).send("error: " + err)
+        res.status(500).send("Error: " + err);
     }
 }
 

@@ -17,6 +17,8 @@ import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router';
 import TimerBar from '@/components/TimeBar';
 import Discussion from '@/components/Discussion'
+import Editorial from '@/components/Editorial';
+
 
 const langMap = {
   javascript: 'javascript',
@@ -391,7 +393,7 @@ const ProblemPage = () => {
                     <div className="w-full text-white flex flex-col h-full">
                       <h2 className="text-xl font-bold mb-4">Editorial</h2>
                       <div className="whitespace-pre-wrap text-sm leading-relaxed bg-gray-800/40 p-4 rounded-md border border-gray-700">
-                        {'Editorial is here for the problem'}
+                        <Editorial secureUrl={problem.secureUrl} thumbnailUrl={problem.thumbnailUrl} duration={problem.duration} />
                       </div>
                     </div>
                   )}

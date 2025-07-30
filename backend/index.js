@@ -21,7 +21,7 @@ const aiRouter = require("./routes/aiChatting");
 const noteRouter = require("./routes/noteSection");
 const bookmarkRouter = require('./routes/bookmark');
 const discussionRoutes = require('./routes/discussionRoutes');
-
+const videoRouter = require("./routes/videoCtrator")
 // Middleware
 const errorHandler = require('./middleware/errorHandler');
 
@@ -62,6 +62,7 @@ app.use("/ai", aiRouter);
 app.use("/note", noteRouter);
 app.use("/book", bookmarkRouter);
 app.use('/api/discussion', discussionRoutes);
+app.use("/video", videoRouter);
 // --- Error Handling Middleware (must be last) ---
 // 1. Handle 404 Not Found for any unhandled routes
 app.use((req, res, next) => {

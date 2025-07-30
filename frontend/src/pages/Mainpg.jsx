@@ -11,11 +11,9 @@ import Mainpg2 from "./Mainpg2";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/footer";
 import "../page1.css";
-import TawkManager from "@/components/TawkToWidget";
+// import TawkManager from "@/components/TawkToWidget";
 import useTawkTo from '@/hooks/useTawkTo';
-// import TawkToWidget from "@/components/TawkToWidget";
 // import { useEffect } from "react";
-// import useTawkTo from "@/hooks/useTawkTo";
 
 
 // import { useState, useRef, Suspense, lazy, useEffect } from "react";
@@ -54,7 +52,7 @@ const iconMap = {
 
 
 export default function Mainpg() {
-  useTawkTo()
+  // useTawkTo()
   // const images = slugs.map(
   //   (slug) => `https://cdn.simpleicons.org/${slug}/${slug}`,
   //   // (slug) => `https://img.icons8.com/?size=100&id=${slug}&format=png&color=000000`
@@ -65,7 +63,7 @@ export default function Mainpg() {
 
     <div className="bg-white">
 
-      <TawkManager />
+      {/* <TawkManager /> */}
       <div className="relative">
         {/* Navbar */}
         <Navbar />
