@@ -10,6 +10,27 @@
   color: white;
 } */
 
+/* video add admin..! */
+@layer components {
+  .form-input {
+    @apply w-full rounded-lg border border-gray-600 bg-gray-900 px-4 py-2 text-white placeholder-gray-500 transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500;
+  }
+
+  .btn-primary {
+    @apply rounded-lg bg-blue-600 px-5 py-2.5 font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-800/50;
+  }
+
+  .btn-secondary {
+    @apply rounded-lg bg-gray-600 px-5 py-2.5 font-semibold text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .action-button {
+    @apply rounded-full p-2.5 transition-all duration-200 hover:scale-110;
+  }
+}
+
+/* end */
+
 @layer base {
   :root {
     --background: 0 0% 100%;
