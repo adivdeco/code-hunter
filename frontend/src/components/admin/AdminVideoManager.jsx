@@ -487,7 +487,7 @@ const AdminProblemManager = () => {
         try {
             setLoading(true);
             const { data } = await axiosClient.get('/problem/getAllProblem');
-            setProblems(data);
+            setProblems(data.allproblem);
         } catch (err) {
             setError('Failed to fetch problems');
             console.error(err);
@@ -495,6 +495,21 @@ const AdminProblemManager = () => {
             setLoading(false);
         }
     };
+    //     useEffect(() => {
+    //         const fetchProblems = async () => {
+    //             try {
+    //                 const response = await axiosClient.get('/problem/allProblems');
+
+    //                 setProblems(response.data.allproblem);
+    //                 setLoading(false);
+    //             } catch (err) {
+    //                 setError(err.message);
+    //                 setLoading(false);
+    //             }
+    //         };
+
+    //         fetchProblems();
+    //     }, []);
 
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this problem?')) return;

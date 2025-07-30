@@ -133,11 +133,11 @@ const problemFetch = async (req, res) => {
         if (!id)
             return res.status(400).send("ID is Missing");
 
-        const getProblem = await Problem.findById(id).select('_id title description difficulty tags visibleTestCases startCode referenceSolution ');
+        const findproblem = await Problem.findById(id).select('_id title description difficulty tags visibleTestCases startCode referenceSolution ');
 
         // video ka jo bhi url wagera le aao
 
-        if (!getProblem)
+        if (!findproblem)
             return res.status(404).send("Problem is Missing");
 
         const videos = await SolutionVideo.findOne({ problemId: id });
@@ -145,7 +145,7 @@ const problemFetch = async (req, res) => {
         if (videos) {
 
             const responseData = {
-                ...getProblem.toObject(),
+                ...findproblem.toObject(),
                 secureUrl: videos.secureUrl,
                 thumbnailUrl: videos.thumbnailUrl,
                 duration: videos.duration,
@@ -154,7 +154,7 @@ const problemFetch = async (req, res) => {
             return res.status(200).send(responseData);
         }
 
-        res.status(200).send(getProblem);
+        res.status(200).send(findproblem);
 
     }
     catch (err) {
