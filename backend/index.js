@@ -22,8 +22,17 @@ const noteRouter = require("./routes/noteSection");
 const bookmarkRouter = require('./routes/bookmark');
 const discussionRoutes = require('./routes/discussionRoutes');
 const videoRouter = require("./routes/videoCtrator")
-// Middleware
+
+
 const errorHandler = require('./middleware/errorHandler');
+
+
+// Configure Cloudinary Globally
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 // --- Application Constants ---
 const PORT = process.env.PORT || 5500;

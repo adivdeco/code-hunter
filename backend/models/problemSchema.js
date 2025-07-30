@@ -102,6 +102,11 @@ const problemSchema = new Schema({
         }
     ],
 
+    videoSolutions: [{
+        type: Schema.Types.ObjectId,
+        ref: 'SolutionVideo'
+    }]
+
 
 
 })

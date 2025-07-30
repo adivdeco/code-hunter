@@ -113,55 +113,85 @@ const deleteProblem = async (req, res) => {
 }
 
 
-const problemFetch = async (req, res) => {
+// const problemFetch = async (req, res) => {
 
-    // try {
+//     // try {
 
-    //     const { id } = req.params
-    //     const findproblem = await Problem.findById(id);
-    //     if (!findproblem) {
-    //         return res.status(404).send("Problem not found");
-    //     }
-    //     res.status(200).send({ message: "Problem find successfully", findproblem });
-    // }
-    // catch (err) {
-    //     res.status(500).send("error: " + err)
-    // }
+//     //     const { id } = req.params
+//     //     const findproblem = await Problem.findById(id);
+//     //     if (!findproblem) {
+//     //         return res.status(404).send("Problem not found");
+//     //     }
+//     //     res.status(200).send({ message: "Problem find successfully", findproblem });
+//     // }
+//     // catch (err) {
+//     //     res.status(500).send("error: " + err)
+//     // }
+//     const { id } = req.params;
+//     try {
+
+//         if (!id)
+//             return res.status(400).send("ID is Missing");
+
+//         const findproblem = await Problem.findById(id);
+
+//         // video ka jo bhi url wagera le aao
+
+//         if (!findproblem)
+//             return res.status(404).send("Problem is Missing");
+
+//         const videos = await SolutionVideo.findOne({ problemId: id });
+
+//         if (videos) {
+
+//             const responseData = {
+//                 ...findproblem.toObject(),
+//                 secureUrl: videos.secureUrl,
+//                 thumbnailUrl: videos.thumbnailUrl,
+//                 duration: videos.duration,
+//             }
+
+//             return res.status(200).send(responseData);
+//         }
+
+//         res.status(200).send(findproblem);
+
+//     }
+//     catch (err) {
+//         res.status(500).send("Error: " + err);
+//     }
+// }
+
+const getProblemById = async (req, res) => {
     const { id } = req.params;
+    if (!id) {
+        return res.status(400).send("Problem ID is missing");
+    }
+
     try {
-
-        if (!id)
-            return res.status(400).send("ID is Missing");
-
-        const findproblem = await Problem.findById(id).select('_id title description difficulty tags visibleTestCases startCode referenceSolution ');
-
-        // video ka jo bhi url wagera le aao
-
-        if (!findproblem)
-            return res.status(404).send("Problem is Missing");
-
-        const videos = await SolutionVideo.findOne({ problemId: id });
-
-        if (videos) {
-
-            const responseData = {
-                ...findproblem.toObject(),
-                secureUrl: videos.secureUrl,
-                thumbnailUrl: videos.thumbnailUrl,
-                duration: videos.duration,
+        // Fetch the problem and populate the videoSolutions field
+        const problem = await Problem.findById(id).populate({
+            path: 'videoSolutions',
+            populate: {
+                path: 'uploader',
+                select: 'name avatar' // Select specific fields from the user
             }
+        });
 
-            return res.status(200).send(responseData);
+        if (!problem) {
+            return res.status(404).send("Problem not found");
         }
 
-        res.status(200).send(findproblem);
+        // Also increment the view count on the video if a videoId is specified
+        // This is a more advanced feature you can add later.
 
-    }
-    catch (err) {
-        res.status(500).send("Error: " + err);
+        res.status(200).json(problem);
+
+    } catch (err) {
+        console.error("Error fetching problem:", err);
+        res.status(500).send("Server Error: " + err.message);
     }
 }
-
 
 
 const getAllProblem = async (req, res) => {
@@ -262,7 +292,7 @@ const allUserSubmissions = async (req, res) => {
 }
 
 
-module.exports = { createProblem, updateProblem, deleteProblem, problemFetch, getAllProblem, solvedProblem, allsubmission, allSolve, allUserSubmissions };
+module.exports = { createProblem, updateProblem, deleteProblem, getProblemById, getAllProblem, solvedProblem, allsubmission, allSolve, allUserSubmissions };
 
 
 

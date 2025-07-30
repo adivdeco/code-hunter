@@ -67,6 +67,7 @@ const ProblemPage = () => {
   useEffect(() => {
 
     const fetchProblem = async () => {
+
       setLoading(true);
       try {
         const response = await axiosClient.get(`/problem/find/${problemId}`);
