@@ -1,15 +1,3 @@
-// const express = require('express');
-// const adminMiddleware = require('../middleware/adminMiddleware');
-// const videoRouter = express.Router();
-// const { generateUploadSignature, saveVideoMetadata, deleteVideo } = require("../controllers/videoSection")
-
-// videoRouter.get("/create/:problemId", adminMiddleware, generateUploadSignature);
-// videoRouter.post("/save", adminMiddleware, saveVideoMetadata);
-// videoRouter.delete("/delete/:problemId", adminMiddleware, deleteVideo);
-
-
-// module.exports = videoRouter;
-
 const express = require('express');
 const {
     uploadVideo,
@@ -21,7 +9,7 @@ const {
 
 const adminMiddleware = require('../middleware/adminMiddleware');
 const authMiddleware = require('../middleware/userMiddleware.js');
-const { upload } = require('../middleware/multer.middleware.js');
+const { uploadVideoFiles, cleanupTempFiles } = require('../middleware/multer.middleware.js');
 
 const videoRouter = express.Router();
 
@@ -29,16 +17,16 @@ const videoRouter = express.Router();
 videoRouter.get("/problem/:problemId", getAllVideosForProblem);
 
 // Route to upload a video (Admin only)
-// Note: This is now a single endpoint that handles everything
-// videoRouter.post("/upload/:problemId", adminMiddleware, uploadVideo);
 videoRouter.post(
     "/upload/:problemId",
     adminMiddleware,
-    upload.fields([
-        { name: "video", maxCount: 1 },
-        { name: "thumbnail", maxCount: 1 }
-    ]),
-    uploadVideo
+    uploadVideoFiles, // Using the configured multer middleware
+    uploadVideo,
+    (req, res, next) => {
+        // Ensure temp files are cleaned up after request
+        cleanupTempFiles(req.files);
+        next();
+    }
 );
 
 // Route to delete a specific video by ITS OWN ID (Admin only)
