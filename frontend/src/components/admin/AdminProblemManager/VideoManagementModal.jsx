@@ -12,8 +12,13 @@ const FileInput = ({ label, name, file, onChange, accept }) => (
         <label className="flex h-12 w-full cursor-pointer items-center rounded-lg border-2 border-dashed border-gray-600 bg-gray-700/50 px-3 transition-colors hover:border-blue-500 hover:bg-gray-700">
             <FiUpload className="mr-3 text-gray-400" />
             <span className="truncate text-gray-300">{file ? file.name : 'Click to select a file'}</span>
-            <input type="file" name={name} accept={accept} onChange={onChange} className="hidden" />
-        </label>
+            <input
+                type="file"
+                name={name}
+                accept={accept}
+                onChange={onChange}
+                className="hidden"
+            />        </label>
     </div>
 );
 
@@ -24,7 +29,12 @@ export const VideoManagementModal = ({ isOpen, onClose, problem, onUploadVideo, 
     const [isUploading, setIsUploading] = useState(false);
 
     const handleFileChange = (e) => {
-        setFiles(prev => ({ ...prev, [e.target.name]: e.target.files[0] }));
+        const file = e.target.files[0];
+        if (file && file.size > 100 * 1024 * 1024) { // 100MB limit
+            toast.error("File size must be less than 100MB");
+            return;
+        }
+        setFiles(prev => ({ ...prev, [e.target.name]: file }));
     };
 
     const handleInputChange = (e) => {
@@ -34,23 +44,36 @@ export const VideoManagementModal = ({ isOpen, onClose, problem, onUploadVideo, 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!files.videoFile) {
+            toast.error("Please select a video file");
+            return;
+        }
+
+        setIsUploading(true);
+
         const formData = new FormData();
-        formData.append('video', videoFile); // 'video' must match multer's field name
-        formData.append('thumbnail', thumbnailFile); // 'thumbnail' must match multer's field name
-        formData.append('title', videoTitle);
-        formData.append('description', videoDescription);
+        formData.append('video', files.videoFile); // Use files.videoFile
+        if (files.thumbnailFile) {
+            formData.append('thumbnail', files.thumbnailFile);
+        }
+        formData.append('title', videoData.title); // Use videoData.title
+        formData.append('description', videoData.description || ''); // Use videoData.description
 
         const toastId = toast.loading("Uploading video...");
-        const { success } = await uploadNewVideo(problem._id, formData);
+        try {
+            const { success } = await onUploadVideo(problem._id, formData);
 
-        if (success) {
-            toast.success("Video uploaded successfully!", { id: toastId });
-            setVideoFile(null);
-            setThumbnailFile(null);
-            setVideoTitle("");
-            setVideoDescription("");
-        } else {
-            toast.error("Failed to upload video", { id: toastId });
+            if (success) {
+                toast.success("Video uploaded successfully!", { id: toastId });
+                setFiles({ videoFile: null, thumbnailFile: null });
+                setVideoData({ title: '', description: '' });
+            } else {
+                toast.error("Failed to upload video", { id: toastId });
+            }
+        } catch (error) {
+            toast.error("Upload failed: " + error.message, { id: toastId });
+        } finally {
+            setIsUploading(false);
         }
     };
 
