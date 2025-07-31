@@ -306,7 +306,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, videoId, likes, dislikes
 
     const handleLike = async () => {
         try {
-            const response = await fetch(`/video/${videoId}/like`, {
+            const response = await fetch(`https://code-hunter-backend.onrender.com/video/${videoId}/like`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -328,7 +328,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, videoId, likes, dislikes
 
     const handleDislike = async () => {
         try {
-            const response = await fetch(`/video/${videoId}/dislike`, {
+            const response = await fetch(`https://code-hunter-backend.onrender.com/video/${videoId}/dislike`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

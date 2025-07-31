@@ -126,7 +126,7 @@ const deleteVideo = async (req, res) => {
 const toggleLike = async (req, res) => {
     try {
         const { videoId } = req.params;
-        const userId = req.user._id; // From authMiddleware
+        const userId = req.finduser._id; // From authMiddleware
 
         const video = await SolutionVideo.findById(videoId);
         if (!video) {
@@ -180,7 +180,7 @@ const toggleLike = async (req, res) => {
 const toggleDislike = async (req, res) => {
     try {
         const { videoId } = req.params;
-        const userId = req.user._id; // From authMiddleware
+        const userId = req.finduser._id; // From authMiddleware
 
         const video = await SolutionVideo.findById(videoId);
         if (!video) {
