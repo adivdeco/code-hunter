@@ -50,28 +50,45 @@ export const VideoManagementModal = ({ isOpen, onClose, problem, onUploadVideo, 
         }
 
         setIsUploading(true);
-
-        const formData = new FormData();
-        formData.append('video', files.videoFile); // Use files.videoFile
-        if (files.thumbnailFile) {
-            formData.append('thumbnail', files.thumbnailFile);
-        }
-        formData.append('title', videoData.title); // Use videoData.title
-        formData.append('description', videoData.description || ''); // Use videoData.description
-
         const toastId = toast.loading("Uploading video...");
-        try {
-            const { success } = await onUploadVideo(problem._id, formData);
 
-            if (success) {
-                toast.success("Video uploaded successfully!", { id: toastId });
-                setFiles({ videoFile: null, thumbnailFile: null });
-                setVideoData({ title: '', description: '' });
-            } else {
-                toast.error("Failed to upload video", { id: toastId });
+        try {
+            const formData = new FormData();
+            formData.append('video', files.videoFile);
+            if (files.thumbnailFile) {
+                formData.append('thumbnail', files.thumbnailFile);
             }
+            formData.append('title', videoData.title);
+            formData.append('description', videoData.description);
+
+            const response = await axiosClient.post(
+                `/video/upload/${problem._id}`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    onUploadProgress: (progressEvent) => {
+                        const percentCompleted = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        );
+                        toast.loading(`Uploading... ${percentCompleted}%`, { id: toastId });
+                    }
+                }
+            );
+
+            toast.success("Upload successful!", { id: toastId });
+            // Reset form
+            setFiles({ videoFile: null, thumbnailFile: null });
+            setVideoData({ title: '', description: '' });
         } catch (error) {
-            toast.error("Upload failed: " + error.message, { id: toastId });
+            console.error("Upload error:", error);
+            toast.error(
+                error.response?.data?.error ||
+                error.message ||
+                "Upload failed",
+                { id: toastId }
+            );
         } finally {
             setIsUploading(false);
         }

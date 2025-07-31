@@ -17,10 +17,21 @@ const storage = multer.diskStorage({
 
 // Create the Multer upload instance with the configured storage.
 // This instance can now be used as middleware in our routes.
+// In your multer middleware
 const upload = multer({
-    storage,
+    storage: storage,
     limits: {
-        fileSize: 100 * 1024 * 1024 // Set a file size limit (e.g., 100MB)
+        fileSize: 100 * 1024 * 1024, // 100MB
+        files: 2 // Max 2 files (video + thumbnail)
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.fieldname === 'video' && !file.mimetype.startsWith('video/')) {
+            return cb(new Error('Only video files are allowed'), false);
+        }
+        if (file.fieldname === 'thumbnail' && !file.mimetype.startsWith('image/')) {
+            return cb(new Error('Only image files are allowed for thumbnails'), false);
+        }
+        cb(null, true);
     }
 });
 

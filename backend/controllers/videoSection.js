@@ -86,9 +86,11 @@ const uploadVideo = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Video upload error:', error);
-        return res.status(500).json({
-            error: error.message || 'Server error during video upload'
+        console.error("Full upload error:", error);
+        console.error("Error stack:", error.stack);
+        res.status(500).json({
+            error: error.message || 'Server error during video upload',
+            details: error.stack
         });
     }
 };
