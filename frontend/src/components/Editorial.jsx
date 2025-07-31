@@ -278,7 +278,7 @@ import { Pause, Play, Volume2, Volume1, VolumeX, Maximize, Minimize, Loader2, He
 import { Button } from "@/components/ui/button";
 // import { useSelect } from '@react-three/drei';
 import { useSelector } from 'react-redux';
-// import { useAuth } from "@/context/AuthContext";
+import axiosClient from '@/utils/axiosClint';
 
 // --- Helper: Format time from seconds to MM:SS ---
 const formatTime = (seconds) => {
@@ -290,6 +290,8 @@ const formatTime = (seconds) => {
 
 const Editorial = ({ secureUrl, thumbnailUrl, duration, videoId, likes, dislikes }) => {
     const { user } = useSelector((state) => state.auth);
+    console.log(user);
+
     const [isLiked, setIsLiked] = useState(false);
     const [isDisliked, setIsDisliked] = useState(false);
     const [likeCount, setLikeCount] = useState(likes?.length || 0);
@@ -306,7 +308,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, videoId, likes, dislikes
 
     const handleLike = async () => {
         try {
-            const response = await fetch(`https://code-hunter-backend.onrender.com/video/${videoId}/like`, {
+            const response = await axiosClient.post(`https://code-hunter-backend.onrender.com/video/${videoId}/like`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -328,7 +330,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, videoId, likes, dislikes
 
     const handleDislike = async () => {
         try {
-            const response = await fetch(`https://code-hunter-backend.onrender.com/video/${videoId}/dislike`, {
+            const response = await axiosClient.post(`https://code-hunter-backend.onrender.com/video/${videoId}/dislike`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -366,7 +368,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, videoId, likes, dislikes
                             variant="ghost"
                             size="sm"
                             onClick={handleLike}
-                            className={`flex items-center gap-2 ${isLiked ? 'text-red-500 hover:text-red-500' : 'text-gray-400 hover:text-white'}`}
+                            className={`flex items-center gap-2 ${isLiked ? 'text-red-500 hover:text-red-500' : 'text-gray-400 hover:text-gray-800'}`}
                         >
                             <ThumbsUp className="w-5 h-5" />
                             <span>{likeCount}</span>
@@ -376,7 +378,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, videoId, likes, dislikes
                             variant="ghost"
                             size="sm"
                             onClick={handleDislike}
-                            className={`flex items-center gap-2 ${isDisliked ? 'text-blue-500 hover:text-blue-500' : 'text-gray-400 hover:text-white'}`}
+                            className={`flex items-center gap-2 ${isDisliked ? 'text-blue-500 hover:text-blue-500' : 'text-gray-400 hover:text-gray-800'}`}
                         >
                             <ThumbsDown className="w-5 h-5" />
                             <span>{dislikeCount}</span>
