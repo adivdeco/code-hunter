@@ -10,6 +10,8 @@ const {
 const adminMiddleware = require('../middleware/adminMiddleware');
 const authMiddleware = require('../middleware/userMiddleware.js');
 const { uploadVideoFiles, cleanupTempFiles } = require('../middleware/multer.middleware.js');
+const { likeDislikeLimiter } = require('../middleware/rateLimiter.js');
+const { likeDislikeValidator } = require('../middleware/validators/videoValidators');
 
 const videoRouter = express.Router();
 
@@ -35,9 +37,9 @@ videoRouter.delete("/:videoId", adminMiddleware, deleteVideo);
 // --- User Interaction Routes (Logged-in users only) ---
 
 // Route to like/unlike a video
-videoRouter.post("/:videoId/like", authMiddleware, toggleLike);
+videoRouter.post("/:videoId/like", authMiddleware, likeDislikeLimiter, likeDislikeValidator, toggleLike);
 
 // Route to dislike/undislike a video
-videoRouter.post("/:videoId/dislike", authMiddleware, toggleDislike);
+videoRouter.post("/:videoId/dislike", authMiddleware, likeDislikeLimiter, likeDislikeValidator, toggleDislike);
 
 module.exports = videoRouter;

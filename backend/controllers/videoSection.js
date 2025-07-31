@@ -124,52 +124,99 @@ const deleteVideo = async (req, res) => {
 
 // --- LIKE/DISLIKE LOGIC ---
 const toggleLike = async (req, res) => {
-    const { videoId } = req.params;
-    const userId = req.finduser._id; // From authMiddleware
-
     try {
+        const { videoId } = req.params;
+        const userId = req.user._id; // From authMiddleware
+
         const video = await SolutionVideo.findById(videoId);
-        if (!video) return res.status(404).json({ error: "Video not found" });
+        if (!video) {
+            return res.status(404).json({ error: "Video not found" });
+        }
 
-        // Remove from dislikes if it exists there
-        video.dislikes.pull(userId);
+        // Check if user already liked
+        const likeIndex = video.likes.indexOf(userId);
+        const dislikeIndex = video.dislikes.indexOf(userId);
 
-        const isLiked = video.likes.includes(userId);
-        if (isLiked) {
-            video.likes.pull(userId); // Unlike
+        // Remove from dislikes if exists
+        if (dislikeIndex > -1) {
+            video.dislikes.splice(dislikeIndex, 1);
+        }
+
+        // Toggle like
+        if (likeIndex > -1) {
+            video.likes.splice(likeIndex, 1); // Unlike
         } else {
             video.likes.push(userId); // Like
         }
 
         await video.save();
-        res.status(200).json({ message: "Success", likes: video.likes.length, dislikes: video.dislikes.length });
+
+        res.status(200).json({
+            success: true,
+            likes: video.likes.length,
+            dislikes: video.dislikes.length
+        });
+
+        await AnalyticsEvent.create({
+            userId,
+            eventType: likeIndex > -1 ? 'video_unlike' : 'video_like',
+            videoId,
+            metadata: {
+                previousLikes: likeIndex > -1 ? video.likes.length + 1 : video.likes.length - 1,
+                currentLikes: video.likes.length,
+                hadDislike: dislikeIndex > -1
+            }
+        });
+
     } catch (error) {
-        res.status(500).json({ error: "Server error" });
+        console.error('Error toggling like:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Server error while toggling like'
+        });
     }
 };
 
 const toggleDislike = async (req, res) => {
-    const { videoId } = req.params;
-    const userId = req.finduser._id;
-
     try {
+        const { videoId } = req.params;
+        const userId = req.user._id; // From authMiddleware
+
         const video = await SolutionVideo.findById(videoId);
-        if (!video) return res.status(404).json({ error: "Video not found" });
+        if (!video) {
+            return res.status(404).json({ error: "Video not found" });
+        }
 
-        // Remove from likes if it exists there
-        video.likes.pull(userId);
+        // Check if user already disliked
+        const dislikeIndex = video.dislikes.indexOf(userId);
+        const likeIndex = video.likes.indexOf(userId);
 
-        const isDisliked = video.dislikes.includes(userId);
-        if (isDisliked) {
-            video.dislikes.pull(userId); // Undislike
+        // Remove from likes if exists
+        if (likeIndex > -1) {
+            video.likes.splice(likeIndex, 1);
+        }
+
+        // Toggle dislike
+        if (dislikeIndex > -1) {
+            video.dislikes.splice(dislikeIndex, 1); // Undislike
         } else {
             video.dislikes.push(userId); // Dislike
         }
 
         await video.save();
-        res.status(200).json({ message: "Success", likes: video.likes.length, dislikes: video.dislikes.length });
+
+        res.status(200).json({
+            success: true,
+            likes: video.likes.length,
+            dislikes: video.dislikes.length
+        });
+
     } catch (error) {
-        res.status(500).json({ error: "Server error" });
+        console.error('Error toggling dislike:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Server error while toggling dislike'
+        });
     }
 };
 

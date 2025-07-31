@@ -509,7 +509,12 @@ const ProblemPage = () => {
                             secureUrl={problem.videoSolutions[0].secureUrl}
                             thumbnailUrl={problem.videoSolutions[0].thumbnailUrl}
                             duration={problem.videoSolutions[0].duration}
+                            videoId={problem.videoSolutions[0]._id}
+                            likes={problem.videoSolutions[0].likes}
+                            dislikes={problem.videoSolutions[0].dislikes}
+
                           />
+
                         ) : (
                           <p className="text-gray-400">No video solution available yet</p>
                         )}
