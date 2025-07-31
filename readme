@@ -1,3 +1,104 @@
-api s =iB0j9C_coZTE23rtqwvaTzSXMSc
-api key = 78786937855545
-name cc = djupaqjuz
+                                                     🔥  😈  🔥
+
+# 1. Project Overview
+
+| Category           | Details                                                                                   |
+|--------------------|------------------------------------------------------------------------------------------|
+| **Purpose**        | All-in-one coding platform for interview prep, competitive programming, and skill development |
+| **Target Audience**| CS students, self-taught developers, coding competition participants                     |
+| **Key Objectives** | Democratize interview prep, provide structured learning, bridge theory/practice          |
+| **Unique Value**   | AI mentor, company-specific problems, video explanations                                 |
+
+---
+
+# 2. Core Features
+
+## User-Facing Features
+
+| Feature                  | Description                                                    | Icon |
+|--------------------------|----------------------------------------------------------------|------|
+| Company-Focused Problems | Curated problems from FAANG+ interviews with difficulty ratings | 📊   |
+| Video Solutions          | In-depth walkthroughs with complexity analysis                  | 🎥   |
+| AI Mentor                | Context-aware hints without revealing solutions                 | 🤖   |
+| Multi-Language Support   | C++, Java, Python, JavaScript, Go with templates                | 💻   |
+| Progress Dashboard       | Tracks solved problems, accuracy, and weak areas                | 📈   |
+
+## Admin-Facing Features
+
+| Feature            | Description                                 |
+|--------------------|---------------------------------------------|
+| User Management    | View/edit user roles and activity logs       |
+| Platform Analytics | DAU, retention rates, problem completion     |
+| Content Management | Create/edit problems and video explanations  |
+| Community Moderation | Monitor discussions and flag content       |
+
+---
+
+# 3. AI Mentor System
+
+## Capabilities
+
+1. **Conceptual Scaffolding**
+    - Identifies knowledge gaps
+    - Provides relevant academic references
+    - Links to similar problems
+
+2. **Progressive Hint System**
+    - Broad conceptual nudges → specific guidance
+    - Example: "Consider hash maps for O(1) lookups"
+
+3. **Code Explanation Engine**
+    - Explains selected code in plain English
+    - Analyzes time/space complexity
+
+## Technical Implementation
+
+| Component         | Technology Used                  |
+|-------------------|----------------------------------|
+| Natural Language  | OpenAI GPT-4 with custom fine-tuning |
+| Context Management| MongoDB conversation trees        |
+| Rate Limiting     | Redis for API request throttling  |
+
+---
+
+# 4. Technology Stack
+
+## Frontend
+
+| Technology   | Purpose         | Docs                                   |
+|--------------|-----------------|----------------------------------------|
+| React 18     | UI Components   | [React](https://react.dev/)            |
+| TypeScript   | Type Safety     | [TypeScript](https://www.typescriptlang.org/) |
+| Redux Toolkit| State Management| [Redux Toolkit](https://redux-toolkit.js.org/) |
+
+## Backend
+
+| Technology | Purpose                 |
+|------------|------------------------|
+| Node.js    | Runtime Environment    |
+| Express    | API Framework          |
+| MongoDB    | NoSQL Database         |
+| Socket.IO  | Real-time Communication|
+
+---
+
+# 5. Challenges & Solutions
+
+| Challenge                | Solution                                                      |
+|--------------------------|--------------------------------------------------------------|
+| Secure Code Execution    | Judge0 + Docker containers with read-only FS                 |
+| Real-time Collaboration  | Socket.IO with Redis adapter and Operational Transform        |
+| AI Context Management    | Vector embeddings + MongoDB conversation trees               |
+
+---
+
+# 6. Appendix
+
+## A. Glossary
+
+- **DAU**: Daily Active Users  
+- **FAANG+**: Facebook, Apple, Amazon, Netflix, Google + similar tech companies
+
+## B. Support
+
+- **Contact**: [support:https://code-hunter-sable.vercel.app/](mailto:sadiv120@gmail.com)

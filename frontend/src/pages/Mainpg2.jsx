@@ -295,7 +295,7 @@ export default function Mainpg2() {
         </div>
 
         <div className="w-full flex justify-center items-center">
-          <MorphingText texts={texts} />
+          <MorphingText texts={texts} className={"font-chango"} />
         </div>
 
         <p className="font-changa text-lg md:text-xl text-gray-700 max-w-2xl">

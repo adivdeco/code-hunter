@@ -183,7 +183,7 @@ const uploadVideo = async (req, res) => {
     // I am assuming the file paths are available on req.files
     const { problemId } = req.params;
     const { title, description } = req.body;
-    const uploaderId = req.result._id; // from adminMiddleware
+    const uploaderId = req.finduser._id; // from adminMiddleware
 
     if (!title) {
         return res.status(400).json({ error: "Video title is required." });
@@ -269,7 +269,7 @@ const deleteVideo = async (req, res) => {
 // --- LIKE/DISLIKE LOGIC ---
 const toggleLike = async (req, res) => {
     const { videoId } = req.params;
-    const userId = req.result._id; // From authMiddleware
+    const userId = req.finduser._id; // From authMiddleware
 
     try {
         const video = await SolutionVideo.findById(videoId);
@@ -294,7 +294,7 @@ const toggleLike = async (req, res) => {
 
 const toggleDislike = async (req, res) => {
     const { videoId } = req.params;
-    const userId = req.result._id;
+    const userId = req.finduser._id;
 
     try {
         const video = await SolutionVideo.findById(videoId);

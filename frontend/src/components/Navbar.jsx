@@ -5,6 +5,7 @@ import NavProfile from "./NavProfile";
 import ThreeRingLoader from "@/components/ThreeRingLoader";
 import { useState, useEffect } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
+import { Crown } from "lucide-react";
 
 export default function Navbar() {
     const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
@@ -76,9 +77,9 @@ export default function Navbar() {
                 <div className="hidden md:flex items-center gap-4 text-md font-changa">
                     <NavLink to={"/"}
                         className={({ isActive }) =>
-                            `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
-                                ? "text-purple-600 underline bg-purple-100/20"
-                                : "hover:text-white hover:bg-purple-200/30 hover:underline"
+                            `relative px-4 py-2 rounded-lg transition-all duration-300 group overflow-hidden ${isActive
+                                ? "text-white bg-gradient-to-br from-purple-600/40 to-purple-800/80 shadow-purple-500/20"
+                                : "text-gray-500 hover:text-white hover:bg-gray-800/60"
                             }`
                         }
                     >
@@ -87,9 +88,9 @@ export default function Navbar() {
 
                     <NavLink to={"/problems"}
                         className={({ isActive }) =>
-                            `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
-                                ? "text-indigo-400 underline bg-indigo-100/20"
-                                : "hover:text-white hover:bg-indigo-200/30 hover:underline"
+                            `relative px-4 py-2 rounded-lg transition-all duration-300 group overflow-hidden ${isActive
+                                ? "text-white bg-gradient-to-br from-blue-600/70 to-blue-800/50 shadow-blue-500/20"
+                                : "text-gray-500 hover:text-white hover:bg-gray-800/60"
                             }`
                         }
                     >
@@ -98,9 +99,9 @@ export default function Navbar() {
 
                     <NavLink to="/pricing"
                         className={({ isActive }) =>
-                            `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
-                                ? "text-pink-700 underline bg-pink-100/20"
-                                : "hover:text-white hover:bg-pink-200/30 hover:underline"
+                            `relative px-4 py-2 rounded-lg transition-all duration-300 group overflow-hidden ${isActive
+                                ? "text-white bg-gradient-to-br from-pink-600/70 to-pink-800/50 shadow-pink-500/20"
+                                : "text-gray-500 hover:text-white hover:bg-gray-800/60"
                             }`
                         }
                     >
@@ -109,9 +110,9 @@ export default function Navbar() {
 
                     <NavLink to="/shop"
                         className={({ isActive }) =>
-                            `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
-                                ? "text-teal-400 underline bg-teal-100/20"
-                                : "hover:text-white hover:bg-teal-200/30 hover:underline"
+                            `relative px-4 py-2 rounded-lg transition-all duration-300 group overflow-hidden ${isActive
+                                ? "text-white bg-gradient-to-br from-teal-600/70 to-teal-800/50 shadow-pink-500/20"
+                                : "text-gray-500 hover:text-white hover:bg-gray-800/60"
                             }`
                         }
                     >
@@ -121,9 +122,9 @@ export default function Navbar() {
                     <NavLink to="/contribution
 "
                         className={({ isActive }) =>
-                            `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
-                                ? "text-yellow-400 underline bg-yellow-100/20"
-                                : "hover:text-white hover:bg-green-200/30 hover:underline"
+                            `relative px-4 py-2 rounded-lg transition-all duration-300 group overflow-hidden ${isActive
+                                ? "text-white bg-gradient-to-br from-cyan-500/80 to-cyan-800/50 shadow-pink-500/20"
+                                : "text-gray-500 hover:text-white hover:bg-gray-800/60"
                             }`
                         }
                     >
@@ -133,9 +134,9 @@ export default function Navbar() {
 
                     <NavLink to="/dashbord"
                         className={({ isActive }) =>
-                            `cursor-pointer px-3 py-2 rounded-xl transition-colors ${isActive
-                                ? "text-green-400 underline bg-green-100/20"
-                                : "hover:text-white hover:bg-green-200/30 hover:underline"
+                            `relative px-4 py-2 rounded-lg transition-all duration-300 group overflow-hidden ${isActive
+                                ? "text-white bg-gradient-to-br from-purple-300/50 to-purple-800/50 shadow-pink-500/20"
+                                : "text-gray-500 hover:text-white hover:bg-gray-800/60"
                             }`
                         }
                     >
@@ -148,7 +149,8 @@ export default function Navbar() {
                     {isAuthenticated ? (
                         <NavLink to={"/pricing"}>
                             <h1 className="font-aladin text-xl relative inline-block">
-                                Upgrade to <span className="font-aladin bg-gradient-to-r from-yellow-500 to-orange-600 text-transparent bg-clip-text text-xl font-extrabold">Pro</span>
+                                {user.isPaidUser ? <Crown className="text-yellow-400" /> : "Upgrade to"}
+                                <span className="font-aladin bg-gradient-to-r from-yellow-500 to-orange-600 text-transparent bg-clip-text text-xl font-extrabold">Pro</span>
                             </h1>
                         </NavLink>
                     ) : (
@@ -265,3 +267,5 @@ export default function Navbar() {
         </>
     );
 }
+
+
