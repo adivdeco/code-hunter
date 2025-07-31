@@ -44,7 +44,7 @@ const { Schema } = mongoose;
 const videoSolutionSchema = new Schema({
     problem: { // Changed from problemId for clarity
         type: Schema.Types.ObjectId,
-        ref: 'Problem',
+        ref: 'problemdata',
         required: true
     },
     uploader: { // Changed from userId

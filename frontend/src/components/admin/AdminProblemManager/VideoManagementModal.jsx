@@ -33,29 +33,25 @@ export const VideoManagementModal = ({ isOpen, onClose, problem, onUploadVideo, 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!files.videoFile) return toast.error('A video file is required.');
-        if (!videoData.title) return toast.error('A video title is required.');
-
-        setIsUploading(true);
-        const toastId = toast.loading('Uploading video...');
 
         const formData = new FormData();
-        formData.append('title', videoData.title);
-        formData.append('description', videoData.description);
-        formData.append('video', files.videoFile);
-        if (files.thumbnailFile) formData.append('thumbnail', files.thumbnailFile);
+        formData.append('video', videoFile); // 'video' must match multer's field name
+        formData.append('thumbnail', thumbnailFile); // 'thumbnail' must match multer's field name
+        formData.append('title', videoTitle);
+        formData.append('description', videoDescription);
 
-        const { success } = await onUploadVideo(problem._id, formData);
+        const toastId = toast.loading("Uploading video...");
+        const { success } = await uploadNewVideo(problem._id, formData);
 
         if (success) {
-            toast.success('Video uploaded successfully!', { id: toastId });
-            setVideoData({ title: '', description: '' }); // Reset form
-            setFiles({ videoFile: null, thumbnailFile: null });
+            toast.success("Video uploaded successfully!", { id: toastId });
+            setVideoFile(null);
+            setThumbnailFile(null);
+            setVideoTitle("");
+            setVideoDescription("");
         } else {
-            // Error toast is handled in the hook
-            toast.dismiss(toastId);
+            toast.error("Failed to upload video", { id: toastId });
         }
-        setIsUploading(false);
     };
 
     const handleDeleteClick = async (videoId) => {

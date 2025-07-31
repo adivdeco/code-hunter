@@ -170,12 +170,16 @@ export const useAdminProblems = () => {
 
     const uploadNewVideo = useCallback(async (problemId, formData) => {
         try {
-            const response = await axiosClient.post(`/video/upload/${problemId}`, formData
-                // {
-                // headers: { 'Content-Type': 'multipart/form-data' },
-                // }
+            const response = await axiosClient.post(
+                `/video/upload/${problemId}`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
             );
-            // Update state by adding the new video to the specific problem
+
             setRawProblems(prev =>
                 prev.map(p =>
                     p._id === problemId
