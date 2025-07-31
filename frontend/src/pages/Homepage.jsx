@@ -403,12 +403,28 @@ function Homepage() {
                       className="hover:bg-gray-800/50"
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <NavLink
-                          to={`/problem/${problem._id}`}
-                          className="text-gray-300 hover:text-blue-400 font-medium transition-colors"
-                        >
-                          {problem.title}
-                        </NavLink>
+                        <div className="flex items-center gap-2">
+                          <NavLink
+                            to={`/problem/${problem._id}`}
+                            className="text-gray-300 hover:text-blue-400 font-medium transition-colors"
+                          >
+                            {problem.title}
+                          </NavLink>
+                          {problem.Demo && (
+                            <span class="
+    inline-flex items-center 
+    rounded-full 
+    px-3 py-1 
+    text-xs font-bold 
+    bg-gradient-to-br from-purple-500 to-pink-600/80 
+    text-white 
+    ring-1 ring-inset ring-purple-500/20 
+    shadow-[0_0_10px_theme(colors.purple.500)]
+  ">
+                              Demo
+                            </span>
+                          )}
+                        </div>
                       </td>
 
                       <td className="px-4 py-4 whitespace-nowrap">

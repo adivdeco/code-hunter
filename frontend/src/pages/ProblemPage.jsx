@@ -1,4 +1,4 @@
-
+'use client';
 import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import Editor from '@monaco-editor/react';
@@ -18,6 +18,7 @@ import { NavLink } from 'react-router';
 import TimerBar from '@/components/TimeBar';
 import Discussion from '@/components/Discussion'
 import Editorial from '@/components/Editorial';
+
 
 
 const langMap = {
@@ -55,13 +56,58 @@ const ProblemPage = () => {
   const [isWordWrapEnabled, setIsWordWrapEnabled] = useState(true);
   const [tabSize, setTabSize] = useState(2); // Or your default
 
+  const [showProblemList, setShowProblemList] = useState(false);
+  const [allProblems, setAllProblems] = useState([]);
 
+  // Fetch all problems for the dropdown
+  useEffect(() => {
+    const fetchAllProblems = async () => {
+      try {
+        const response = await axiosClient.get('/problem/allProblems');
+        setAllProblems(response.data.allproblem || []);
+      } catch (error) {
+        console.error('Error fetching all problems:', error);
+      }
+    };
 
+    fetchAllProblems();
+  }, []);
 
+  // Add this effect to handle click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showProblemList && !event.target.closest('.relative')) {
+        setShowProblemList(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showProblemList]);
 
   const { handleSubmit } = useForm();
 
   // console.log(user);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredProblems, setFilteredProblems] = useState([]);
+
+  // Filter problems based on search term
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setFilteredProblems(allProblems);
+    } else {
+      const filtered = allProblems.filter(problem =>
+        problem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (problem.tags && problem.tags.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+      setFilteredProblems(filtered);
+    }
+  }, [searchTerm, allProblems]);
+
+
+
 
 
   useEffect(() => {
@@ -264,19 +310,83 @@ const ProblemPage = () => {
 
       <nav className="h-12 w-full bg-black px-3 flex items-center justify-between text-white shadow-sm">
 
-        {/* left */}
         <div className="flex items-center gap-3">
           <span className="text-lg font-bold font-changa text-white flex items-center">
             Code
             <span className="ml-1 bg-yellow-400 text-black px-0.5 rounded-sm">Hunter</span>
           </span>
-          <span className="text-sm text-gray-400 font-changa hidden sm:inline">Practice. Learn. Repeat.</span>
+
+
+          <div className="relative">
+            <button
+              onClick={() => setShowProblemList(!showProblemList)}
+              className="flex items-center gap-1 hover:text-yellow-400 transition"
+            >
+              <span className="text-sm text-gray-400 font-changa hidden sm:inline">Problems</span>
+              <ChevronDown size={16} className={showProblemList ? "transform rotate-180" : ""} />
+            </button>
+
+            {showProblemList && (
+              <div className="absolute left-0 mt-2 w-64 max-h-[70vh] overflow-y-auto bg-gray-800 border border-gray-700 rounded-md shadow-lg z-50">
+                <div className="p-2">
+                  <input
+                    type="text"
+                    placeholder="Search problems..."
+                    className="w-full px-3 py-2 mb-2 text-sm bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    value={searchTerm}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      const dropdown = document.querySelector('.problems-dropdown');
+                      if (dropdown) dropdown.scrollTop = 0;
+                    }}
+                  />
+
+                  <div className="space-y-1 problems-dropdown max-h-[60vh] overflow-y-auto">
+                    {filteredProblems.length > 0 ? (
+                      filteredProblems.map((problem) => (
+                        <NavLink
+                          key={problem._id}
+                          to={`/problem/${problem._id}`}
+                          className={({ isActive }) =>
+                            `block px-3 py-2 text-sm rounded-md transition-colors ${isActive
+                              ? 'bg-yellow-500/20 text-yellow-400'
+                              : 'text-gray-300 hover:bg-gray-700'
+                            }`
+                          }
+                          onClick={() => setShowProblemList(false)}
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="truncate">{problem.title}</span>
+                            <span className={`text-xs px-2 py-1 rounded-full shrink-0 ${problem.difficulty === 'easy' ? 'bg-green-500/20 text-green-400' :
+                              problem.difficulty === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                                'bg-red-500/20 text-red-400'
+                              }`}>
+                              {problem.difficulty}
+                            </span>
+                          </div>
+                          {problem.tags && (
+                            <div className="text-xs text-gray-400 mt-1 truncate">
+                              {problem.tags}
+                            </div>
+                          )}
+                        </NavLink>
+                      ))
+                    ) : (
+                      <div className="px-3 py-2 text-sm text-gray-400">
+                        No problems found matching "{searchTerm}"
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* center */}
         <div className="hidden md:flex items-center gap-6 text-sm text-gray-300">
           <NavLink to={"/problems"}>
-            <button className="hover:text-yellow-400 transition">Practice</button>
+            <button className="hover:text-yellow-400 transition">Home</button>
           </NavLink>
 
 
@@ -394,7 +504,15 @@ const ProblemPage = () => {
                     <div className="w-full text-white flex flex-col h-full">
                       <h2 className="text-xl font-bold mb-4">Editorial</h2>
                       <div className="whitespace-pre-wrap text-sm leading-relaxed bg-gray-800/40 p-4 rounded-md border border-gray-700">
-                        <Editorial secureUrl={problem.secureUrl} thumbnailUrl={problem.thumbnailUrl} duration={problem.duration} />
+                        {problem.videoSolutions?.length > 0 ? (
+                          <Editorial
+                            secureUrl={problem.videoSolutions[0].secureUrl}
+                            thumbnailUrl={problem.videoSolutions[0].thumbnailUrl}
+                            duration={problem.videoSolutions[0].duration}
+                          />
+                        ) : (
+                          <p className="text-gray-400">No video solution available yet</p>
+                        )}
                       </div>
                     </div>
                   )}

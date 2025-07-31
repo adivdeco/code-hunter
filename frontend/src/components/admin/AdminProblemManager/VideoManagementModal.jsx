@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import toast from 'react-hot-toast';
 import { FiX, FiUpload, FiLoader, FiTrash2, FiPlayCircle, FiAlertCircle } from 'react-icons/fi';
+import axiosClient from '@/utils/axiosClint';
 
 Modal.setAppElement('#root'); // Ensure this matches your root element ID
 

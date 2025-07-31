@@ -63,12 +63,14 @@
 // module.exports = { getCorsOptions };
 
 const getCorsOptions = () => {
-    const allowedOrigins = [
-        'http://localhost:5173',
-        'https://code-hunter-backend.onrender.com',
-        'https://code-hunter-*.vercel.app', // Wildcard for Vercel preview URLs
-        'https://your-production-domain.com' // Add your production domain
-    ];
+    // const allowedOrigins = [
+    //     'http://localhost:5173',
+    //     'https://code-hunter-backend.onrender.com',
+    //     'https://code-hunter-*.vercel.app', // Wildcard for Vercel preview URLs
+    //     'https://your-production-domain.com' // Add your production domain
+    // ];
+    const allowedOrigins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : [];
+
 
     return {
         origin: (origin, callback) => {
