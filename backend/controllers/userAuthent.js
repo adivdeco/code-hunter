@@ -253,6 +253,20 @@ const logout = async (req, res) => {
     }
 };
 
+const alluser = async (req, res) => {
+    try {
+        const alluser = await User.find()
+        if (alluser.length === 0) {
+            return res.status(404).send("No User found");
+        }
+        res.status(200).json({ message: "All User fetched successfully", alluser });
+    } catch (error) {
+        res.send("Error in fetch: " + err)
+
+
+    }
+}
+
 const adminregister = async (req, res) => {
     try {
 
