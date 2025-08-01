@@ -3,8 +3,55 @@ const User = require('../models/userSchema')
 const { register, login, logout, adminregister, deletedprofil, alluser, updateUserStatus, getUserStats, adminDeleteUser } = require('../controllers/userAuthent.js');
 const userMiddleware = require('../middleware/userMiddleware.js');
 const adminMiddleware = require('../middleware/adminMiddleware.js');
-
+const axios = require('axios');
+const jwt = require('jsonwebtoken');
 const authRoutre = express.Router()
+
+const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+const FRONTEND_URL = process.env.FRONTEND_URL;
+
+authRoutre.get('/github', (req, res) => {
+    const redirectURL = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user`;
+    res.redirect(redirectURL);
+});
+
+// 2. Handle GitHub callback
+authRoutre.get('/github/callback', async (req, res) => {
+    const code = req.query.code;
+    try {
+        // Exchange code for access token
+        const tokenRes = await axios.post(`https://github.com/login/oauth/access_token`, {
+            client_id: CLIENT_ID,
+            client_secret: CLIENT_SECRET,
+            code: code,
+        }, {
+            headers: { Accept: 'application/json' },
+        });
+
+        const access_token = tokenRes.data.access_token;
+
+        // Get user info
+        const userRes = await axios.get('https://api.github.com/user', {
+            headers: { Authorization: `token ${access_token}` },
+        });
+
+        const githubUser = userRes.data;
+
+        // Create a JWT (or session) — customize payload as needed
+        const token = jwt.sign({
+            id: githubUser.id,
+            username: githubUser.login,
+            avatar: githubUser.avatar_url,
+        }, "secretkey", { expiresIn: '7d' });
+
+        // Send token to frontend via redirect with query
+        res.redirect(`${FRONTEND_URL}/auth-success?token=${token}`);
+    } catch (error) {
+        console.error("GitHub login error:", error);
+        res.redirect(`${FRONTEND_URL}/auth-failure`);
+    }
+});
 
 authRoutre.post('/register', register)
 authRoutre.post('/login', login);

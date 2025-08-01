@@ -73,6 +73,11 @@ export default function LoginPage() {
     });
   };
 
+  const handleGithubLogin = () => {
+    window.location.href = 'https://code-hunter-backend.onrender.com/auth/github';
+  };
+
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-gray-900">
       {/* ===== 2. ADD THE TOASTER COMPONENT ===== */}
@@ -190,7 +195,7 @@ export default function LoginPage() {
                   </button>
 
                   <button
-                    onClick={() => handleFeatureInProgress('GitHub')}
+                    onClick={handleGithubLogin}
                     type="button"
                     className="inline-flex w-full justify-center items-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition-colors border border-white/10"
                   >
