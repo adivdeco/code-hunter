@@ -17,38 +17,90 @@ authRoutre.get('/github', (req, res) => {
 });
 
 // 2. Handle GitHub callback
+// authRoutre.get('/github/callback', async (req, res) => {
+//     const code = req.query.code;
+//     try {
+//         // Exchange code for access token
+//         const tokenRes = await axios.post(`https://github.com/login/oauth/access_token`, {
+//             client_id: CLIENT_ID,
+//             client_secret: CLIENT_SECRET,
+//             code: code,
+//         }, {
+//             headers: { Accept: 'application/json' },
+//         });
+
+//         const access_token = tokenRes.data.access_token;
+
+//         // Get user info
+//         const userRes = await axios.get('https://api.github.com/user', {
+//             headers: { Authorization: `token ${access_token}` },
+//         });
+
+//         const githubUser = userRes.data;
+
+//         // Create a JWT (or session) — customize payload as needed
+//         const token = jwt.sign({
+//             githubId: githubUser.id,
+//             username: githubUser.login,
+//             avatar: githubUser.avatar_url,
+//             email: githubUser.email || `${githubUser.id}@github.com`,
+//             name: githubUser.name || githubUser.login,
+//             password: 'github-auth', // dummy password to satisfy schema
+//             role: 'user',
+//         }, "secretkey", { expiresIn: '7d' });
+
+//         // Send token to frontend via redirect with query
+//         res.redirect(`${FRONTEND_URL}/auth-success?token=${token}`);
+//     } catch (error) {
+//         console.error("GitHub login error:", error);
+//         res.redirect(`${FRONTEND_URL}/auth-failure`);
+//     }
+// });
 authRoutre.get('/github/callback', async (req, res) => {
     const code = req.query.code;
+
     try {
-        // Exchange code for access token
         const tokenRes = await axios.post(`https://github.com/login/oauth/access_token`, {
             client_id: CLIENT_ID,
             client_secret: CLIENT_SECRET,
             code: code,
         }, {
-            headers: { Accept: 'application/json' },
+            headers: { Accept: 'application/json' }
         });
 
         const access_token = tokenRes.data.access_token;
 
-        // Get user info
         const userRes = await axios.get('https://api.github.com/user', {
-            headers: { Authorization: `token ${access_token}` },
+            headers: { Authorization: `token ${access_token}` }
         });
 
         const githubUser = userRes.data;
 
-        // Create a JWT (or session) — customize payload as needed
-        const token = jwt.sign({
-            id: githubUser.id,
-            username: githubUser.login,
-            avatar: githubUser.avatar_url,
-        }, "secretkey", { expiresIn: '7d' });
+        let user = await User.findOne({ githubId: githubUser.id });
+        if (!user) {
+            user = await User.create({
+                githubId: githubUser.id,
+                username: githubUser.login,
+                avatar: githubUser.avatar_url,
+                email: githubUser.email || `${githubUser.id}@github.com`,
+                name: githubUser.name || githubUser.login,
+                role: 'user'
+            });
+        }
 
-        // Send token to frontend via redirect with query
+        const token = jwt.sign({
+            githubId: user.githubId,
+            _id: user._id,
+            username: user.username,
+            avatar: user.avatar,
+            email: user.email,
+            name: user.name,
+            role: user.role
+        }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
         res.redirect(`${FRONTEND_URL}/auth-success?token=${token}`);
-    } catch (error) {
-        console.error("GitHub login error:", error);
+    } catch (err) {
+        console.error("GitHub Auth Error:", err.message);
         res.redirect(`${FRONTEND_URL}/auth-failure`);
     }
 });

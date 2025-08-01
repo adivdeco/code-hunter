@@ -48,6 +48,52 @@
 
 
 
+// const jwt = require('jsonwebtoken');
+// const User = require('../models/userSchema');
+// const redisClient = require('../config/redis');
+
+// const userMiddleware = async (req, res, next) => {
+//     try {
+//         const { token } = req.cookies;
+
+//         if (!token) {
+//             return res.status(401).send("Token is not provided");
+//         }
+
+//         const payload = jwt.verify(token, "secretkey"); // ✅ use env secret
+
+//         const userId = payload._id || payload.id; // ✅ support both _id and GitHub id
+
+//         if (!userId) {
+//             return res.status(401).send("Unauthorized: Invalid token payload");
+//         }
+
+//         const finduser = await User.findOne({
+//             $or: [{ _id: userId }, { githubId: userId }]
+//         });
+
+//         if (!finduser) {
+//             return res.status(404).send("User not found");
+//         }
+
+//         // const IsBlocked = await redisClient.exists(`blocked:${token}`);
+//         const IsBlocked = await redisClient.exists(`blocked:${token}`);
+
+//         if (IsBlocked) {
+//             console.log("User is blocked token:", token);
+//             return res.status(403).send("Forbidden: User is blocked");
+//         }
+
+//         req.finduser = finduser;
+//         next();
+//     } catch (err) {
+//         res.status(500).send("Error: " + err.message);
+//     }
+// };
+
+// module.exports = userMiddleware;
+
+
 const jwt = require('jsonwebtoken');
 const User = require('../models/userSchema');
 const redisClient = require('../config/redis');
@@ -55,31 +101,21 @@ const redisClient = require('../config/redis');
 const userMiddleware = async (req, res, next) => {
     try {
         const { token } = req.cookies;
+        if (!token) return res.status(401).send("Token not provided");
 
-        if (!token) {
-            return res.status(401).send("Token is not provided");
-        }
-
-        const payload = jwt.verify(token, "secretkey"); // ✅ use env secret
-
-        const userId = payload._id || payload.id; // ✅ support both _id and GitHub id
-
-        if (!userId) {
-            return res.status(401).send("Unauthorized: Invalid token payload");
-        }
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        if (!payload?._id && !payload?.githubId)
+            return res.status(401).send("Invalid token payload");
 
         const finduser = await User.findOne({
-            $or: [{ _id: userId }, { githubId: userId }]
+            $or: [{ _id: payload._id }, { githubId: payload.githubId }]
         });
 
-        if (!finduser) {
+        if (!finduser)
             return res.status(404).send("User not found");
-        }
 
-        const IsBlocked = await redisClient.exists(`blocked:${token}`);
-        if (IsBlocked) {
-            return res.status(403).send("Forbidden: User is blocked");
-        }
+        const isBlocked = await redisClient.exists(`blocked:${token}`);
+        if (isBlocked) return res.status(403).send("Forbidden: Token is blocked");
 
         req.finduser = finduser;
         next();
