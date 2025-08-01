@@ -5,7 +5,7 @@ const userMiddleware = require('../middleware/userMiddleware.js');
 const adminMiddleware = require('../middleware/adminMiddleware.js');
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
-
+const jwt = require('jsonwebtoken');
 
 
 const authRoutre = express.Router()
@@ -185,24 +185,33 @@ passport.use(new GitHubStrategy({
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     callbackURL: "https://code-hunter-backend.onrender.com/auth/github/callback",
     scope: ['user:email'],
-    state: true, // Recommended for security
-    passReqToCallback: false
+    state: true,
+    proxy: true // Important for HTTPS
 }, async (accessToken, refreshToken, profile, done) => {
     try {
-        // Add debug logging
-        console.log('GitHub Profile:', profile);
-        console.log('Access Token:', accessToken);
+        console.log('GitHub profile received:', profile);
 
-        // Your existing user handling logic
-        let user = await User.findOne({ githubId: profile.id });
+        // Find or create user
+        let user = await User.findOne({
+            $or: [
+                { githubId: profile.id },
+                { email: profile.emails?.[0]?.value }
+            ]
+        });
 
         if (!user) {
             user = await User.create({
                 githubId: profile.id,
                 name: profile.displayName || profile.username,
                 email: profile.emails?.[0]?.value,
-                avatar: profile.photos?.[0]?.value
+                avatar: profile.photos?.[0]?.value,
+                isPaidUser: false,
+                role: 'user'
             });
+        } else if (!user.githubId) {
+            // Merge existing account with GitHub
+            user.githubId = profile.id;
+            await user.save();
         }
 
         return done(null, user);
@@ -211,6 +220,7 @@ passport.use(new GitHubStrategy({
         return done(err);
     }
 }));
+
 // Serialization
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -225,58 +235,79 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-// Add GitHub OAuth routes
-// Add this before your GitHub routes
-authRoutre.use((req, res, next) => {
-    // Store original redirect
-    req.session.oauth2return = req.headers.referer;
-    next();
-});
+// GitHub OAuth Routes
+router.get('/github', passport.authenticate('github'));
 
-authRoutre.get('/github', passport.authenticate('github'));
-
-authRoutre.get('/github/callback',
-    (req, res, next) => {
-        passport.authenticate('github', (err, user, info) => {
-            if (err) {
-                console.error('OAuth Error:', err);
-                const returnTo = req.session.oauth2return || '/login';
-                return res.redirect(`${returnTo}?error=oauth_failed`);
-            }
-            if (!user) {
-                return res.redirect('/login?error=user_not_found');
-            }
-            req.logIn(user, (loginErr) => {
-                if (loginErr) {
-                    console.error('Login Error:', loginErr);
-                    return res.redirect('/login?error=session_failed');
-                }
-                next();
-            });
-        })(req, res, next);
-    },
+router.get('/github/callback',
+    passport.authenticate('github', {
+        failureRedirect: '/auth/failed',
+        session: false // We'll use JWT instead
+    }),
     (req, res) => {
-        // Successful authentication
-        const userData = {
-            _id: req.user._id,
-            name: req.user.name,
-            email: req.user.email,
-            avatar: req.user.avatar
-        };
+        try {
+            if (!req.user) {
+                throw new Error('User not found after authentication');
+            }
 
-        const script = `
-      <script>
-        window.opener.postMessage({
-          type: 'auth_success',
-          user: ${JSON.stringify(userData)}
-        }, '${process.env.FRONTEND_URL}');
-        window.close();
-      </script>
-    `;
+            // Create JWT token
+            const token = jwt.sign(
+                {
+                    _id: req.user._id,
+                    email: req.user.email,
+                    role: req.user.role
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' }
+            );
 
-        res.send(script);
+            // Send response to frontend
+            const script = `
+        <script>
+          window.opener.postMessage({
+            type: 'auth_success',
+            token: '${token}',
+            user: ${JSON.stringify({
+                _id: req.user._id,
+                name: req.user.name,
+                email: req.user.email,
+                avatar: req.user.avatar,
+                role: req.user.role
+            })}
+          }, '${process.env.FRONTEND_URL}');
+          window.close();
+        </script>
+      `;
+
+            res.send(script);
+        } catch (error) {
+            console.error('Callback error:', error);
+            const script = `
+        <script>
+          window.opener.postMessage({
+            type: 'auth_error',
+            error: 'Authentication failed'
+          }, '${process.env.FRONTEND_URL}');
+          window.close();
+        </script>
+      `;
+            res.send(script);
+        }
     }
 );
+
+// Failure route
+router.get('/auth/failed', (req, res) => {
+    const script = `
+    <script>
+      window.opener.postMessage({
+        type: 'auth_error',
+        error: 'GitHub authentication failed'
+      }, '${process.env.FRONTEND_URL}');
+      window.close();
+    </script>
+  `;
+    res.send(script);
+});
 
 
 module.exports = authRoutre;

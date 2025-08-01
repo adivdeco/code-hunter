@@ -75,107 +75,66 @@ export default function LoginPage() {
   };
 
   const handleGitHubLogin = () => {
-    try {
-      setGithubLoading(true);
+    setGithubLoading(true);
 
-      // Set timeout for popup block detection (1.5 seconds)
-      const timer = setTimeout(() => {
-        setGithubLoading(false);
-        toast.error('Pop-up was blocked. Please allow pop-ups or try again.');
-      }, 1500);
+    // Window setup
+    const width = 500;
+    const height = 600;
+    const left = window.screen.width / 2 - width / 2;
+    const top = window.screen.height / 2 - height / 2;
 
-      // Window dimensions and positioning
-      const width = 500;  // Slightly smaller for better mobile compatibility
-      const height = 600;
-      const left = window.screen.width / 2 - width / 2;
-      const top = window.screen.height / 2 - height / 2;
+    // Open window
+    const authWindow = window.open(
+      '',
+      'githubAuth',
+      `width=${width},height=${height},top=${top},left=${left},` +
+      `toolbar=no,location=no,status=no,menubar=no`
+    );
 
-      // First open a blank window (less likely to be blocked)
-      const authWindow = window.open(
-        '',
-        'githubAuth',
-        `width=${width},height=${height},top=${top},left=${left},` +
-        `toolbar=no,location=no,status=no,menubar=no`
-      );
-
-      // Check if popup was blocked
-      if (!authWindow || authWindow.closed || typeof authWindow.closed === 'undefined') {
-        clearTimeout(timer);
-        setGithubLoading(false);
-
-        // Fallback to redirect approach
-        window.location.href = 'https://code-hunter-backend.onrender.com/auth/github';
-        return;
-      }
-
-      // Now set the URL (after window is open)
-      authWindow.location.href = 'https://code-hunter-backend.onrender.com/auth/github';
-
-      // Message handler
-      const handleMessage = (event) => {
-        // Security check - verify message origin
-        if (event.origin !== 'https://code-hunter-backend.onrender.com') return;
-
-        clearTimeout(timer);
-        setGithubLoading(false);
-
-        if (event.data.type === 'auth_success') {
-          const user = event.data.user;
-
-          // Dispatch login action with additional auth method info
-          dispatch(loginUser({
-            ...user,
-            authMethod: 'github' // Add auth method to user state
-          }));
-
-          // Close window if still open
-          try {
-            if (authWindow && !authWindow.closed) {
-              authWindow.close();
-            }
-          } catch (err) {
-            console.warn('Error closing auth window:', err);
-          }
-
-          // Redirect to problems page
-          navigate('/problems', {
-            state: { welcome: true },
-            replace: true
-          });
-
-        } else if (event.data.type === 'auth_error') {
-          toast.error(event.data.message || 'GitHub login failed');
-          try {
-            if (authWindow && !authWindow.closed) {
-              authWindow.close();
-            }
-          } catch (err) {
-            console.warn('Error closing auth window:', err);
-          }
-        }
-      };
-
-      // Add event listener
-      window.addEventListener('message', handleMessage);
-
-      // Cleanup function
-      return () => {
-        window.removeEventListener('message', handleMessage);
-        clearTimeout(timer);
-        try {
-          if (authWindow && !authWindow.closed) {
-            authWindow.close();
-          }
-        } catch (err) {
-          console.warn('Error in cleanup:', err);
-        }
-      };
-
-    } catch (error) {
+    // Check if popup was blocked
+    if (!authWindow) {
       setGithubLoading(false);
-      console.error('GitHub login error:', error);
-      toast.error(error.message || 'Failed to initiate GitHub login');
+      // Fallback to redirect
+      window.location.href = `${process.env.VITE_API_URL}/auth/github`;
+      return;
     }
+
+    // Set URL after window opens
+    authWindow.location.href = `${process.env.VITE_API_URL}/auth/github`;
+
+    // Message handler
+    const handleMessage = (event) => {
+      if (event.origin !== process.env.VITE_API_URL) return;
+
+      setGithubLoading(false);
+
+      switch (event.data.type) {
+        case 'auth_success':
+          // Set token in cookies/localStorage
+          document.cookie = `token=${event.data.token}; path=/; secure; sameSite=lax`;
+
+          // Update Redux state
+          dispatch(loginUser(event.data.user));
+
+          // Close window and redirect
+          if (authWindow) authWindow.close();
+          navigate('/problems');
+          break;
+
+        case 'auth_error':
+          toast.error(event.data.error || 'GitHub login failed');
+          if (authWindow) authWindow.close();
+          break;
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      if (authWindow) authWindow.close();
+    };
   };
 
 

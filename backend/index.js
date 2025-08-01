@@ -30,17 +30,31 @@ const app = express();
 
 
 // part of fit
-// Session configuration
+// Add these to your existing server setup:
+
+// Session configuration with Redis store
+const RedisStore = require('connect-redis')(session);
 app.use(session({
+  store: new RedisStore({ client: redisClient }),
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true } // Use 'secure: true' in production (HTTPS)
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
 }));
 
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
+// Trust proxy for HTTPS
+app.set('trust proxy', 1);
+
+// Add CORS middleware for OAuth routes
+app.use('/auth/github', cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
 // git part end
 
 
@@ -75,7 +89,10 @@ process.on('SIGINT', async () => {
   });
 });
 
-
+app.use('/auth', cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
 
 app.use("/auth", authRouter);
 app.use("/problem", problemRouter);
