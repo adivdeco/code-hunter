@@ -13,40 +13,85 @@ const register = async (req, res) => {
 
         const { name, email, password } = req.body;
 
+        // Check if user exists (both email and GitHub ID)
+        const existingUser = await User.findOne({
+            $or: [
+                { email },
+                { githubId: req.user?.githubId }
+            ]
+        });
 
-        // For GitHub OAuth users (no password)
-        if (req.user && req.user.githubId) {
-            return res.status(200).json({
-                success: true,
-                user: req.user
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                error: existingUser.githubId ?
+                    "GitHub account already linked" :
+                    "Email already registered"
             });
         }
 
-        req.body.password = await bcrypt.hash(password, 10);
+        // Handle GitHub OAuth registration
+        if (req.user?.githubId) {
+            const user = await User.create({
+                ...req.user,
+                email: req.user.email || email // Use GitHub email if available
+            });
 
-        req.body.role = 'user';
-
-        const user = await User.create(req.body);   // add data to database
-
-
-        const token = jwt.sign({ _id: user._id, email: email, role: 'user' }, "secretkey", { expiresIn: 1200 * 1200 }); // 1 hour expiration
-
-
-        const reply = {
-            name: user.name,
-            email: user.email,
-            _id: user._id,
-            role: user.role,
+            return res.status(200).json({
+                success: true,
+                user: {
+                    name: user.name,
+                    email: user.email,
+                    _id: user._id,
+                    role: user.role
+                }
+            });
         }
 
-        res.cookie('token', token, { maxAge: 1200 * 1200 * 1000, httpOnly: true }); // Set cookie with token
-        res.status(200).json({
-            user: reply,
-            message: "login sussesfully",
+        // Traditional registration
+        if (!password) {
+            return res.status(400).json({
+                success: false,
+                error: "Password is required for traditional registration"
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({
+            ...req.body,
+            password: hashedPassword,
+            role: 'user'
         });
-    }
-    catch (err) {
-        res.send("Error: " + err)
+
+        const token = jwt.sign(
+            { _id: user._id, email, role: 'user' },
+            "secretkey",
+            { expiresIn: '14d' }
+        );
+
+        res.cookie('token', token, {
+            maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None'
+        });
+
+        res.status(200).json({
+            user: {
+                name: user.name,
+                email: user.email,
+                _id: user._id,
+                role: user.role
+            },
+            message: "Registration successful"
+        });
+    } catch (err) {
+        console.error("Registration error:", err);
+        res.status(500).json({
+            success: false,
+            error: "Registration failed",
+            details: process.env.NODE_ENV === 'development' ? err.message : undefined
+        });
     }
 }
 

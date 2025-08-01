@@ -21,7 +21,6 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: function () {
-            // Only require password for non-OAuth users
             return !this.githubId;
         },
         minlength: 6
