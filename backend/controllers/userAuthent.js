@@ -244,8 +244,8 @@ const logout = async (req, res) => {
     try {
         const { token } = req.cookies;
         const payload = jwt.decode(token);
-        await redisClient.set(`blocked:${token}`, 'blocked');
-        await redisClient.expireAt(`blocked:${token}`, payload.exp);
+        await redisClient.set(`blocked:${payload._id}`, 'blocked');
+        await redisClient.expireAt(`blocked:${payload._id}`, payload.exp);
         res.cookie('token', null, { expires: new Date(0), httpOnly: true });
         res.status(200).json("Logout Successful");
     } catch (err) {
@@ -276,7 +276,7 @@ const adminregister = async (req, res) => {
         req.body.password = await bcrypt.hash(password, 10);
 
         const user = await User.create(req.body);
-        const token = jwt.sign({ email: email, _id: user._id, role: user.role }, "secretkey", { expiresIn: 120 * 120 }); // 1 hour expiration
+        const token = jwt.sign({ email: email, _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: 120 * 120 }); // 1 hour expiration
         res.cookie('token', token, { maxAge: 120 * 120 * 1000, httpOnly: true }); // Set cookie with token
         res.send("Admin User Created Successfully");
     }

@@ -104,6 +104,28 @@ authRoutre.get('/github/callback', async (req, res) => {
         res.redirect(`${FRONTEND_URL}/auth-failure`);
     }
 });
+authRoutre.get("/check", userMiddleware, (req, res) => {
+
+
+    const reply = {
+        name: req.finduser.name,
+        email: req.finduser.email,
+        _id: req.finduser._id,
+        role: req.finduser.role,
+        isPaidUser: req.finduser.isPaidUser,
+        problemSolved: req.finduser.problemSolved,
+        createdAt: req.finduser.createdAt,
+        country: req.finduser.country,
+        avatar: req.finduser.avatar,
+        // streak: req.finduser.streak, // Uncomment if streak exists in your schema
+    };
+
+
+    res.status(200).json({
+        message: "valid user",
+        user: reply
+    })
+})
 
 authRoutre.post('/register', register)
 authRoutre.post('/login', login);
@@ -119,28 +141,7 @@ authRoutre.delete('/profile', userMiddleware, deletedprofil);
 // Admin deletion of any user
 authRoutre.delete('/admin/users/:userId', adminMiddleware, adminDeleteUser);
 
-authRoutre.get("/check", userMiddleware, (req, res) => {
 
-
-    const reply = {
-        name: req.finduser.name,
-        email: req.finduser.email,
-        _id: req.finduser._id,
-        role: req.finduser.role,
-        isPaidUser: req.finduser.isPaidUser,
-        problemSolved: req.finduser.problemSolved,
-        createdAt: req.finduser.createdAt,
-        country: req.finduser.country,
-        avatar: req.finduser.avatar,
-        streak: req.finduser.streak, // Uncomment if streak exists in your schema
-    };
-
-
-    res.status(200).json({
-        message: "valid user",
-        user: reply
-    })
-})
 
 
 
