@@ -174,7 +174,6 @@ import ShippingPage from "@/pages/ShippingPage";
 import PrivacyPage from "@/pages/PrivacyPage";
 import ShopPage from './pages/ShopPage';
 import ManualPaymentPage from '@/pages/ManualPaymentPage';
-import AuthSuccess from "./pages/AuthSuccess";
 
 // Admin Components
 import AdminPanel from "./components/admin/Add_que";
@@ -246,7 +245,7 @@ function App() {
   // Route protection helpers
   const requireAuth = (element) => isAuthenticated ? element : <Navigate to="/" />;
   const requireAdmin = (element) => isAuthenticated && user?.role === "admin" ? element : <Navigate to="/" />;
-  const redirectIfAuth = (element) => isAuthenticated ? <Navigate to="/dashbord" /> : element;
+  const redirectIfAuth = (element) => isAuthenticated ? <Navigate to="/dashboard" /> : element;
 
   return (
     <>
@@ -282,8 +281,6 @@ function App() {
         <Route path="/contribution" element={requireAuth(<ContributionPage />)} />
         <Route path="/duscission" element={<GlobalChatPage />} />
         {/* <Route path="/user/video" element={requireAuth(<ProblemList />)} /> */}
-        <Route path="/auth-success" element={<AuthSuccess />} />
-
 
         {/* Admin Routes */}
         <Route path="/admin" element={requireAdmin(<Admin />)} />
