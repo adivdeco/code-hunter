@@ -26,6 +26,9 @@ const session = require('express-session');
 const passport = require('passport');
 
 
+const app = express();
+
+
 // part of fit
 // Session configuration
 app.use(session({
@@ -47,7 +50,6 @@ const errorHandler = require('./middleware/errorHandler');
 
 // --- Application Constants ---
 const PORT = process.env.PORT || 5500;
-const app = express();
 const httpServer = http.createServer(app);
 
 // --- Middleware Setup ---
