@@ -245,7 +245,7 @@ function App() {
   // Route protection helpers
   const requireAuth = (element) => isAuthenticated ? element : <Navigate to="/" />;
   const requireAdmin = (element) => isAuthenticated && user?.role === "admin" ? element : <Navigate to="/" />;
-  const redirectIfAuth = (element) => isAuthenticated ? <Navigate to="/dashboard" /> : element;
+  const redirectIfAuth = (element) => isAuthenticated ? <Navigate to="/dashbord" /> : element;
 
   return (
     <>
