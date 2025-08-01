@@ -3,129 +3,8 @@ const User = require('../models/userSchema')
 const { register, login, logout, adminregister, deletedprofil, alluser, updateUserStatus, getUserStats, adminDeleteUser } = require('../controllers/userAuthent.js');
 const userMiddleware = require('../middleware/userMiddleware.js');
 const adminMiddleware = require('../middleware/adminMiddleware.js');
-const axios = require('axios');
-const jwt = require('jsonwebtoken');
+
 const authRoutre = express.Router()
-
-const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
-const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
-const FRONTEND_URL = process.env.FRONTEND_URL;
-
-authRoutre.get('/github', (req, res) => {
-    const redirectURL = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user`;
-    res.redirect(redirectURL);
-});
-
-// 2. Handle GitHub callback
-// authRoutre.get('/github/callback', async (req, res) => {
-//     const code = req.query.code;
-//     try {
-//         // Exchange code for access token
-//         const tokenRes = await axios.post(`https://github.com/login/oauth/access_token`, {
-//             client_id: CLIENT_ID,
-//             client_secret: CLIENT_SECRET,
-//             code: code,
-//         }, {
-//             headers: { Accept: 'application/json' },
-//         });
-
-//         const access_token = tokenRes.data.access_token;
-
-//         // Get user info
-//         const userRes = await axios.get('https://api.github.com/user', {
-//             headers: { Authorization: `token ${access_token}` },
-//         });
-
-//         const githubUser = userRes.data;
-
-//         // Create a JWT (or session) — customize payload as needed
-//         const token = jwt.sign({
-//             githubId: githubUser.id,
-//             username: githubUser.login,
-//             avatar: githubUser.avatar_url,
-//             email: githubUser.email || `${githubUser.id}@github.com`,
-//             name: githubUser.name || githubUser.login,
-//             password: 'github-auth', // dummy password to satisfy schema
-//             role: 'user',
-//         }, "secretkey", { expiresIn: '7d' });
-
-//         // Send token to frontend via redirect with query
-//         res.redirect(`${FRONTEND_URL}/auth-success?token=${token}`);
-//     } catch (error) {
-//         console.error("GitHub login error:", error);
-//         res.redirect(`${FRONTEND_URL}/auth-failure`);
-//     }
-// });
-authRoutre.get('/github/callback', async (req, res) => {
-    const code = req.query.code;
-
-    try {
-        const tokenRes = await axios.post(`https://github.com/login/oauth/access_token`, {
-            client_id: CLIENT_ID,
-            client_secret: CLIENT_SECRET,
-            code: code,
-        }, {
-            headers: { Accept: 'application/json' }
-        });
-
-        const access_token = tokenRes.data.access_token;
-
-        const userRes = await axios.get('https://api.github.com/user', {
-            headers: { Authorization: `token ${access_token}` }
-        });
-
-        const githubUser = userRes.data;
-
-        let user = await User.findOne({ githubId: githubUser.id });
-        if (!user) {
-            user = await User.create({
-                githubId: githubUser.id,
-                username: githubUser.login,
-                avatar: githubUser.avatar_url,
-                email: githubUser.email || `${githubUser.id}@github.com`,
-                name: githubUser.name || githubUser.login,
-                role: 'user'
-            });
-        }
-
-        const token = jwt.sign({
-            githubId: user.githubId,
-            _id: user._id,
-            username: user.username,
-            avatar: user.avatar,
-            email: user.email,
-            name: user.name,
-            role: user.role
-        }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-        res.redirect(`${FRONTEND_URL}/auth-success?token=${token}`);
-    } catch (err) {
-        console.error("GitHub Auth Error:", err.message);
-        res.redirect(`${FRONTEND_URL}/auth-failure`);
-    }
-});
-authRoutre.get("/check", userMiddleware, (req, res) => {
-
-
-    const reply = {
-        name: req.finduser.name,
-        email: req.finduser.email,
-        _id: req.finduser._id,
-        role: req.finduser.role,
-        isPaidUser: req.finduser.isPaidUser,
-        problemSolved: req.finduser.problemSolved,
-        createdAt: req.finduser.createdAt,
-        country: req.finduser.country,
-        avatar: req.finduser.avatar,
-        // streak: req.finduser.streak, // Uncomment if streak exists in your schema
-    };
-
-
-    res.status(200).json({
-        message: "valid user",
-        user: reply
-    })
-})
 
 authRoutre.post('/register', register)
 authRoutre.post('/login', login);
@@ -141,7 +20,28 @@ authRoutre.delete('/profile', userMiddleware, deletedprofil);
 // Admin deletion of any user
 authRoutre.delete('/admin/users/:userId', adminMiddleware, adminDeleteUser);
 
+authRoutre.get("/check", userMiddleware, (req, res) => {
 
+
+    const reply = {
+        name: req.finduser.name,
+        email: req.finduser.email,
+        _id: req.finduser._id,
+        role: req.finduser.role,
+        isPaidUser: req.finduser.isPaidUser,
+        problemSolved: req.finduser.problemSolved,
+        createdAt: req.finduser.createdAt,
+        country: req.finduser.country,
+        avatar: req.finduser.avatar,
+        streak: req.finduser.streak, // Uncomment if streak exists in your schema
+    };
+
+
+    res.status(200).json({
+        message: "valid user",
+        user: reply
+    })
+})
 
 
 

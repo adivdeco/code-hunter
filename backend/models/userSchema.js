@@ -1,118 +1,16 @@
-// const mongoose = require('mongoose');
-// const { Schema } = mongoose;
-
-// const userSchema = new Schema({
-
-//     name: {
-//         type: String,
-//         required: true,
-//         trim: true,
-//         minLength: 3,
-//         maxLength: 10,
-//         lowercase: true,
-//     },
-//     email: {
-//         type: String,
-//         required: true,
-//         unique: true,
-//         trim: true,
-//         lowercase: true,
-//     },
-//     password: {
-//         type: String,
-//         required: function () { return !this.githubId }, // password required only for normal users
-//         minlength: 4,
-//     },
-
-//     githubId: {
-//         type: String,
-//         unique: true,
-//         sparse: true, // allow null for normal users
-//     },
-
-//     username: {
-//         type: String,
-//         trim: true,
-//     },
-
-//     role: {
-//         type: String,
-//         enum: ['user', 'admin'],
-//         default: 'user',
-//     },
-//     isPaidUser: {  // New field
-//         type: Boolean,
-//         default: false
-//     },
-//     lastActive: {  // New field
-//         type: Date,
-//         default: Date.now
-//     },
-//     problemSolved: {
-//         type: [{
-//             problemId: {
-//                 type: Schema.Types.ObjectId,
-//                 ref: 'problemdata',
-//             },
-//             solvedAt: {  // New subfield
-//                 type: Date,
-//                 default: Date.now
-//             },
-//         }],
-//     },
-
-//     subscription: {  // New field for more detailed subscription info
-//         type: {
-//             plan: String,
-//             startsAt: Date,
-//             expiresAt: Date,
-//             autoRenew: Boolean
-//         },
-//         default: null
-//     },
-//     country: {
-//         type: String,
-//         uppercase: true,
-//         trim: true,
-//         maxlength: 2,
-//         default: 'IN',
-//     },
-//     avatar: {
-//         type: String,
-//         default: '',
-//     },
-
-
-
-
-// }, {
-//     timestamps: true,
-// });
-
-// userSchema.post('findOneAndDelete', async function (doc) {
-//     if (doc) {
-//         await mongoose.model('solution').deleteMany({
-//             userId: doc._id
-//         });
-//     }
-// });
-
-// const User = mongoose.model('userdata', userSchema);
-// module.exports = User;
-
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
+
     name: {
         type: String,
         required: true,
         trim: true,
         minLength: 3,
-        maxLength: 50,
+        maxLenghth: 10,
         lowercase: true,
     },
-
     email: {
         type: String,
         required: true,
@@ -120,72 +18,56 @@ const userSchema = new Schema({
         trim: true,
         lowercase: true,
     },
-
     password: {
         type: String,
-        required: function () {
-            return !this.githubId;
-        },
-        minlength: 4,
+        required: true,
+        minLength: 4,
+        // maxLength:10,
     },
-
-    githubId: {
-        type: String,
-        unique: true,
-        sparse: true, // allows null for non-GitHub users
-    },
-
-    username: {
-        type: String,
-        trim: true,
-    },
-
     role: {
         type: String,
         enum: ['user', 'admin'],
         default: 'user',
     },
-
-    isPaidUser: {
+    isPaidUser: {  // New field
         type: Boolean,
-        default: false,
+        default: false
     },
-
-    subscription: {
-        plan: {
-            type: String,
-            default: null,
-        },
-        startsAt: {
-            type: Date,
-            default: null,
-        },
-        expiresAt: {
-            type: Date,
-            default: null,
-        },
-        autoRenew: {
-            type: Boolean,
-            default: false,
-        }
-    },
-
-    lastActive: {
+    lastActive: {  // New field
         type: Date,
-        default: Date.now,
+        default: Date.now
+    },
+    problemSolved: {
+        type: [{
+            problemId: {
+                type: Schema.Types.ObjectId,
+                ref: 'problemdata',
+            },
+            solvedAt: {  // New subfield
+                type: Date,
+                default: Date.now
+            },
+        }],
+    },
+    problemSolved2: {
+        type: [{
+            problemdata: {
+                type: Schema.Types.ObjectId,
+                ref: 'problemdata',
+            }
+
+        }],
     },
 
-    problemSolved: [{
-        problemId: {
-            type: Schema.Types.ObjectId,
-            ref: 'problemdata',
+    subscription: {  // New field for more detailed subscription info
+        type: {
+            plan: String,
+            startsAt: Date,
+            expiresAt: Date,
+            autoRenew: Boolean
         },
-        solvedAt: {
-            type: Date,
-            default: Date.now,
-        },
-    }],
-
+        default: null
+    },
     country: {
         type: String,
         uppercase: true,
@@ -193,23 +75,23 @@ const userSchema = new Schema({
         maxlength: 2,
         default: 'IN',
     },
-
     avatar: {
         type: String,
         default: '',
     },
 
-    streak: {
-        type: Number,
-        default: 0,
-    }
 
-}, { timestamps: true });
 
-// Automatically delete user's solutions on profile deletion
+
+}, {
+    timestamps: true,
+});
+
 userSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
-        await mongoose.model('solution').deleteMany({ userId: doc._id });
+        await mongoose.model('solution').deleteMany({
+            userId: doc._id
+        });
     }
 });
 
