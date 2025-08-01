@@ -22,6 +22,24 @@ const noteRouter = require("./routes/noteSection");
 const bookmarkRouter = require('./routes/bookmark');
 const discussionRoutes = require('./routes/discussionRoutes');
 const videoRouter = require("./routes/videoCtrator")
+const session = require('express-session');
+const passport = require('passport');
+
+
+// part of fit
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true } // Use 'secure: true' in production (HTTPS)
+}));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+// git part end
+
 
 const errorHandler = require('./middleware/errorHandler');
 

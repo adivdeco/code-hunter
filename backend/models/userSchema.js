@@ -79,6 +79,11 @@ const userSchema = new Schema({
         type: String,
         default: '',
     },
+    githubId: {
+        type: String,
+        unique: true,
+        sparse: true // Allows null values for non-GitHub users
+    },
 
 
 
