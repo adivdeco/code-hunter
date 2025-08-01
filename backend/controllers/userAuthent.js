@@ -8,72 +8,51 @@ const redisClient = require('../config/redis');
 
 const register = async (req, res) => {
     try {
-        console.log("Registering user with data:", req.body);
+        console.log(req.body);
         validateuser(req.body);
 
         const { name, email, password } = req.body;
+        req.body.password = await bcrypt.hash(password, 10);
 
-        // Check if a user with the given email already exists
-        const existingUser = await User.findOne({ email });
+        req.body.role = 'user';
 
-        if (existingUser) {
-            return res.status(400).json({
-                success: false,
-                error: "An account with this email already exists."
-            });
+        const user = await User.create(req.body);   // add data to database
+
+
+        const token = jwt.sign({ _id: user._id, email: email, role: 'user' }, "secretkey", { expiresIn: 1200 * 1200 }); // 1 hour expiration
+
+
+        const reply = {
+            name: user.name,
+            email: user.email,
+            _id: user._id,
+            role: user.role,
         }
 
-        // This is a standard registration flow.
-        // GitHub registration is handled entirely by the Passport strategy.
-        if (!password) {
-            return res.status(400).json({
-                success: false,
-                error: "Password is required for registration."
-            });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({
-            name,
-            email,
-            password: hashedPassword,
-            role: 'user'
-        });
-
-        // Create token and cookie
-        const token = jwt.sign(
-            { _id: user._id, email: user.email, role: user.role },
-            process.env.JWT_SECRET || "secretkey", // Use env variable for secret
-            { expiresIn: '14d' }
-        );
-
-        res.cookie('token', token, {
-            maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'None'
-        });
-
-        res.status(201).json({ // Use 201 for resource creation
-            user: {
-                name: user.name,
-                email: user.email,
-                _id: user._id,
-                role: user.role,
-                avatar: user.avatar
-            },
-            message: "Registration successful"
-        });
-
-    } catch (err) {
-        console.error("Registration error:", err);
-        res.status(500).json({
-            success: false,
-            error: "Registration failed due to a server error.",
-            details: process.env.NODE_ENV === 'development' ? err.message : undefined
+        res.cookie('token', token, { maxAge: 1200 * 1200 * 1000, httpOnly: true }); // Set cookie with token
+        res.status(200).json({
+            user: reply,
+            message: "login sussesfully",
         });
     }
+    catch (err) {
+        res.send("Error: " + err)
+    }
 }
+const alluser = async (req, res) => {
+    try {
+        const alluser = await User.find()
+        if (alluser.length === 0) {
+            return res.status(404).send("No User found");
+        }
+        res.status(200).json({ message: "All User fetched successfully", alluser });
+    } catch (error) {
+        res.send("Error in fetch: " + err)
+
+
+    }
+}
+
 
 
 const login = async (req, res) => {
@@ -151,23 +130,6 @@ const login = async (req, res) => {
         });
     }
 };
-
-
-
-const alluser = async (req, res) => {
-    try {
-        const alluser = await User.find()
-        if (alluser.length === 0) {
-            return res.status(404).send("No User found");
-        }
-        res.status(200).json({ message: "All User fetched successfully", alluser });
-    } catch (error) {
-        res.send("Error in fetch: " + err)
-
-
-    }
-}
-
 
 const logout = async (req, res) => {
 

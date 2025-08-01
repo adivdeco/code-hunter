@@ -22,33 +22,14 @@ const noteRouter = require("./routes/noteSection");
 const bookmarkRouter = require('./routes/bookmark');
 const discussionRoutes = require('./routes/discussionRoutes');
 const videoRouter = require("./routes/videoCtrator")
-const session = require('express-session');
-const passport = require('passport');
+
 const errorHandler = require('./middleware/errorHandler');
-
-const app = express();
-
-
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false, // Set to false for best practice
-  cookie: {
-    // Secure cookie should only be true in production (HTTPS)
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-  }
-}));
-
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
 
 
 
 // --- Application Constants ---
 const PORT = process.env.PORT || 5500;
+const app = express();
 const httpServer = http.createServer(app);
 
 // --- Middleware Setup ---

@@ -20,17 +20,10 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: function () {
-            return !this.githubId;
-        },
-        minlength: 6
+        required: true,
+        minLength: 4,
+        // maxLength:10,
     },
-    githubId: {
-        type: String,
-        unique: true,
-        sparse: true // Allows null values for non-GitHub users
-    },
-
     role: {
         type: String,
         enum: ['user', 'admin'],
@@ -56,7 +49,15 @@ const userSchema = new Schema({
             },
         }],
     },
+    problemSolved2: {
+        type: [{
+            problemdata: {
+                type: Schema.Types.ObjectId,
+                ref: 'problemdata',
+            }
 
+        }],
+    },
 
     subscription: {  // New field for more detailed subscription info
         type: {
@@ -78,7 +79,6 @@ const userSchema = new Schema({
         type: String,
         default: '',
     },
-
 
 
 

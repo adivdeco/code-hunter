@@ -39,7 +39,6 @@ const userMiddleware = async (req, res, next) => {
 
     }
     catch (err) {
-        console.error("User middleware error:", err);
         res.status(500).send("Error: " + err.message);
     }
 }

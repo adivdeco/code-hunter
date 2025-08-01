@@ -35,7 +35,6 @@ const schema = z.object({
 
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
-  const [githubLoading, setGithubLoading] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,57 +52,6 @@ function Signup() {
 
   const onSubmit = (data) => {
     dispatch(registerUser(data));
-  };
-
-
-  const handleGitHubLogin = () => {
-    setGithubLoading(true);
-
-    const backendUrl = process.env.NODE_ENV === 'production'
-      ? 'https://code-hunter-backend.onrender.com' // Your production backend
-      : 'http://localhost:5500'; // Your local backend
-
-    const width = 600, height = 700;
-    const left = window.screen.width / 2 - width / 2;
-    const top = window.screen.height / 2 - height / 2;
-
-    const authWindow = window.open(
-      `${backendUrl}/auth/github`,
-      'githubAuth',
-      `width=${width},height=${height},top=${top},left=${left},toolbar=no,location=no,status=no,menubar=no`
-    );
-
-    // Listener for messages from the popup
-    const handleMessage = (event) => {
-      // IMPORTANT: Verify the message origin for security
-      if (event.origin !== backendUrl) {
-        console.warn("Message received from unknown origin:", event.origin);
-        return;
-      }
-
-      // We received a message, so stop loading
-      setGithubLoading(false);
-
-      // Clean up listener
-      window.removeEventListener('message', handleMessage);
-
-      // Close the popup if it's still open
-      if (authWindow && !authWindow.closed) {
-        authWindow.close();
-      }
-
-      if (event.data.type === 'auth_success') {
-        toast.success('Successfully logged in with GitHub!');
-        // *** THE CRITICAL FIX ***
-        // Dispatch the NEW action to set the user state directly
-        dispatch(setAuthUser(event.data.user));
-        navigate('/problems', { replace: true });
-      } else if (event.data.type === 'auth_error') {
-        toast.error(event.data.message || 'GitHub login failed.');
-      }
-    };
-
-    window.addEventListener('message', handleMessage, false);
   };
 
   const handleFeatureInProgress = (featureName) => {
@@ -328,24 +276,13 @@ function Signup() {
                 </button>
 
                 <button
-                  onClick={handleGitHubLogin}
-                  disabled={githubLoading}
+                  onClick={() => handleFeatureInProgress('GitHub')}
                   type="button"
                   className="inline-flex w-full justify-center items-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition-colors border border-white/10"
                 >
-                  {githubLoading ? (
-                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  ) : (
-                    <>
-                      <ImGithub className="h-5 w-5" />
-                      <span>GitHub</span>
-                    </>
-                  )}
+                  <ImGithub className="h-5 w-5" />
+                  <span>GitHub</span>
                 </button>
-
               </div>
             </div>
 
