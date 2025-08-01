@@ -1,8 +1,8 @@
 // AuthSuccess.jsx
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { login } from '@/redux/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../authSlice';
 import toast from 'react-hot-toast';
 
 const AuthSuccess = () => {
