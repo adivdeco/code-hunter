@@ -23,39 +23,32 @@ const bookmarkRouter = require('./routes/bookmark');
 const discussionRoutes = require('./routes/discussionRoutes');
 const videoRouter = require("./routes/videoCtrator")
 const session = require('express-session');
-const passport = require('passport');
-
+const MongoStore = require('connect-mongo');
 
 const app = express();
 
 
-// part of fit
-// Add these to your existing server setup:
 
-// Session configuration with Redis store
-const RedisStore = require('connect-redis')(session);
+// Make sure this matches your actual MongoDB connection string
+const mongoUrl = process.env.URl || null;
+
 app.use(session({
-  store: new RedisStore({ client: redisClient }),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: mongoUrl,  // This is required
+    collectionName: 'sessions',
+    ttl: 14 * 24 * 60 * 60, // 14 days
+    autoRemove: 'native' // Automatically remove expired sessions
+  }),
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     sameSite: 'lax',
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
   }
 }));
-
-// Trust proxy for HTTPS
-app.set('trust proxy', 1);
-
-// Add CORS middleware for OAuth routes
-app.use('/auth/github', cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
-}));
-// git part end
 
 
 const errorHandler = require('./middleware/errorHandler');
@@ -89,10 +82,7 @@ process.on('SIGINT', async () => {
   });
 });
 
-app.use('/auth', cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
-}));
+
 
 app.use("/auth", authRouter);
 app.use("/problem", problemRouter);

@@ -236,9 +236,9 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // GitHub OAuth Routes
-router.get('/github', passport.authenticate('github'));
+authRoutre.get('/github', passport.authenticate('github'));
 
-router.get('/github/callback',
+authRoutre.get('/github/callback',
     passport.authenticate('github', {
         failureRedirect: '/auth/failed',
         session: false // We'll use JWT instead
@@ -296,7 +296,7 @@ router.get('/github/callback',
 );
 
 // Failure route
-router.get('/auth/failed', (req, res) => {
+authRoutre.get('/auth/failed', (req, res) => {
     const script = `
     <script>
       window.opener.postMessage({
