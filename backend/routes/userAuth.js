@@ -183,32 +183,34 @@ authRoutre.patch('/profile', userMiddleware, async (req, res) => {
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "https://code-hunter-backend.onrender.com/auth/github/callback"
-},
-    async (accessToken, refreshToken, profile, done) => {
-        try {
-            let user = await User.findOne({ githubId: profile.id });
+    callbackURL: "https://code-hunter-backend.onrender.com/auth/github/callback",
+    scope: ['user:email'],
+    state: true, // Recommended for security
+    passReqToCallback: false
+}, async (accessToken, refreshToken, profile, done) => {
+    try {
+        // Add debug logging
+        console.log('GitHub Profile:', profile);
+        console.log('Access Token:', accessToken);
 
-            if (!user) {
-                user = new User({
-                    githubId: profile.id,
-                    name: profile.displayName || profile.username,
-                    email: profile.emails?.[0]?.value || `${profile.username}@github.com`,
-                    avatar: profile.photos?.[0]?.value,
-                    // No password field for GitHub-authenticated users
-                    isPaidUser: false,
-                    role: 'user'
-                });
-                await user.save();
-            }
+        // Your existing user handling logic
+        let user = await User.findOne({ githubId: profile.id });
 
-            return done(null, user);
-        } catch (err) {
-            return done(err);
+        if (!user) {
+            user = await User.create({
+                githubId: profile.id,
+                name: profile.displayName || profile.username,
+                email: profile.emails?.[0]?.value,
+                avatar: profile.photos?.[0]?.value
+            });
         }
-    }
-));
 
+        return done(null, user);
+    } catch (err) {
+        console.error('GitHub auth error:', err);
+        return done(err);
+    }
+}));
 // Serialization
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -224,20 +226,44 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // Add GitHub OAuth routes
-authRoutre.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+// Add this before your GitHub routes
+authRoutre.use((req, res, next) => {
+    // Store original redirect
+    req.session.oauth2return = req.headers.referer;
+    next();
+});
+
+authRoutre.get('/github', passport.authenticate('github'));
 
 authRoutre.get('/github/callback',
-    passport.authenticate('github', { failureRedirect: '/login' }),
+    (req, res, next) => {
+        passport.authenticate('github', (err, user, info) => {
+            if (err) {
+                console.error('OAuth Error:', err);
+                const returnTo = req.session.oauth2return || '/login';
+                return res.redirect(`${returnTo}?error=oauth_failed`);
+            }
+            if (!user) {
+                return res.redirect('/login?error=user_not_found');
+            }
+            req.logIn(user, (loginErr) => {
+                if (loginErr) {
+                    console.error('Login Error:', loginErr);
+                    return res.redirect('/login?error=session_failed');
+                }
+                next();
+            });
+        })(req, res, next);
+    },
     (req, res) => {
+        // Successful authentication
         const userData = {
             _id: req.user._id,
             name: req.user.name,
             email: req.user.email,
-            avatar: req.user.avatar,
-            role: req.user.role,
-            isPaidUser: req.user.isPaidUser
+            avatar: req.user.avatar
         };
-        // Successful authentication, redirect to frontend with token or session
+
         const script = `
       <script>
         window.opener.postMessage({
