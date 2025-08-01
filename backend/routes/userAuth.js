@@ -151,6 +151,35 @@ authRoutre.patch('/profile', userMiddleware, async (req, res) => {
 
 
 // GitHub OAuth Configuration
+// passport.use(new GitHubStrategy({
+//     clientID: process.env.GITHUB_CLIENT_ID,
+//     clientSecret: process.env.GITHUB_CLIENT_SECRET,
+//     callbackURL: "https://code-hunter-backend.onrender.com/auth/github/callback"
+// },
+//     async (accessToken, refreshToken, profile, done) => {
+//         try {
+//             // Check if user exists in your database
+//             let user = await User.findOne({ githubId: profile.id });
+
+//             if (!user) {
+//                 // Create new user if doesn't exist
+//                 user = new User({
+//                     githubId: profile.id,
+//                     name: profile.displayName || profile.username,
+//                     email: profile.emails?.[0]?.value || `${profile.username}@github.com`,
+//                     avatar: profile.photos?.[0]?.value,
+//                     isPaidUser: false, // Default value
+//                     role: 'user' // Default role
+//                 });
+//                 await user.save();
+//             }
+
+//             return done(null, user);
+//         } catch (err) {
+//             return done(err);
+//         }
+//     }
+// ));
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
@@ -158,18 +187,17 @@ passport.use(new GitHubStrategy({
 },
     async (accessToken, refreshToken, profile, done) => {
         try {
-            // Check if user exists in your database
             let user = await User.findOne({ githubId: profile.id });
 
             if (!user) {
-                // Create new user if doesn't exist
                 user = new User({
                     githubId: profile.id,
                     name: profile.displayName || profile.username,
                     email: profile.emails?.[0]?.value || `${profile.username}@github.com`,
                     avatar: profile.photos?.[0]?.value,
-                    isPaidUser: false, // Default value
-                    role: 'user' // Default role
+                    // No password field for GitHub-authenticated users
+                    isPaidUser: false,
+                    role: 'user'
                 });
                 await user.save();
             }

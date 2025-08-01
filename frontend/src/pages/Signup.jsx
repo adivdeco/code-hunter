@@ -54,6 +54,81 @@ function Signup() {
     dispatch(registerUser(data));
   };
 
+  const handleGitHubLogin = () => {
+    try {
+      setGithubLoading(true);
+
+      // Set timeout for popup block detection
+      const timer = setTimeout(() => {
+        setGithubLoading(false);
+        toast.error('Pop-up was blocked. Please allow pop-ups for this site.');
+      }, 1000);
+
+      // Window dimensions and positioning
+      const width = 600;
+      const height = 700;
+      const left = window.screen.width / 2 - width / 2;
+      const top = window.screen.height / 2 - height / 2;
+
+      // Open authentication window
+      const authWindow = window.open(
+        'https://code-hunter-backend.onrender.com/auth/github',
+        'githubAuth',
+        `toolbar=no, location=no, directories=no, status=no, menubar=no, 
+      scrollbars=no, resizable=no, copyhistory=no, 
+      width=${width}, height=${height}, top=${top}, left=${left}`
+      );
+
+      // Check if popup was blocked
+      if (!authWindow || authWindow.closed || typeof authWindow.closed === 'undefined') {
+        clearTimeout(timer);
+        setGithubLoading(false);
+        toast.error('Please allow pop-ups for GitHub login');
+        return;
+      }
+
+      // Message handler
+      const handleMessage = (event) => {
+        // Security check - verify message origin
+        if (event.origin !== 'https://code-hunter-backend.onrender.com') return;
+
+        clearTimeout(timer);
+        setGithubLoading(false);
+
+        if (event.data.type === 'auth_success') {
+          const user = event.data.user;
+          dispatch(loginUser(user)); // Update Redux state
+          if (authWindow && !authWindow.closed) {
+            authWindow.close();
+          }
+          navigate('/problems');
+        } else if (event.data.type === 'auth_error') {
+          toast.error('GitHub login failed');
+          if (authWindow && !authWindow.closed) {
+            authWindow.close();
+          }
+        }
+      };
+
+      // Add event listener
+      window.addEventListener('message', handleMessage);
+
+      // Cleanup function
+      return () => {
+        window.removeEventListener('message', handleMessage);
+        clearTimeout(timer);
+        if (authWindow && !authWindow.closed) {
+          authWindow.close();
+        }
+      };
+
+    } catch (error) {
+      setGithubLoading(false);
+      toast.error('Failed to initiate GitHub login');
+      console.error('GitHub login error:', error);
+    }
+  };
+
   const handleFeatureInProgress = (featureName) => {
     toast.error(`${featureName} login is currently under development.`, {
       duration: 2000,
@@ -276,13 +351,24 @@ function Signup() {
                 </button>
 
                 <button
-                  onClick={() => handleFeatureInProgress('GitHub')}
+                  onClick={handleGitHubLogin}
+                  disabled={githubLoading}
                   type="button"
                   className="inline-flex w-full justify-center items-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition-colors border border-white/10"
                 >
-                  <ImGithub className="h-5 w-5" />
-                  <span>GitHub</span>
+                  {githubLoading ? (
+                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  ) : (
+                    <>
+                      <ImGithub className="h-5 w-5" />
+                      <span>GitHub</span>
+                    </>
+                  )}
                 </button>
+
               </div>
             </div>
 

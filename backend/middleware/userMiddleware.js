@@ -10,6 +10,12 @@ const userMiddleware = async (req, res, next) => {
 
         const { token } = req.cookies;
 
+        // For GitHub OAuth (session-based)
+        if (req.isAuthenticated()) {
+            req.finduser = req.user;
+            return next();
+        }
+
         if (!token) {
             return res.status(401).send("tocken is not provided");
         }

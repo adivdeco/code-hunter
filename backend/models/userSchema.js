@@ -20,10 +20,18 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
-        minLength: 4,
-        // maxLength:10,
+        required: function () {
+            // Only require password for non-OAuth users
+            return !this.githubId;
+        },
+        minlength: 6
     },
+    githubId: {
+        type: String,
+        unique: true,
+        sparse: true // Allows null values for non-GitHub users
+    },
+
     role: {
         type: String,
         enum: ['user', 'admin'],
