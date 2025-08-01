@@ -56,15 +56,7 @@ const userSchema = new Schema({
             },
         }],
     },
-    problemSolved2: {
-        type: [{
-            problemdata: {
-                type: Schema.Types.ObjectId,
-                ref: 'problemdata',
-            }
 
-        }],
-    },
 
     subscription: {  // New field for more detailed subscription info
         type: {
@@ -86,11 +78,7 @@ const userSchema = new Schema({
         type: String,
         default: '',
     },
-    githubId: {
-        type: String,
-        unique: true,
-        sparse: true // Allows null values for non-GitHub users
-    },
+
 
 
 

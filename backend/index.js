@@ -23,35 +23,27 @@ const bookmarkRouter = require('./routes/bookmark');
 const discussionRoutes = require('./routes/discussionRoutes');
 const videoRouter = require("./routes/videoCtrator")
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+const passport = require('passport');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
 
-
-// Make sure this matches your actual MongoDB connection string
-const mongoUrl = process.env.URl || null;
-
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: mongoUrl,  // This is required
-    collectionName: 'sessions',
-    ttl: 14 * 24 * 60 * 60, // 14 days
-    autoRemove: 'native' // Automatically remove expired sessions
-  }),
+  saveUninitialized: false, // Set to false for best practice
   cookie: {
+    // Secure cookie should only be true in production (HTTPS)
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: 'lax',
-    maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
   }
 }));
 
-
-const errorHandler = require('./middleware/errorHandler');
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 

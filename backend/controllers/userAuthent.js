@@ -8,92 +8,73 @@ const redisClient = require('../config/redis');
 
 const register = async (req, res) => {
     try {
-        console.log(req.body);
+        console.log("Registering user with data:", req.body);
         validateuser(req.body);
 
         const { name, email, password } = req.body;
 
-        // Check if user exists (both email and GitHub ID)
-        const existingUser = await User.findOne({
-            $or: [
-                { email },
-                { githubId: req.user?.githubId }
-            ]
-        });
+        // Check if a user with the given email already exists
+        const existingUser = await User.findOne({ email });
 
         if (existingUser) {
             return res.status(400).json({
                 success: false,
-                error: existingUser.githubId ?
-                    "GitHub account already linked" :
-                    "Email already registered"
+                error: "An account with this email already exists."
             });
         }
 
-        // Handle GitHub OAuth registration
-        if (req.user?.githubId) {
-            const user = await User.create({
-                ...req.user,
-                email: req.user.email || email // Use GitHub email if available
-            });
-
-            return res.status(200).json({
-                success: true,
-                user: {
-                    name: user.name,
-                    email: user.email,
-                    _id: user._id,
-                    role: user.role
-                }
-            });
-        }
-
-        // Traditional registration
+        // This is a standard registration flow.
+        // GitHub registration is handled entirely by the Passport strategy.
         if (!password) {
             return res.status(400).json({
                 success: false,
-                error: "Password is required for traditional registration"
+                error: "Password is required for registration."
             });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
-            ...req.body,
+            name,
+            email,
             password: hashedPassword,
             role: 'user'
         });
 
+        // Create token and cookie
         const token = jwt.sign(
-            { _id: user._id, email, role: 'user' },
-            "secretkey",
+            { _id: user._id, email: user.email, role: user.role },
+            process.env.JWT_SECRET || "secretkey", // Use env variable for secret
             { expiresIn: '14d' }
         );
 
         res.cookie('token', token, {
             maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
             httpOnly: true,
-            secure: true,
+            secure: process.env.NODE_ENV === 'production',
             sameSite: 'None'
         });
 
-        res.status(200).json({
+        res.status(201).json({ // Use 201 for resource creation
             user: {
                 name: user.name,
                 email: user.email,
                 _id: user._id,
-                role: user.role
+                role: user.role,
+                avatar: user.avatar
             },
             message: "Registration successful"
         });
+
     } catch (err) {
         console.error("Registration error:", err);
         res.status(500).json({
             success: false,
-            error: "Registration failed",
+            error: "Registration failed due to a server error.",
             details: process.env.NODE_ENV === 'development' ? err.message : undefined
         });
     }
 }
+
 
 const login = async (req, res) => {
     try {
