@@ -103,6 +103,7 @@ export const VideoManagementModal = ({ isOpen, onClose, problem, onUploadVideo, 
             else toast.error('Failed to delete video.', { id: toastId });
         }
     };
+    console.log(problem)
 
     return (
         <Modal
@@ -117,7 +118,7 @@ export const VideoManagementModal = ({ isOpen, onClose, problem, onUploadVideo, 
             <div className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2">
                 {/* --- Left Side: Existing Videos List --- */}
                 <div className="flex flex-col">
-                    <h3 className="text-lg font-semibold mb-3 border-b border-gray-700 pb-2">Existing Solutions</h3>
+                    <h3 className="text-lg text-gray-400 font-semibold mb-3 border-b border-gray-700 pb-2">Existing Solutions</h3>
                     <div className="flex-1 overflow-y-auto pr-2 space-y-2" style={{ maxHeight: '400px' }}>
                         {(problem.videoSolutions?.length ?? 0) > 0 ? (
                             problem.videoSolutions.map(video => (
@@ -126,7 +127,7 @@ export const VideoManagementModal = ({ isOpen, onClose, problem, onUploadVideo, 
                                         <FiPlayCircle className="text-green-400 w-6 h-6 flex-shrink-0" />
                                         <p className="font-medium group-hover:text-blue-300 truncate" title={video.title}>{video.title}</p>
                                     </a>
-                                    <button onClick={() => handleDeleteClick(video._id)} className="text-red-500 hover:text-red-400 p-1 rounded-full hover:bg-red-500/10"><FiTrash2 /></button>
+                                    <button onClick={() => handleDeleteClick(video)} className="text-red-500 hover:text-red-400 p-1 rounded-full hover:bg-red-500/10"><FiTrash2 /></button>
                                 </div>
                             ))
                         ) : (
@@ -140,10 +141,10 @@ export const VideoManagementModal = ({ isOpen, onClose, problem, onUploadVideo, 
 
                 {/* --- Right Side: Upload Form --- */}
                 <div className="border-t pt-6 md:border-t-0 md:pt-0 md:border-l md:pl-8 border-gray-700">
-                    <h3 className="text-lg font-semibold mb-3">Add New Solution</h3>
+                    <h3 className="text-lg text-gray-400 font-semibold mb-3">Add New Solution</h3>
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                        <input type="text" name="title" value={videoData.title} onChange={handleInputChange} placeholder="Video Title*" required className="form-input" />
-                        <textarea name="description" value={videoData.description} onChange={handleInputChange} placeholder="Video Description" rows="3" className="form-input"></textarea>
+                        <textarea name="description" value={videoData.description} onChange={handleInputChange} placeholder="Video Explnation | upper area" rows="3" className="form-input"></textarea>
+                        <input type="text" name="title" value={videoData.title} onChange={handleInputChange} placeholder="TimeComplextivity | lower area*" required className="form-input" />
 
                         <FileInput label="Video File*" name="videoFile" file={files.videoFile} onChange={handleFileChange} accept="video/*" />
                         <FileInput label="Custom Thumbnail (Optional)" name="thumbnailFile" file={files.thumbnailFile} onChange={handleFileChange} accept="image/*" />

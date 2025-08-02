@@ -2,11 +2,9 @@
 
 const Problem = require("../models/problemSchema");
 const SolutionVideo = require("../models/videoSolnSchema");
-const { uploadOnCloudinary, deleteFromCloudinary } = require("../utils/cloudinary"); // A new helper util
+const { uploadOnCloudinary, deleteFromCloudinary } = require("../utils/cloudinary");
 
-// Note: For this to work, you need `multer` for file handling
-// npm install multer
-// We'll handle this in the route or use a file upload utility
+
 
 const getAllVideosForProblem = async (req, res) => {
     try {
