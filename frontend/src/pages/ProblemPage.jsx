@@ -432,7 +432,7 @@ const ProblemPage = () => {
         {/* right */}
         <div className="flex items-center gap-4">
           <h1 className="font-aladin text-xl relative inline-block">
-            {user.isPaidUser ? <Crown className="text-yellow-400" /> : "Upgrade to"}
+            {user?.isPaidUser ? <Crown className="text-yellow-400" /> : "Upgrade to"}
             <span className="font-aladin bg-gradient-to-r from-yellow-500 to-orange-600 text-transparent bg-clip-text text-xl font-extrabold">Pro</span>
           </h1>
           <NavProfile user={user} />
@@ -1058,4 +1058,6 @@ const ProblemPage = () => {
 };
 
 export default ProblemPage;
+
+
 

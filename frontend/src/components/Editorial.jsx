@@ -120,14 +120,6 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, videoId, likes, dislikes
             <div className="bg-gradient-to-br from-gray-900/80 to-gray-900/50 rounded-xl p-6 border border-gray-700 shadow-lg">
                 <h3 className="text-xl font-semibold mb-3 text-white">Written Explanation</h3>
                 <div className="prose prose-invert max-w-none text-gray-300">
-                    {/* <p>This problem can be solved using a two-pointer approach that efficiently checks for the target sum by moving pointers based on the current sum comparison.</p>
-                    <ul className="list-disc pl-5 space-y-2 mt-4">
-                        <li>Initialize two pointers at the start and end of the sorted array</li>
-                        <li>Calculate the sum of elements at these pointers</li>
-                        <li>If sum equals target, return the indices</li>
-                        <li>If sum is less than target, move left pointer right</li>
-                        <li>If sum is greater than target, move right pointer left</li>
-                    </ul> */}
                     {description
                     }
                     <div className="mt-6 bg-gray-800/50 p-4 rounded-lg border border-gray-700">

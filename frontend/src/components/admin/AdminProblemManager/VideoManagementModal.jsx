@@ -103,7 +103,7 @@ export const VideoManagementModal = ({ isOpen, onClose, problem, onUploadVideo, 
             else toast.error('Failed to delete video.', { id: toastId });
         }
     };
-    console.log(problem)
+    // console.log(problem)
 
     return (
         <Modal
@@ -143,9 +143,8 @@ export const VideoManagementModal = ({ isOpen, onClose, problem, onUploadVideo, 
                 <div className="border-t pt-6 md:border-t-0 md:pt-0 md:border-l md:pl-8 border-gray-700">
                     <h3 className="text-lg text-gray-400 font-semibold mb-3">Add New Solution</h3>
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                        <textarea name="description" value={videoData.description} onChange={handleInputChange} placeholder="Video Explnation | upper area" rows="3" className="form-input"></textarea>
-                        <input type="text" name="title" value={videoData.title} onChange={handleInputChange} placeholder="TimeComplextivity | lower area*" required className="form-input" />
-
+                        <textarea name="description" value={videoData.description} onChange={handleInputChange} placeholder="uper/part way to solve" rows="3" className="form-input"></textarea>
+                        <input type="text" name="title" value={videoData.title} onChange={handleInputChange} placeholder="lowerpart/timecopllex*" required className="form-input" />
                         <FileInput label="Video File*" name="videoFile" file={files.videoFile} onChange={handleFileChange} accept="video/*" />
                         <FileInput label="Custom Thumbnail (Optional)" name="thumbnailFile" file={files.thumbnailFile} onChange={handleFileChange} accept="image/*" />
 

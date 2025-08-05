@@ -26,7 +26,7 @@ export const useAdminProblems = () => {
             setLoading(false);
         }
     }, []);
-    console.log(rawProblems);
+    // console.log(rawProblems);
 
 
     useEffect(() => {
