@@ -88,11 +88,13 @@ const ProblemPage = () => {
     };
   }, [showProblemList]);
 
+
   const { handleSubmit } = useForm();
 
   // console.log(user);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredProblems, setFilteredProblems] = useState([]);
+
 
   // Filter problems based on search term
   useEffect(() => {
@@ -109,6 +111,42 @@ const ProblemPage = () => {
 
 
 
+
+
+  // useEffect(() => {
+
+  //   const fetchProblem = async () => {
+
+  //     setLoading(true);
+  //     try {
+  //       const response = await axiosClient.get(`/problem/find/${problemId}`);
+  //       console.log("Fetched problem:", response.data);
+
+  //       const matchedStartCode = response.data.startCode.find(
+  //         sc => sc.language === langMap[selectedLanguage] // or use langMap[selectedLanguage] if needed
+  //       );
+
+  //       if (!matchedStartCode) {
+  //         console.warn("No matching start code found for language:", selectedLanguage);
+  //       }
+
+  //       const initialcode = matchedStartCode?.initialCode || '';
+
+
+  //       setProblem(response.data);
+  //       setLoading(false);
+
+  //       setInitialCode(initialcode); // ✅ store starter code
+  //       setCode(initialcode);
+
+  //     } catch (error) {
+  //       console.error('Error fetching problem:', error);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchProblem();
+  // }, [problemId]);
 
 
   useEffect(() => {

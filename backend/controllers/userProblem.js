@@ -174,16 +174,13 @@ const getProblemById = async (req, res) => {
             path: 'videoSolutions',
             populate: {
                 path: 'uploader',
-                select: 'name avatar' // Select specific fields from the user
+                select: 'name avatar'
             }
         });
 
         if (!problem) {
             return res.status(404).send("Problem not found");
         }
-
-        // Also increment the view count on the video if a videoId is specified
-        // This is a more advanced feature you can add later.
 
         res.status(200).json(problem);
 
