@@ -53,55 +53,6 @@ const alluser = async (req, res) => {
     }
 }
 
-const passport = require('passport');
-
-// Add these new methods to your exports
-const githubAuth = passport.authenticate('github', { scope: ['user:email'] });
-
-// const githubAuthCallback = passport.authenticate('github', {
-//     failureRedirect: '/login',
-//     session: false
-// }, async (err, user, info) => {
-//     if (err || !user) {
-//         return res.redirect(`${process.env.FRONTEND_URL}/login?error=github_auth_failed`);
-//     }
-
-//     // Create JWT token
-//     const token = jwt.sign(
-//         { email: user.email, _id: user._id, role: user.role },
-//         process.env.JWT_SECRET,
-//         { expiresIn: '24h' }
-//     );
-
-//     // Set cookie and redirect
-//     res.cookie('token', token, {
-//         maxAge: 24 * 60 * 60 * 1000, // 24 hours
-//         httpOnly: true,
-//         secure: process.env.NODE_ENV === 'production',
-//         sameSite: 'None'
-//     });
-
-//     res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
-// });
-// authRouter.get('/github/callback', githubAuthCallback, (req, res) => {
-//     // Check if this is a popup window flow
-//     if (req.headers['sec-fetch-dest'] === 'iframe') {
-//         // Send message to opener window
-//         const responseHtml = `
-//       <script>
-//         window.opener.postMessage({
-//           type: 'AUTH_SUCCESS',
-//           user: ${JSON.stringify(req.user)}
-//         }, '${process.env.FRONTEND_URL}');
-//         window.close();
-//       </script>
-//     `;
-//         return res.send(responseHtml);
-//     }
-
-//     // Regular flow - redirect to frontend
-//     res.redirect(`${process.env.FRONTEND_URL}/dashbord?token=${req.cookies.token}`);
-// });
 
 
 const login = async (req, res) => {

@@ -1,32 +1,39 @@
 const express = require('express');
 const User = require('../models/userSchema')
-const { register, login, logout, adminregister, githubAuthCallback, githubAuth, deletedprofil, alluser, updateUserStatus, getUserStats, adminDeleteUser } = require('../controllers/userAuthent.js');
+const { register, login, logout, adminregister, deletedprofil, alluser, updateUserStatus, getUserStats, adminDeleteUser } = require('../controllers/userAuthent.js');
 const userMiddleware = require('../middleware/userMiddleware.js');
 const adminMiddleware = require('../middleware/adminMiddleware.js');
+const passport = require('passport');
 
 const authRoutre = express.Router()
 
 authRoutre.post('/register', register)
 authRoutre.post('/login', login);
 
-authRoutre.get('/github', githubAuth);
-authRoutre.get('/github/callback', (req, res) => {
-    if (req.headers['sec-fetch-dest'] === 'iframe') {
-        // Send message to opener window
-        const responseHtml = `
-      <script>
-        window.opener.postMessage({
-          type: 'AUTH_SUCCESS',
-          user: ${JSON.stringify(req.user)}
-        }, '${process.env.FRONTEND_URL}');
-        window.close();
-      </script>
-    `;
-        return res.send(responseHtml);
-    }
 
-    // Regular flow - redirect to frontend
-    res.redirect(`${process.env.FRONTEND_URL}/dashbord?token=${req.cookies.token}`);
+authRoutre.get('/github', passport.authenticate('github', { session: false })); authRoutre.get('/github/callback', (req, res) => {
+    passport.authenticate('github', { session: false }, (err, user, info) => {
+        if (err || !user) {
+            return res.redirect(`${process.env.FRONTEND_URL}/login?error=github_auth_failed`);
+        }
+
+        // Create JWT token
+        const token = jwt.sign(
+            { email: user.email, _id: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Set cookie and redirect
+        res.cookie('token', token, {
+            maxAge: 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None'
+        });
+
+        res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+    })(req, res, next);
 });
 
 

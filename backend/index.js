@@ -35,6 +35,24 @@ const httpServer = http.createServer(app);
 
 // Add these near other middleware
 const passport = require('./config/passport');
+
+const session = require('express-session');
+const RedisStore = require('connect-redis').default;
+
+// Configure session middleware
+app.use(session({
+  store: new RedisStore({ client: redisClient }),
+  secret: process.env.JWT_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: 'None'
+  }
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
