@@ -11,29 +11,27 @@ authRoutre.post('/register', register)
 authRoutre.post('/login', login);
 
 
-authRoutre.get('/github', passport.authenticate('github', { session: false })); authRoutre.get('/github/callback', (req, res) => {
-    passport.authenticate('github', { session: false }, (err, user, info) => {
-        if (err || !user) {
-            return res.redirect(`${process.env.FRONTEND_URL}/login?error=github_auth_failed`);
+
+authRoutre.get('/github', passport.authenticate('github', { session: false }));
+authRoutre.get('/github/callback', (req, res) => {
+    passport.authenticate('github', { session: false }),
+        (req, res) => {
+            // Create JWT token and redirect
+            const token = jwt.sign(
+                { _id: req.user._id, email: req.user.email, role: req.user.role },
+                process.env.JWT_SECRET,
+                { expiresIn: '24h' }
+            );
+
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'None',
+                maxAge: 24 * 60 * 60 * 1000
+            });
+
+            res.redirect(process.env.FRONTEND_URL);
         }
-
-        // Create JWT token
-        const token = jwt.sign(
-            { email: user.email, _id: user._id, role: user.role },
-            process.env.JWT_SECRET,
-            { expiresIn: '24h' }
-        );
-
-        // Set cookie and redirect
-        res.cookie('token', token, {
-            maxAge: 24 * 60 * 60 * 1000,
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'None'
-        });
-
-        res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
-    })(req, res, next);
 });
 
 

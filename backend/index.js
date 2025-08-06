@@ -34,15 +34,22 @@ const httpServer = http.createServer(app);
 
 
 // Add these near other middleware
-const passport = require('./config/passport');
 
 const session = require('express-session');
-const RedisStore = require('connect-redis').default;
+const { createClient } = require('redis');
+let RedisStore = require('connect-redis')(session);
 
-// Configure session middleware
+// Create Redis client
+const redisClient = createClient({
+  url: process.env.REDIS_URL,
+  // Other Redis configurations if needed
+});
+redisClient.connect().catch(console.error);
+
+// Session configuration
 app.use(session({
   store: new RedisStore({ client: redisClient }),
-  secret: process.env.JWT_SECRET || 'your-secret-key',
+  secret: process.env.JWT_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
