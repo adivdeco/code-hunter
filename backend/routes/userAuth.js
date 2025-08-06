@@ -10,8 +10,23 @@ authRoutre.post('/register', register)
 authRoutre.post('/login', login);
 
 authRoutre.get('/github', githubAuth);
-authRoutre.get('/github/callback', githubAuthCallback, (req, res) => {
-    // This will be handled by the callback above
+authRoutre.get('/github/callback', (req, res) => {
+    if (req.headers['sec-fetch-dest'] === 'iframe') {
+        // Send message to opener window
+        const responseHtml = `
+      <script>
+        window.opener.postMessage({
+          type: 'AUTH_SUCCESS',
+          user: ${JSON.stringify(req.user)}
+        }, '${process.env.FRONTEND_URL}');
+        window.close();
+      </script>
+    `;
+        return res.send(responseHtml);
+    }
+
+    // Regular flow - redirect to frontend
+    res.redirect(`${process.env.FRONTEND_URL}/dashbord?token=${req.cookies.token}`);
 });
 
 

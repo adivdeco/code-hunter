@@ -83,25 +83,25 @@ const githubAuth = passport.authenticate('github', { scope: ['user:email'] });
 
 //     res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
 // });
-authRouter.get('/github/callback', githubAuthCallback, (req, res) => {
-    // Check if this is a popup window flow
-    if (req.headers['sec-fetch-dest'] === 'iframe') {
-        // Send message to opener window
-        const responseHtml = `
-      <script>
-        window.opener.postMessage({
-          type: 'AUTH_SUCCESS',
-          user: ${JSON.stringify(req.user)}
-        }, '${process.env.FRONTEND_URL}');
-        window.close();
-      </script>
-    `;
-        return res.send(responseHtml);
-    }
+// authRouter.get('/github/callback', githubAuthCallback, (req, res) => {
+//     // Check if this is a popup window flow
+//     if (req.headers['sec-fetch-dest'] === 'iframe') {
+//         // Send message to opener window
+//         const responseHtml = `
+//       <script>
+//         window.opener.postMessage({
+//           type: 'AUTH_SUCCESS',
+//           user: ${JSON.stringify(req.user)}
+//         }, '${process.env.FRONTEND_URL}');
+//         window.close();
+//       </script>
+//     `;
+//         return res.send(responseHtml);
+//     }
 
-    // Regular flow - redirect to frontend
-    res.redirect(`${process.env.FRONTEND_URL}/dashbord?token=${req.cookies.token}`);
-});
+//     // Regular flow - redirect to frontend
+//     res.redirect(`${process.env.FRONTEND_URL}/dashbord?token=${req.cookies.token}`);
+// });
 
 
 const login = async (req, res) => {
@@ -307,7 +307,7 @@ module.exports = {
     updateUserStatus,
     getUserStats,
     adminDeleteUser,
-    githubAuthCallback,
+    // githubAuthCallback,
     githubAuth
 
 }
