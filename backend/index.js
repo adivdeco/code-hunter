@@ -32,37 +32,6 @@ const PORT = process.env.PORT || 5500;
 const app = express();
 const httpServer = http.createServer(app);
 
-
-// Add these near other middleware
-
-const session = require('express-session');
-const { createClient } = require('redis');
-let RedisStore = require('connect-redis')(session);
-
-// Create Redis client
-const redisClient = createClient({
-  url: process.env.REDIS_URL,
-  // Other Redis configurations if needed
-});
-redisClient.connect().catch(console.error);
-
-// Session configuration
-app.use(session({
-  store: new RedisStore({ client: redisClient }),
-  secret: process.env.JWT_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'None'
-  }
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
 // --- Middleware Setup ---
 app.use(cors(getCorsOptions())); // Use centralized CORS configuration
 app.use(express.json()); // To parse JSON bodies

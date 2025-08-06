@@ -257,9 +257,7 @@ module.exports = {
     alluser,
     updateUserStatus,
     getUserStats,
-    adminDeleteUser,
-    // githubAuthCallback,
-    // githubAuth
+    adminDeleteUser
 
 }
 
