@@ -73,6 +73,47 @@ export default function LoginPage() {
     });
   };
 
+
+  const handleGitHubLogin = () => {
+    // Clear any existing error messages
+    setError('');
+
+    // Open GitHub auth in a new tab or redirect in current window
+    const authWindow = window.open(
+      `${process.env.REACT_APP_API_URL || 'http://localhost:5500'}/auth/github`,
+      '_blank' // Open in new tab (recommended for better UX)
+      // '_self' // Use this if you prefer to redirect in same window
+    );
+
+    // If using new tab, listen for messages from the popup
+    if (authWindow) {
+      const messageListener = (event) => {
+        // Security check - verify message is from your backend
+        if (event.origin !== (process.env.REACT_APP_API_URL || 'http://localhost:5500')) {
+          return;
+        }
+
+        if (event.data.type === 'AUTH_SUCCESS') {
+          // Close the popup
+          authWindow.close();
+          // Update your app state
+          setUser(event.data.user);
+          // Redirect or update UI
+          navigate('/dashboard');
+        } else if (event.data.type === 'AUTH_ERROR') {
+          authWindow.close();
+          setError(event.data.message || 'GitHub login failed');
+        }
+      };
+
+      window.addEventListener('message', messageListener);
+
+      // Cleanup
+      return () => window.removeEventListener('message', messageListener);
+    }
+  };
+
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-gray-900">
       {/* ===== 2. ADD THE TOASTER COMPONENT ===== */}
@@ -190,7 +231,7 @@ export default function LoginPage() {
                   </button>
 
                   <button
-                    onClick={() => handleFeatureInProgress('GitHub')}
+                    onClick={handleGitHubLogin}
                     type="button"
                     className="inline-flex w-full justify-center items-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition-colors border border-white/10"
                   >

@@ -24,6 +24,11 @@ const userSchema = new Schema({
         minLength: 4,
         // maxLength:10,
     },
+    githubId: {
+        type: String,
+        unique: true,
+        sparse: true // Allows multiple nulls
+    },
     role: {
         type: String,
         enum: ['user', 'admin'],

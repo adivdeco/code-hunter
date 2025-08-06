@@ -32,6 +32,12 @@ const PORT = process.env.PORT || 5500;
 const app = express();
 const httpServer = http.createServer(app);
 
+
+// Add these near other middleware
+const passport = require('./config/passport');
+app.use(passport.initialize());
+app.use(passport.session());
+
 // --- Middleware Setup ---
 app.use(cors(getCorsOptions())); // Use centralized CORS configuration
 app.use(express.json()); // To parse JSON bodies

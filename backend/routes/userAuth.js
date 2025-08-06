@@ -1,6 +1,6 @@
 const express = require('express');
 const User = require('../models/userSchema')
-const { register, login, logout, adminregister, deletedprofil, alluser, updateUserStatus, getUserStats, adminDeleteUser } = require('../controllers/userAuthent.js');
+const { register, login, logout, adminregister, githubAuthCallback, githubAuth, deletedprofil, alluser, updateUserStatus, getUserStats, adminDeleteUser } = require('../controllers/userAuthent.js');
 const userMiddleware = require('../middleware/userMiddleware.js');
 const adminMiddleware = require('../middleware/adminMiddleware.js');
 
@@ -8,6 +8,13 @@ const authRoutre = express.Router()
 
 authRoutre.post('/register', register)
 authRoutre.post('/login', login);
+
+authRoutre.get('/github', githubAuth);
+authRoutre.get('/github/callback', githubAuthCallback, (req, res) => {
+    // This will be handled by the callback above
+});
+
+
 authRoutre.post('/logout', userMiddleware, logout);
 authRoutre.post('/admin/register', adminMiddleware, adminregister);
 authRoutre.get('/alluser', userMiddleware, alluser)
