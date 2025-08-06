@@ -257,6 +257,7 @@ module.exports = {
     alluser,
     updateUserStatus,
     getUserStats,
+    // alpha,
     adminDeleteUser
 
 }
